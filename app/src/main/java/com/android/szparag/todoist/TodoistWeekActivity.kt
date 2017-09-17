@@ -61,6 +61,7 @@ class TodoistWeekActivity : AppCompatActivity() {
     ResizeAnimation(view, displayMetrics.widthPixels, displayMetrics.heightPixels).apply {
       this.duration = 500
       view.startAnimation(this)
+      this.setAnimationListener()
     }
   }
 

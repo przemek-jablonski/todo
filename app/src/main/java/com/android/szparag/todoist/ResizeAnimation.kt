@@ -9,7 +9,7 @@ import android.view.animation.Transformation
  */
 class ResizeAnimation(
     private val targetView: View, private val targetWidth: Int, private val targetHeight: Int)
-  : Animation() {
+  : BaseAnimation() {
 
   private val startWidth: Int = targetView.width
   private val startHeight: Int = targetView.height
