@@ -7,9 +7,8 @@ import android.view.animation.Transformation
 /**
  * Created by Przemyslaw Jablonski (github.com/sharaquss, pszemek.me) on 9/16/2017.
  */
-class ResizeAnimation(
-    private val targetView: View, private val targetWidth: Int, private val targetHeight: Int)
-  : BaseAnimation() {
+class ResizeAnimation(targetView: View, private val targetWidth: Int, private val targetHeight: Int)
+  : BaseAnimation(targetView) {
 
   private val startWidth: Int = targetView.width
   private val startHeight: Int = targetView.height
