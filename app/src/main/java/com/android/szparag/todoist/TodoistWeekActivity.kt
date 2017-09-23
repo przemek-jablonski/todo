@@ -44,7 +44,6 @@ class TodoistWeekActivity : AppCompatActivity() {
       recyclerHeight = this.height
       this.adapter = WeekRvAdapter()
       val layoutManager = SmoothScrollLinearLayoutManager(this@TodoistWeekActivity)
-//          .setupSmoothScrolling(this@TodoistWeekActivity, 10f)
       this.layoutManager = layoutManager
       this.addItemDecoration(DividerItemDecoration(this.context, layoutManager.orientation))
     }
@@ -57,7 +56,6 @@ class TodoistWeekActivity : AppCompatActivity() {
   }
 
   private fun handleWeekItemClicked(recyclerView: RecyclerView, position: Int, view: View) {
-//    Snackbar.make(view, "item clicked: $position", Snackbar.LENGTH_LONG).show()
     view
         .resize(targetHeight = recyclerView.height)
         .duration()

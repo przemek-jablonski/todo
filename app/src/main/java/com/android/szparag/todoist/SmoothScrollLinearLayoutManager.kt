@@ -24,9 +24,8 @@ class SmoothScrollLinearLayoutManager(context: Context) : LinearLayoutManager(co
         return scrollVector
       }
 
-      override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics): Float {
-        return MILLISECONDS_PER_INCH / displayMetrics.densityDpi
-      }
+      override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics)
+          = MILLISECONDS_PER_INCH / displayMetrics.densityDpi
 
 
     }
