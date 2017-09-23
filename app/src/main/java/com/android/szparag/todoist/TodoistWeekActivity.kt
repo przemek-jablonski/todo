@@ -43,7 +43,7 @@ class TodoistWeekActivity : AppCompatActivity() {
     calendarWeekRecyclerView.apply {
       recyclerHeight = this.height
       this.adapter = WeekRvAdapter()
-      val layoutManager = LinearLayoutManager(this@TodoistWeekActivity)
+      val layoutManager = SmoothScrollLinearLayoutManager(this@TodoistWeekActivity)
 //          .setupSmoothScrolling(this@TodoistWeekActivity, 10f)
       this.layoutManager = layoutManager
       this.addItemDecoration(DividerItemDecoration(this.context, layoutManager.orientation))
