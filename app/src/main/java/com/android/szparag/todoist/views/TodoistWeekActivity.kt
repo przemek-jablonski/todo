@@ -20,6 +20,7 @@ import com.android.szparag.todoist.presenters.contracts.WeekPresenter
 import com.android.szparag.todoist.resize
 import com.android.szparag.todoist.setupGranularClickListener
 import com.android.szparag.todoist.views.contracts.WeekView
+import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.subscribeBy
 import kotterknife.bindView
@@ -42,8 +43,8 @@ class TodoistWeekActivity : TodoistBaseActivity<WeekPresenter>(), WeekView {
 
   override fun onStart() {
     super.onStart()
-    DaggerGlobalScopeWrapper.getComponent(this).inject(this) //todo: find a way to generize them in Kotlin
-    presenter.attach(this) //todo: find a way to generize them in Kotlin
+    DaggerGlobalScopeWrapper.getComponent(this).inject(this) //todo: find a way to generify them in Kotlin
+    presenter.attach(this) //todo: find a way to generify them in Kotlin
     displayMetrics = getDisplayMetrics()
   }
 
@@ -65,10 +66,15 @@ class TodoistWeekActivity : TodoistBaseActivity<WeekPresenter>(), WeekView {
 //        .map { it.second }
   }
 
-  override fun resizeDayToFullscreen(view: View, positionInList: Int) = view.resize(targetHeight = calendarWeekRecyclerView.height).duration().play()
+  override fun resizeDayToFullscreen(view: View, positionInList: Int): Observable<AnimationEvent> {
+    logger.debug("resizeDayToFullscreen, pos: $positionInList, view: $view")
+    return view.resize(targetHeight = calendarWeekRecyclerView.height).duration().play()
+  }
 
-  override fun fixPositionByScrolling(positionInList: Int) {
-    calendarWeekRecyclerView.smoothScrollToPosition(positionInList)
+
+  override fun fixPositionByScrolling(positionInList: Int): Completable {
+    logger.debug("fixPositionByScrolling, pos: $positionInList")
+    return Completable.fromAction { calendarWeekRecyclerView.smoothScrollToPosition(positionInList) }
   }
 
 //  private fun handleWeekItemClicked(recyclerView: RecyclerView, position: Int, view: View) {

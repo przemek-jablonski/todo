@@ -26,7 +26,7 @@ class TodoistWeekPresenter : TodoistBasePresenter<WeekView>(), WeekPresenter {
     logger.debug("subscribeModelEvents")
   }
 
-  override fun subscribeViewUserEvents() {
+  override fun subscribeViewUserEvents() { //todo: presenter has knowledge about View (it.first), refactor
     logger.debug("subscribeViewUserEvents")
 
     view?.run {
@@ -34,12 +34,9 @@ class TodoistWeekPresenter : TodoistBasePresenter<WeekView>(), WeekPresenter {
           .ui()
           .doOnNext { dayOfTheWeekSelected = it.second }
           .flatMap { this.resizeDayToFullscreen(it.first, it.second).ui() }
+          .flatMapCompletable { this.fixPositionByScrolling(dayOfTheWeekSelected).ui() }
+          .doFinally { logger.debug("ItemClickSupport.subscribeItemClick.doFinally") }
           .subscribeBy(
-              onNext = {
-                logger.debug("ItemClickSupport.subscribeItemClick.onNext: ")
-                this.fixPositionByScrolling(dayOfTheWeekSelected)
-//                handleWeekItemClicked(calendarWeekRecyclerView, it.second, it.first)
-              },
               onError = {
                 logger.error("ItemClickSupport.subscribeItemClick.onError: exc: $it")
               },
