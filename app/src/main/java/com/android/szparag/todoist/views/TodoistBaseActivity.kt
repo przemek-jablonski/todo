@@ -1,22 +1,17 @@
 package com.android.szparag.todoist.views
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.annotation.CallSuper
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
-import android.view.MenuItem
 import com.android.szparag.todoist.Logger
-import com.android.szparag.todoist.R
 import com.android.szparag.todoist.emptyString
 import com.android.szparag.todoist.events.PermissionEvent
 import com.android.szparag.todoist.events.PermissionEvent.PermissionResponse
 import com.android.szparag.todoist.events.PermissionEvent.PermissionResponse.PERMISSION_DENIED
-import com.android.szparag.todoist.presenters.Presenter
+import com.android.szparag.todoist.presenters.contracts.Presenter
 import com.android.szparag.todoist.views.contracts.View
-import com.android.szparag.todoist.views.contracts.View.MenuOption
 import com.android.szparag.todoist.views.contracts.View.PermissionType
 import com.android.szparag.todoist.views.contracts.View.PermissionType.NULL
 import com.android.szparag.todoist.views.contracts.View.UserAlertMessage

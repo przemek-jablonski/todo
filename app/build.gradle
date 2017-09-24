@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 android {
   compileSdkVersion 25
@@ -20,6 +21,11 @@ android {
   }
 }
 
+kapt {
+  generateStubs = true
+}
+
+
 dependencies {
   compile fileTree(dir: 'libs', include: ['*.jar'])
   androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -33,9 +39,13 @@ dependencies {
   compile 'io.reactivex.rxjava2:rxjava:2.1.1'
   compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
   compile 'io.reactivex.rxjava2:rxkotlin:2.0.3'
+  compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
+  compile 'com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:2.0.0'
+
+  //  dagger2
+  compile group: 'com.google.dagger', name: 'dagger', version: '2.9'
+  kapt 'com.google.dagger:dagger-compiler:2.9'
 
   compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-}
-repositories {
-  mavenCentral()
+  compile group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: '1.1.4-3'
 }

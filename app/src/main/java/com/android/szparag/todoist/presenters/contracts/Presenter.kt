@@ -1,9 +1,16 @@
-package com.android.szparag.todoist.presenters
+package com.android.szparag.todoist.presenters.contracts
 
+import android.support.annotation.CallSuper
+import com.android.szparag.todoist.Logger
 import com.android.szparag.todoist.views.contracts.View
+import io.reactivex.disposables.CompositeDisposable
 
 interface Presenter<V : View> {
 
+  var logger: Logger
+  var view: V?
+  var viewDisposables: CompositeDisposable
+  var modelDisposables: CompositeDisposable
 
   /**
    *  Attaches given View to this presenter, allowing two-way communication.
@@ -47,5 +54,29 @@ interface Presenter<V : View> {
    */
   fun onViewReady()
 
+
+  /**
+   * Setting subscriptions for all of the events coming from Model class.
+   *
+   * In order for subscriptions to be properly cleaned up, those Disposables should be aggregated inside #modelDisposables variable
+   * (.toModelDisposable() extension function comes handy here).
+   */
+  fun subscribeModelEvents()
+
+  /**
+   * Setting subscriptions for permission related events coming from View class.
+   *
+   * In order for subscriptions to be properly cleaned up, those Disposables should be aggregated inside #viewDisposables variable
+   * (.toViewDisposable() extension function comes handy here).
+   */
+  fun subscribeViewPermissionsEvents()
+
+  /**
+   * Setting subscriptions for user triggered events coming from View class.
+   *
+   * In order for subscriptions to be properly cleaned up, those Disposables should be aggregated inside #viewDisposables variable
+   * (.toViewDisposable() extension function comes handy here).
+   */
+  fun subscribeViewUserEvents()
 
 }
