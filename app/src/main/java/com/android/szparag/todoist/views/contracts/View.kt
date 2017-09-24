@@ -1,6 +1,6 @@
 package com.android.szparag.todoist.views.contracts
 
-import com.android.szparag.todoist.Logger
+import com.android.szparag.todoist.utils.Logger
 import com.android.szparag.todoist.events.PermissionEvent
 import com.android.szparag.todoist.views.TodoistBaseActivity
 import io.reactivex.Observable
@@ -94,6 +94,8 @@ interface View {
    *  Stops rendering current alert message
    */
   fun stopRenderUserAlertMessage(userAlertMessage: UserAlertMessage)
+
+  fun subscribeUserBackButtonPressed(): Observable<Any>
 
 }
 

@@ -1,7 +1,6 @@
 package com.android.szparag.todoist.presenters.contracts
 
-import android.support.annotation.CallSuper
-import com.android.szparag.todoist.Logger
+import com.android.szparag.todoist.utils.Logger
 import com.android.szparag.todoist.views.contracts.View
 import io.reactivex.disposables.CompositeDisposable
 

@@ -7,9 +7,11 @@ import io.reactivex.Observable
 
 interface WeekView : View {
 
-  fun onUserDayPicked(): Observable<Pair<android.view.View, Int>>
-  fun setupWeekdaysList()
-  fun resizeDayToFullscreen(view: android.view.View, positionInList: Int): Observable<AnimationEvent>
-  fun fixPositionByScrolling(positionInList: Int): Completable
+  fun setupWeekList(): Completable  //todo: custom data structure in
+
+  fun subscribeUserDayPicked(): Observable<Pair<android.view.View, Int>>
+
+  fun animateWeekdayToFullscreen(view: android.view.View, positionInList: Int): Observable<AnimationEvent>
+  fun animateShiftItemOnScreenPosition(positionInList: Int): Completable
 
 }

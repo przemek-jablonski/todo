@@ -1,4 +1,4 @@
-package com.android.szparag.todoist
+package com.android.szparag.todoist.utils
 
 import android.util.Log
 import kotlin.reflect.KClass

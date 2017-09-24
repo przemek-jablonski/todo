@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.support.annotation.CallSuper
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
-import com.android.szparag.todoist.Logger
-import com.android.szparag.todoist.emptyString
+import com.android.szparag.todoist.utils.Logger
+import com.android.szparag.todoist.utils.emptyString
 import com.android.szparag.todoist.events.PermissionEvent
 import com.android.szparag.todoist.events.PermissionEvent.PermissionResponse
 import com.android.szparag.todoist.events.PermissionEvent.PermissionResponse.PERMISSION_DENIED

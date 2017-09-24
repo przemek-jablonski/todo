@@ -1,7 +1,6 @@
 package com.android.szparag.todoist.dagger
 
 import android.content.Context
-import com.android.szparag.todoist.Logger
 import com.android.szparag.todoist.presenters.TodoistWeekPresenter
 import com.android.szparag.todoist.presenters.contracts.WeekPresenter
 import dagger.Module

@@ -1,6 +1,5 @@
-package com.android.szparag.todoist
+package com.android.szparag.todoist.utils
 
-import android.widget.Spinner
 import io.reactivex.Completable
 import io.reactivex.CompletableEmitter
 import io.reactivex.Flowable
@@ -24,8 +23,10 @@ private val OBSERVABLE_NULL_VALUE_THROWABLE_TEXT = "Observable onNext() argument
 private val REALM_COMPLETABLE_NULL_EXCEPTION_THROWABLE_TEXT = "Realm transaction callback errored (with null exception)"
 private val DISPOSABLE_ALREADY_IN_CONTAINER = "Disposable is already in given container. Throwing exception"
 private val DISPOSABLE_CONTAINER_IS_NULL = "Disposable container is null. Throwing exception"
-val DISPOSABLE_ALREADY_IN_CONTAINER_THROWABLE: Throwable by lazy { Throwable(DISPOSABLE_ALREADY_IN_CONTAINER) }
-val DISPOSABLE_CONTAINER_NULL_THROWABLE: Throwable by lazy { Throwable(DISPOSABLE_CONTAINER_NULL_THROWABLE) }
+val DISPOSABLE_ALREADY_IN_CONTAINER_THROWABLE: Throwable by lazy { Throwable(
+    DISPOSABLE_ALREADY_IN_CONTAINER) }
+val DISPOSABLE_CONTAINER_NULL_THROWABLE: Throwable by lazy { Throwable(
+    DISPOSABLE_CONTAINER_NULL_THROWABLE) }
 
 fun CompositeDisposable.add(disposable: Disposable?): Boolean {
   disposable?.let { this.add(disposable); return true }

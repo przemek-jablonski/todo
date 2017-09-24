@@ -1,6 +1,6 @@
 @file:Suppress("NOTHING_TO_INLINE")
 
-package com.android.szparag.todoist
+package com.android.szparag.todoist.utils
 
 import android.app.Activity
 import android.content.Context
@@ -10,7 +10,9 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.SmoothScroller
 import android.util.DisplayMetrics
 import android.view.View
-import android.view.WindowManager
+import com.android.szparag.todoist.ItemClickSupport
+import com.android.szparag.todoist.R
+import com.android.szparag.todoist.ResizeAnimation
 
 /**
  * Created by Przemyslaw Jablonski (github.com/sharaquss, pszemek.me) on 9/17/2017.
@@ -18,8 +20,10 @@ import android.view.WindowManager
 
 
 inline fun RecyclerView.setupGranularClickListener()
-    = this.getTag(R.id.item_click_support) as ItemClickSupport? ?: ItemClickSupport().apply { this.attach(this@setupGranularClickListener) }
-inline fun RecyclerView.clearGranularClickListener() = (this.getTag(R.id.item_click_support) as ItemClickSupport?)?.apply { this.detach() }
+    = this.getTag(
+    R.id.item_click_support) as ItemClickSupport? ?: ItemClickSupport().apply { this.attach(this@setupGranularClickListener) }
+inline fun RecyclerView.clearGranularClickListener() = (this.getTag(
+    R.id.item_click_support) as ItemClickSupport?)?.apply { this.detach() }
 
 inline fun Activity.getDisplayMetrics(): DisplayMetrics {
   val displayMetrics = DisplayMetrics()

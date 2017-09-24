@@ -1,10 +1,10 @@
 package com.android.szparag.todoist.presenters
 
 import android.support.annotation.CallSuper
-import com.android.szparag.todoist.Logger
-import com.android.szparag.todoist.add
+import com.android.szparag.todoist.utils.Logger
+import com.android.szparag.todoist.utils.add
 import com.android.szparag.todoist.presenters.contracts.Presenter
-import com.android.szparag.todoist.ui
+import com.android.szparag.todoist.utils.ui
 import com.android.szparag.todoist.views.contracts.View
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable

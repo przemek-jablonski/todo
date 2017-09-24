@@ -1,7 +1,7 @@
 package com.android.szparag.todoist.presenters
 
 import com.android.szparag.todoist.presenters.contracts.WeekPresenter
-import com.android.szparag.todoist.ui
+import com.android.szparag.todoist.utils.ui
 import com.android.szparag.todoist.views.contracts.WeekView
 import io.reactivex.rxkotlin.subscribeBy
 
@@ -11,7 +11,7 @@ class TodoistWeekPresenter : TodoistBasePresenter<WeekView>(), WeekPresenter {
 
   override fun onAttached() {
     super.onAttached()
-    view?.setupWeekdaysList()
+    view?.setupWeekList()?.ui()?.subscribe().toViewDisposable()
   }
 
   override fun onBeforeDetached() {
@@ -28,13 +28,33 @@ class TodoistWeekPresenter : TodoistBasePresenter<WeekView>(), WeekPresenter {
 
   override fun subscribeViewUserEvents() { //todo: presenter has knowledge about View (it.first), refactor
     logger.debug("subscribeViewUserEvents")
+    onUserDayPicked()
+  }
 
+  private fun onUserBackButtonPressed() {
+//    view
+//        ?.subscribeUserBackButtonPressed()
+//        ?.ui()
+//        ?.subscribeBy(
+//            onNext = {
+//              logger.debug()
+//            },
+//            onError = {
+//              logger.error("onUserBackButtonPressed.subscribeUserBackButtonPressed")
+//            },
+//            onComplete = {
+//              logger.debug()
+//            }
+//        )
+  }
+
+  private fun onUserDayPicked() {
     view?.run {
-      this.onUserDayPicked()
+      this.subscribeUserDayPicked()
           .ui()
           .doOnNext { dayOfTheWeekSelected = it.second }
-          .flatMap { this.resizeDayToFullscreen(it.first, it.second).ui() }
-          .flatMapCompletable { this.fixPositionByScrolling(dayOfTheWeekSelected).ui() }
+          .flatMap { this.animateWeekdayToFullscreen(it.first, it.second).ui() }
+          .flatMapCompletable { this.animateShiftItemOnScreenPosition(dayOfTheWeekSelected).ui() }
           .doFinally { logger.debug("ItemClickSupport.subscribeItemClick.doFinally") }
           .subscribeBy(
               onError = {
@@ -46,7 +66,8 @@ class TodoistWeekPresenter : TodoistBasePresenter<WeekView>(), WeekPresenter {
           )
           .toViewDisposable()
     }
-
   }
+
+
 
 }
