@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_todoist_week"
-    tools:context="com.android.szparag.todoist.TodoistWeekActivity">
+    tools:context="com.android.szparag.todoist.views.TodoistWeekActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview_calendar_week"
