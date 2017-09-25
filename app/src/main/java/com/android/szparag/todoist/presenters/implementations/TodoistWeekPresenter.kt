@@ -1,7 +1,9 @@
 package com.android.szparag.todoist.presenters.implementations
 
 import com.android.szparag.todoist.AnimationEvent
+import com.android.szparag.todoist.models.contracts.CalendarModel
 import com.android.szparag.todoist.presenters.contracts.WeekPresenter
+import com.android.szparag.todoist.utils.computation
 import com.android.szparag.todoist.utils.ui
 import com.android.szparag.todoist.views.contracts.View.Screen.DAY_SCREEN
 import com.android.szparag.todoist.views.contracts.View.Screen.MONTH_SCREEN
@@ -9,7 +11,7 @@ import com.android.szparag.todoist.views.contracts.WeekView
 import io.reactivex.rxkotlin.subscribeBy
 import java.util.concurrent.TimeUnit
 
-class TodoistWeekPresenter : TodoistBasePresenter<WeekView>(), WeekPresenter {
+class TodoistWeekPresenter(private var model: CalendarModel) : TodoistBasePresenter<WeekView>(), WeekPresenter {
 
   private var dayOfTheWeekSelected = -1
 
@@ -31,6 +33,17 @@ class TodoistWeekPresenter : TodoistBasePresenter<WeekView>(), WeekPresenter {
 
   override fun subscribeModelEvents() {
     logger.debug("subscribeModelEvents")
+    model
+        .attach()
+        .computation()
+        .subscribeBy (
+            onComplete = {
+              logger.debug("subscribeModelEvents.model.attach.onComplete")
+            },
+            onError = {
+              logger.error("subscribeModelEvents.model.attach.onError")
+            }
+        )
   }
 
   override fun subscribeViewUserEvents() { //todo: presenter has knowledge about View (it.first), refactor

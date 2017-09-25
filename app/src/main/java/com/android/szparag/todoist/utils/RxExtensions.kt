@@ -125,3 +125,5 @@ fun <T> Observable<T>.single() = this.subscribeOn(Schedulers.single())
 fun <T> Flowable<T>.single() = this.subscribeOn(Schedulers.single())
 
 fun <T> Observable<T>.computation() = this.subscribeOn(Schedulers.computation())
+
+fun Completable.computation() = this.subscribeOn(Schedulers.computation())

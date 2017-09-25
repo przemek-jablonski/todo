@@ -13,6 +13,7 @@ import android.view.View
 import com.android.szparag.todoist.ItemClickSupport
 import com.android.szparag.todoist.R
 import com.android.szparag.todoist.ResizeAnimation
+import org.joda.time.DateTime
 
 /**
  * Created by Przemyslaw Jablonski (github.com/sharaquss, pszemek.me) on 9/17/2017.
@@ -24,6 +25,9 @@ import com.android.szparag.todoist.ResizeAnimation
 //fun lerp(a: Float, b: Float, amount: Float): Float {
 //
 //}
+
+inline fun DateTime.unixTime(): Long = (this.millis / 1000F).toLong()
+
 
 inline fun RecyclerView.setupGranularClickListener()
     = this.getTag(

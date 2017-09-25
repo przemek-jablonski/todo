@@ -21,6 +21,7 @@ import com.android.szparag.todoist.utils.ui
 import com.android.szparag.todoist.views.contracts.WeekView
 import io.reactivex.Completable
 import io.reactivex.Observable
+import java.util.Locale
 import javax.inject.Inject
 
 class TodoistWeekActivity : TodoistBaseActivity<WeekPresenter>(), WeekView {
@@ -31,7 +32,6 @@ class TodoistWeekActivity : TodoistBaseActivity<WeekPresenter>(), WeekView {
   val calendarWeekRecyclerViewDecor by lazy {
     DividerItemDecoration(calendarWeekRecyclerView.context, calendarWeekRecyclerViewLayoutManager.orientation)
   }
-  private var currentScrollTimeMillis: Int = -1
 
   @Inject override lateinit var presenter: WeekPresenter
 
