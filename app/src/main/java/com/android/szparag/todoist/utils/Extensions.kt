@@ -31,6 +31,10 @@ inline fun Activity.getDisplayMetrics(): DisplayMetrics {
   return displayMetrics
 }
 
+inline fun RecyclerView.getSmoothScrollTime() {
+  this.layoutManager
+}
+
 inline fun LinearLayoutManager.setupSmoothScrolling(context: Context, durationFactor: Float = 2F): LinearLayoutManager {
   val linearSmoothScroller = LinearSmoothScroller(context).configureDurationFactor(context, durationFactor)
   return object : LinearLayoutManager(context) {

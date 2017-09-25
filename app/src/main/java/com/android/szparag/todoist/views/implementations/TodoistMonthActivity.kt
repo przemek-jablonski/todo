@@ -1,6 +1,5 @@
-package com.android.szparag.todoist.views
+package com.android.szparag.todoist.views.implementations
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.android.szparag.todoist.R
 import com.android.szparag.todoist.presenters.contracts.MonthPresenter

@@ -10,7 +10,7 @@
       android:supportsRtl="true"
       android:theme="@style/AppTheme">
     <activity
-        android:name=".views.TodoistWeekActivity"
+        android:name=".views.implementations.TodoistWeekActivity"
         android:label="@string/app_name"
         android:theme="@style/AppTheme.NoActionBar">
       <intent-filter>
@@ -19,9 +19,9 @@
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
-    <activity android:name=".views.TodoistMonthActivity">
+    <activity android:name=".views.implementations.TodoistMonthActivity">
     </activity>
-    <activity android:name=".views.TodoistDayActivity">
+    <activity android:name=".views.implementations.TodoistDayActivity">
     </activity>
   </application>
 

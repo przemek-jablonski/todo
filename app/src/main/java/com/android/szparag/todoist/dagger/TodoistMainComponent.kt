@@ -2,7 +2,7 @@
 
 package com.android.szparag.todoist.dagger
 
-import com.android.szparag.todoist.views.TodoistWeekActivity
+import com.android.szparag.todoist.views.implementations.TodoistWeekActivity
 import dagger.Component
 import javax.inject.Singleton
 

@@ -1,19 +1,20 @@
-package com.android.szparag.todoist.views
+package com.android.szparag.todoist.views.implementations
 
 import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.CallSuper
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
-import com.android.szparag.todoist.utils.Logger
-import com.android.szparag.todoist.utils.emptyString
 import com.android.szparag.todoist.events.PermissionEvent
 import com.android.szparag.todoist.events.PermissionEvent.PermissionResponse
 import com.android.szparag.todoist.events.PermissionEvent.PermissionResponse.PERMISSION_DENIED
 import com.android.szparag.todoist.presenters.contracts.Presenter
+import com.android.szparag.todoist.utils.Logger
+import com.android.szparag.todoist.utils.emptyString
 import com.android.szparag.todoist.views.contracts.View
 import com.android.szparag.todoist.views.contracts.View.PermissionType
 import com.android.szparag.todoist.views.contracts.View.PermissionType.NULL
+import com.android.szparag.todoist.views.contracts.View.Screen
 import com.android.szparag.todoist.views.contracts.View.UserAlertMessage
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
@@ -68,9 +69,13 @@ abstract class TodoistBaseActivity<P : Presenter<*>> : AppCompatActivity(), View
     return viewReadySubject
   }
 
-  override fun <A : TodoistBaseActivity<*>> startActivity(targetActivityClass: Class<A>) {
-    logger.debug("startActivity, target: $targetActivityClass")
-    startActivity(Intent(applicationContext, targetActivityClass))
+  override fun gotoScreen(targetScreen: Screen) {
+    logger.debug("gotoScreen, targetScreen: $targetScreen")
+    startActivity(when (targetScreen) {
+      View.Screen.DAY_SCREEN -> Intent(applicationContext, TodoistDayActivity::class.java)
+      View.Screen.WEEK_SCREEN -> Intent(applicationContext, TodoistWeekActivity::class.java)
+      else -> Intent(applicationContext, TodoistMonthActivity::class.java)
+    })
   }
 
 
@@ -86,9 +91,7 @@ abstract class TodoistBaseActivity<P : Presenter<*>> : AppCompatActivity(), View
 
   override fun requestPermissions(vararg permissions: PermissionType) {
     logger.debug("requestPermissions, permissions: $permissions")
-    requestPermissions(
-        permissions.map(this::permissionTypeToString).toTypedArray(),
-        requestCode())
+    requestPermissions(permissions.map(this::permissionTypeToString).toTypedArray(), requestCode())
   }
 
   override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -124,7 +127,7 @@ abstract class TodoistBaseActivity<P : Presenter<*>> : AppCompatActivity(), View
     return PERMISSION_DENIED
   }
 
-  private fun requestCode()  = Math.abs(this.packageName.hashCode())
+  private fun requestCode() = Math.abs(this.packageName.hashCode())
 
 
 }

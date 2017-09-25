@@ -11,8 +11,7 @@ class Logger {
   private val errorLoggingAvailable = true //todo: check if NOT in debug
 
   companion object {
-    fun create(callerClass : KClass<*>)
-        = Logger().apply { this.callerClassString = callerClass.simpleName.toString() }
+    fun create(callerClass : KClass<*>) = Logger().apply { this.callerClassString = callerClass.simpleName.toString() }
   }
 
   init {
@@ -25,9 +24,8 @@ class Logger {
   fun error(string: String?, throwable: Throwable) = log(Log.ERROR, string, throwable)
 
   private fun log(level: Int = Log.DEBUG, string: String?, exception: Throwable? = null) {
-    exception?.let {
-      Log.println(level, APPLICATION_TAG, "$callerClassString: $string $exception")
-    } ?: Log.println(level, APPLICATION_TAG, "$callerClassString: $string")
+    exception?.let { Log.println(level, APPLICATION_TAG, "$callerClassString: $string, exc: $exception") }
+        ?: Log.println(level, APPLICATION_TAG, "$callerClassString: $string")
 
     exception?.let { exception.printStackTrace() }
   }

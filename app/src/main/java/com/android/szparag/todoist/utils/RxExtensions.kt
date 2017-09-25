@@ -4,15 +4,16 @@ import io.reactivex.Completable
 import io.reactivex.CompletableEmitter
 import io.reactivex.Flowable
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 
 
 private val onNextStub: (Any) -> Unit = {}
 private val onErrorStub: (Throwable) -> Unit = {
-
   throw RuntimeException(it)
 }
 private val onCompleteStub: () -> Unit = {}
@@ -23,10 +24,14 @@ private val OBSERVABLE_NULL_VALUE_THROWABLE_TEXT = "Observable onNext() argument
 private val REALM_COMPLETABLE_NULL_EXCEPTION_THROWABLE_TEXT = "Realm transaction callback errored (with null exception)"
 private val DISPOSABLE_ALREADY_IN_CONTAINER = "Disposable is already in given container. Throwing exception"
 private val DISPOSABLE_CONTAINER_IS_NULL = "Disposable container is null. Throwing exception"
-val DISPOSABLE_ALREADY_IN_CONTAINER_THROWABLE: Throwable by lazy { Throwable(
-    DISPOSABLE_ALREADY_IN_CONTAINER) }
-val DISPOSABLE_CONTAINER_NULL_THROWABLE: Throwable by lazy { Throwable(
-    DISPOSABLE_CONTAINER_NULL_THROWABLE) }
+val DISPOSABLE_ALREADY_IN_CONTAINER_THROWABLE: Throwable by lazy {
+  Throwable(
+      DISPOSABLE_ALREADY_IN_CONTAINER)
+}
+val DISPOSABLE_CONTAINER_NULL_THROWABLE: Throwable by lazy {
+  Throwable(
+      DISPOSABLE_CONTAINER_NULL_THROWABLE)
+}
 
 fun CompositeDisposable.add(disposable: Disposable?): Boolean {
   disposable?.let { this.add(disposable); return true }
@@ -48,6 +53,30 @@ fun Completable?.nonNull()
 fun CompletableEmitter.safeOnError(throwable: Throwable?) =
     this.onError(throwable ?: Throwable(REALM_COMPLETABLE_NULL_EXCEPTION_THROWABLE_TEXT))
 
+//fun <T, R> Observable<T>.flatMap(mapper: Function<>) {
+//
+//}
+
+fun <T> Observable<T>.flatMap(completable: Completable, onComplete: () -> Unit = onCompleteStub, onError: (Throwable) -> Unit =
+onErrorStub):
+    Observable<T> {
+//  var disposable: Disposable? = null
+  return this.doOnNext {
+//    disposable =
+        completable
+            .subscribe()
+//            .subscribeBy (
+//        onComplete = {
+////          disposable?.takeIf {it.isDisposed}?.dispose()
+//          com.android.szparag.todoist.utils.onCompleteStub.invoke()
+//        },
+//        onError = { exc ->
+////          disposable?.takeIf {it.isDisposed}?.dispose()
+//          com.android.szparag.todoist.utils.onErrorStub.invoke(exc)
+//        }
+//    )
+  }
+}
 
 //fun Realm.executeTransactionAsyncBy(transaction: Transaction, onSuccess: OnSuccess = OnSuccess {},
 //    onError: OnError = OnError {}) {
@@ -81,16 +110,18 @@ fun CompletableEmitter.safeOnError(throwable: Throwable?) =
 //  return SpinnerSelectionObservable(view)
 //}
 
-fun Completable.ui(): Completable = this.subscribeOn(AndroidSchedulers.mainThread())
+fun Completable.ui() = this.subscribeOn(AndroidSchedulers.mainThread())
 
-fun <T> Observable<T>.ui(): Observable<T> = this.subscribeOn(AndroidSchedulers.mainThread())
+fun <T> Observable<T>.ui() = this.subscribeOn(AndroidSchedulers.mainThread())
 
-fun <T> Flowable<T>.ui(): Flowable<T> = this.subscribeOn(AndroidSchedulers.mainThread())
+fun <T> Single<T>.ui() = this.subscribeOn(AndroidSchedulers.mainThread())
 
-fun Completable.single(): Completable = this.subscribeOn(Schedulers.single())
+fun <T> Flowable<T>.ui() = this.subscribeOn(AndroidSchedulers.mainThread())
 
-fun <T> Observable<T>.single(): Observable<T> = this.subscribeOn(Schedulers.single())
+fun Completable.single() = this.subscribeOn(Schedulers.single())
 
-fun <T> Flowable<T>.single(): Flowable<T> = this.subscribeOn(Schedulers.single())
+fun <T> Observable<T>.single() = this.subscribeOn(Schedulers.single())
 
-fun <T> Observable<T>.computation(): Observable<T> = this.subscribeOn(Schedulers.computation())
+fun <T> Flowable<T>.single() = this.subscribeOn(Schedulers.single())
+
+fun <T> Observable<T>.computation() = this.subscribeOn(Schedulers.computation())

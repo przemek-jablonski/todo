@@ -2,7 +2,6 @@ package com.android.szparag.todoist.views.contracts
 
 import com.android.szparag.todoist.utils.Logger
 import com.android.szparag.todoist.events.PermissionEvent
-import com.android.szparag.todoist.views.TodoistBaseActivity
 import io.reactivex.Observable
 import io.reactivex.subjects.Subject
 
@@ -11,6 +10,12 @@ interface View {
   var logger: Logger
   val viewReadySubject: Subject<Boolean>
   val permissionsSubject: Subject<PermissionEvent>
+
+  enum class Screen {
+    DAY_SCREEN,
+    WEEK_SCREEN,
+    MONTH_SCREEN
+  }
 
   /**
    *  Collection of alert messages that can be rendered for the user in this app
@@ -66,7 +71,7 @@ interface View {
    *  Triggers start of another Activity. Contract omits providing applicationContext
    *  so that it can be used with non-Android based Presenters.
    */
-  fun <A : TodoistBaseActivity<*>> startActivity(targetActivityClass: Class<A>)
+  fun gotoScreen(targetScreen: Screen)
 
   /**
    *  Checks whether permission(s) from PermissionType group are granted or not

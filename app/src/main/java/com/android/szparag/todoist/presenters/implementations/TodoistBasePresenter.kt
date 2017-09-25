@@ -1,4 +1,4 @@
-package com.android.szparag.todoist.presenters
+package com.android.szparag.todoist.presenters.implementations
 
 import android.support.annotation.CallSuper
 import com.android.szparag.todoist.utils.Logger

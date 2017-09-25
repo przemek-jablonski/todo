@@ -1,4 +1,4 @@
-package com.android.szparag.todoist.views
+package com.android.szparag.todoist.views.implementations
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
