@@ -18,6 +18,12 @@ import com.android.szparag.todoist.ResizeAnimation
  * Created by Przemyslaw Jablonski (github.com/sharaquss, pszemek.me) on 9/17/2017.
  */
 
+//fun Float.lerp(other: Float, amount: Float): Float = this + amount * (other - this)
+//fun Int.lerp(other: Float, amount: Float): Float = this + amount * (other - this)
+
+//fun lerp(a: Float, b: Float, amount: Float): Float {
+//
+//}
 
 inline fun RecyclerView.setupGranularClickListener()
     = this.getTag(

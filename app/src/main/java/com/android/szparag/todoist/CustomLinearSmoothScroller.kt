@@ -5,11 +5,10 @@ import android.graphics.PointF
 import android.support.v7.widget.LinearSmoothScroller
 import android.util.DisplayMetrics
 import android.util.Log
-import com.android.szparag.todoist.utils.Logger
-import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.Subject
 
 class CustomLinearSmoothScroller(context: Context) : LinearSmoothScroller(context) {
+
+  val SCROLLING_TIME_CEIL_MILLIS = 150
 
   override fun computeScrollVectorForPosition(targetPosition: Int): PointF? {
     val result = super.computeScrollVectorForPosition(targetPosition)
@@ -33,8 +32,10 @@ class CustomLinearSmoothScroller(context: Context) : LinearSmoothScroller(contex
   }
 
   override fun calculateTimeForScrolling(dx: Int): Int {
-    val result = super.calculateTimeForScrolling(dx)
-    Log.d("RV", "${hashCode()} calculateTimeForScrolling, dx: $dx, time(total,ms): $result")
-    return result
+    val resultSuper = super.calculateTimeForScrolling(dx)
+    val resultAdjusted = if (resultSuper <= 10) resultSuper else minOf(resultSuper, SCROLLING_TIME_CEIL_MILLIS)
+    Log.d("RV", "${hashCode()} calculateTimeForScrolling, dx: $dx, resultSuper: $resultSuper, resultAdjusted: $resultAdjusted, scrollingCeil: " +
+        "$SCROLLING_TIME_CEIL_MILLIS")
+    return resultAdjusted
   }
 }
