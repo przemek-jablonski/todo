@@ -21,8 +21,6 @@ import org.joda.time.Weeks
 import org.joda.time.DateTimeConstants
 
 
-
-
 //todo: locale is useless here
 class TodoistCalendarModel(private val locale: Locale): CalendarModel {
 
@@ -68,9 +66,11 @@ class TodoistCalendarModel(private val locale: Locale): CalendarModel {
       (0..6)
           .map { monday.plusDays(it) }
           .mapTo(weekDays) {
-            RenderWeekDay(dayName = it.dayOfWeek().getAsText(locale),
+            RenderWeekDay(
+                dayName = it.dayOfWeek().getAsText(locale),
                 dayNumber = it.dayOfMonth,
                 monthNumber = it.monthOfYear,
+                monthName = it.monthOfYear().getAsText(locale),
                 yearNumber = it.year,
                 tasksDoneCount = 0,
                 tasksRemainingCount = 0)

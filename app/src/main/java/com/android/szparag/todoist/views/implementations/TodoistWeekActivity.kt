@@ -64,7 +64,7 @@ class TodoistWeekActivity : TodoistBaseActivity<WeekPresenter>(), WeekView {
     return Completable.fromAction {
       calendarWeekRecyclerView.apply {
         recyclerHeight = this.height
-        this.adapter = WeekRvAdapter()
+        this.adapter = WeekRvAdapter(renderWeekDaysEvent.weekList)
         this.layoutManager = calendarWeekRecyclerViewLayoutManager
         this.addItemDecoration(calendarWeekRecyclerViewDecor)
       }
