@@ -1,6 +1,5 @@
 package com.android.szparag.todoist
 
-import android.icu.util.Calendar
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +16,7 @@ class WeekRvAdapter : RecyclerView.Adapter<WeekViewHolder>() {
 
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeekViewHolder {
-    return WeekViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_recyclerview_calendar_week, parent, false))
+    return WeekViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_calendar_week_day, parent, false))
   }
 
   override fun onBindViewHolder(holder: WeekViewHolder, position: Int) {
