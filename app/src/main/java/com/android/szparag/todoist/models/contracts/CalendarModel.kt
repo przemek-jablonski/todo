@@ -1,5 +1,7 @@
 package com.android.szparag.todoist.models.contracts
 
+import com.android.szparag.todoist.events.RenderWeekDayEvent
+import io.reactivex.Observable
 import java.util.Calendar
 
 interface CalendarModel: Model {
@@ -10,6 +12,6 @@ interface CalendarModel: Model {
 
   fun getCurrentDay()
 
-  fun getCurrentWeek()
+  fun getCurrentWeek(): Observable<RenderWeekDayEvent>
 
 }

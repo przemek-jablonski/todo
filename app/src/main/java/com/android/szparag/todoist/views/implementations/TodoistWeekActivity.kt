@@ -12,6 +12,7 @@ import com.android.szparag.todoist.R.layout
 import com.android.szparag.todoist.SmoothScrollLinearLayoutManager
 import com.android.szparag.todoist.WeekRvAdapter
 import com.android.szparag.todoist.dagger.DaggerGlobalScopeWrapper
+import com.android.szparag.todoist.events.RenderWeekDayEvent
 import com.android.szparag.todoist.presenters.contracts.WeekPresenter
 import com.android.szparag.todoist.utils.bindView
 import com.android.szparag.todoist.utils.getDisplayMetrics
@@ -57,8 +58,9 @@ class TodoistWeekActivity : TodoistBaseActivity<WeekPresenter>(), WeekView {
     presenter.detach()
   }
 
-  override fun setupWeekList(): Completable { //todo: should be Completable
-    logger.debug("setupWeekList")
+
+  override fun setupWeekList(renderWeekDaysEvent: RenderWeekDayEvent): Completable {
+    logger.debug("setupWeekList, event: $renderWeekDaysEvent")
     return Completable.fromAction {
       calendarWeekRecyclerView.apply {
         recyclerHeight = this.height

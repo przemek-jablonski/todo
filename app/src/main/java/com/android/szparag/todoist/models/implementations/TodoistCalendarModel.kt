@@ -1,9 +1,12 @@
 package com.android.szparag.todoist.models.implementations
 
+import com.android.szparag.todoist.events.RenderWeekDayEvent
 import com.android.szparag.todoist.models.contracts.CalendarModel
+import com.android.szparag.todoist.models.entities.RenderWeekDay
 import com.android.szparag.todoist.utils.Logger
 import com.android.szparag.todoist.utils.unixTime
 import io.reactivex.Completable
+import io.reactivex.Observable
 import java.util.Calendar
 import java.util.Locale
 import org.joda.time.DateTimeZone
@@ -15,6 +18,9 @@ import org.joda.time.LocalTime
 import org.joda.time.DateTimeFieldType.dayOfWeek
 import org.joda.time.Period
 import org.joda.time.Weeks
+import org.joda.time.DateTimeConstants
+
+
 
 
 //todo: locale is useless here
@@ -24,8 +30,8 @@ class TodoistCalendarModel(private val locale: Locale): CalendarModel {
   override lateinit var logger: Logger
 
   override fun attach(): Completable {
+    logger = Logger.create(this::class)
     return Completable.fromAction {
-      logger = Logger.create(this::class)
       logger.debug("attach")
       setupCalendarInstance()
     }
@@ -53,9 +59,24 @@ class TodoistCalendarModel(private val locale: Locale): CalendarModel {
 
   }
 
-  override fun getCurrentWeek() {
+  override fun getCurrentWeek(): Observable<RenderWeekDayEvent> {
     logger.debug("getCurrentWeek")
-
+    return Observable.create { emitter ->
+      val weekDays = mutableListOf<RenderWeekDay>()
+      val now = LocalDate()
+      val monday = now.withDayOfWeek(DateTimeConstants.MONDAY)
+      (0..6)
+          .map { monday.plusDays(it) }
+          .mapTo(weekDays) {
+            RenderWeekDay(dayName = it.dayOfWeek().getAsText(locale),
+                dayNumber = it.dayOfMonth,
+                monthNumber = it.monthOfYear,
+                yearNumber = it.year,
+                tasksDoneCount = 0,
+                tasksRemainingCount = 0)
+          }
+      emitter.onNext(RenderWeekDayEvent(weekDays))
+    }
   }
 
 

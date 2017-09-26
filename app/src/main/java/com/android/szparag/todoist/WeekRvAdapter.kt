@@ -21,7 +21,7 @@ class WeekRvAdapter : RecyclerView.Adapter<WeekViewHolder>() {
 
   override fun onBindViewHolder(holder: WeekViewHolder, position: Int) {
     val dayOfTheWeekString = daysOfTheWeekString[position]
-    holder.itemTextView.text = dayOfTheWeekString
+//    holder.itemTextView.text = dayOfTheWeekString
   }
 
   override fun getItemCount(): Int {
@@ -31,7 +31,7 @@ class WeekRvAdapter : RecyclerView.Adapter<WeekViewHolder>() {
 
   class WeekViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    internal var itemTextView : TextView = itemView.findViewById(R.id.calendarWeekText) as TextView
+//    internal var itemTextView : TextView = itemView.findViewById(R.id.calendarWeekText) as TextView
 
   }
 

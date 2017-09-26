@@ -4,6 +4,7 @@ import com.android.szparag.todoist.AnimationEvent
 import com.android.szparag.todoist.models.contracts.CalendarModel
 import com.android.szparag.todoist.presenters.contracts.WeekPresenter
 import com.android.szparag.todoist.utils.computation
+import com.android.szparag.todoist.utils.flatMap
 import com.android.szparag.todoist.utils.ui
 import com.android.szparag.todoist.views.contracts.View.Screen.DAY_SCREEN
 import com.android.szparag.todoist.views.contracts.View.Screen.MONTH_SCREEN
@@ -18,7 +19,17 @@ class TodoistWeekPresenter(private var model: CalendarModel) : TodoistBasePresen
   override fun onAttached() {
     super.onAttached()
     logger.debug("onAttached")
-    view?.setupWeekList()?.ui()?.subscribe().toViewDisposable()
+    model.getCurrentWeek()
+        .computation()
+        .filter { view != null }
+        .flatMapCompletable { view!!.setupWeekList(it).ui() }
+        .subscribeBy(onComplete = {
+          logger.debug("model.getCurrentWeek/view.setupWeekList.onNext")
+        }
+        , onError = { exc ->
+          logger.error("model.getCurrentWeek/view.setupWeekList.onError", exc)
+        })
+        .toModelDisposable()
   }
 
   override fun onBeforeDetached() {

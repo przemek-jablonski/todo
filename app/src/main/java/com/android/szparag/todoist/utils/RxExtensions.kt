@@ -2,6 +2,7 @@ package com.android.szparag.todoist.utils
 
 import io.reactivex.Completable
 import io.reactivex.CompletableEmitter
+import io.reactivex.CompletableSource
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -32,6 +33,7 @@ val DISPOSABLE_CONTAINER_NULL_THROWABLE: Throwable by lazy {
   Throwable(
       DISPOSABLE_CONTAINER_NULL_THROWABLE)
 }
+
 
 fun CompositeDisposable.add(disposable: Disposable?): Boolean {
   disposable?.let { this.add(disposable); return true }
