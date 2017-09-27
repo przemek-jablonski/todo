@@ -26,6 +26,7 @@ import java.util.Locale
 import javax.inject.Inject
 
 class TodoistWeekActivity : TodoistBaseActivity<WeekPresenter>(), WeekView {
+
   var recyclerHeight: Int? = null
   lateinit var displayMetrics: DisplayMetrics
   val calendarWeekRecyclerView: RecyclerView by bindView(id.recyclerview_calendar_week)

@@ -4,7 +4,9 @@ import android.content.Context
 import android.os.Build
 import com.android.szparag.todoist.models.contracts.CalendarModel
 import com.android.szparag.todoist.models.implementations.TodoistCalendarModel
+import com.android.szparag.todoist.presenters.contracts.DayPresenter
 import com.android.szparag.todoist.presenters.contracts.WeekPresenter
+import com.android.szparag.todoist.presenters.implementations.TodoistDayPresenter
 import com.android.szparag.todoist.presenters.implementations.TodoistWeekPresenter
 import dagger.Module
 import dagger.Provides
@@ -16,6 +18,7 @@ class TodoistMainModule(private val context: Context) {
 
   @Provides @Singleton fun provideContext() = context
   @Provides fun provideWeekPresenter(calendarModel: CalendarModel): WeekPresenter = TodoistWeekPresenter(calendarModel)
+  @Provides @Singleton fun provideDayPresenter(calendarModel: CalendarModel): DayPresenter = TodoistDayPresenter(calendarModel)
   @Provides @Singleton fun provideCalendarModel(currentLocale: Locale): CalendarModel = TodoistCalendarModel(currentLocale)
 
   @Suppress("DEPRECATION") @Provides fun provideCurrentLocale() =

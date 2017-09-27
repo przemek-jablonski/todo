@@ -28,7 +28,7 @@ class TodoistCalendarModel(private val locale: Locale): CalendarModel {
   override lateinit var logger: Logger
 
   override fun attach(): Completable {
-    logger = Logger.create(this::class)
+    logger = Logger.create(this::class, this.hashCode())
     return Completable.fromAction {
       logger.debug("attach")
       setupCalendarInstance()
@@ -52,9 +52,9 @@ class TodoistCalendarModel(private val locale: Locale): CalendarModel {
 
   override fun detach() = Completable.fromAction { logger.debug("detach") }
 
-  override fun getCurrentDay() {
+  override fun getCurrentDay(): Observable<RenderWeekDay> {
     logger.debug("getCurrentDay")
-
+    return Observable.create {  }
   }
 
   override fun getCurrentWeek(): Observable<RenderWeekDayEvent> {

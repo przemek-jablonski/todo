@@ -12,7 +12,7 @@ import com.android.szparag.todoist.views.contracts.WeekView
 import io.reactivex.rxkotlin.subscribeBy
 import java.util.concurrent.TimeUnit
 
-class TodoistWeekPresenter(private var model: CalendarModel) : TodoistBasePresenter<WeekView>(), WeekPresenter {
+class TodoistWeekPresenter(private val model: CalendarModel) : TodoistBasePresenter<WeekView>(), WeekPresenter {
 
   private var dayOfTheWeekSelected = -1
 

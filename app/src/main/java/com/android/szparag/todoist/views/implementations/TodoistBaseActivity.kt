@@ -15,6 +15,7 @@ import com.android.szparag.todoist.views.contracts.View
 import com.android.szparag.todoist.views.contracts.View.PermissionType
 import com.android.szparag.todoist.views.contracts.View.PermissionType.NULL
 import com.android.szparag.todoist.views.contracts.View.Screen
+import com.android.szparag.todoist.views.contracts.View.Screen.DAY_SCREEN
 import com.android.szparag.todoist.views.contracts.View.UserAlertMessage
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
@@ -34,7 +35,7 @@ abstract class TodoistBaseActivity<P : Presenter<*>> : AppCompatActivity(), View
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     viewReadySubject.doOnSubscribe { viewReadySubject.onNext(hasWindowFocus()) }
-    logger = Logger.create(this::class)
+    logger = Logger.create(this::class, this.hashCode())
     logger.debug("logger created, $logger")
     logger.debug("onCreate, bundle: $savedInstanceState")
   }
@@ -76,6 +77,7 @@ abstract class TodoistBaseActivity<P : Presenter<*>> : AppCompatActivity(), View
       View.Screen.WEEK_SCREEN -> Intent(applicationContext, TodoistWeekActivity::class.java)
       else -> Intent(applicationContext, TodoistMonthActivity::class.java)
     })
+    if (targetScreen == DAY_SCREEN) overridePendingTransition(0, 0)
   }
 
 
