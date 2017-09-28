@@ -1,18 +1,23 @@
 package com.android.szparag.todoist.models.contracts
 
-import com.android.szparag.todoist.events.RenderWeekDayEvent
-import com.android.szparag.todoist.models.entities.RenderWeekDay
+import com.android.szparag.todoist.models.entities.RenderWeekDays
 import io.reactivex.Observable
 import java.util.Calendar
+import java.util.Locale
 
 interface CalendarModel: Model {
 
   val calendar: Calendar
+  var locale: Locale
 
   fun setupCalendarInstance()
 
-  fun getCurrentDay(): Observable<RenderWeekDay>
+  fun updateLocale(locale: Locale)
+  fun setSelectedDay(dayNumberInTheWeek: Int): Observable<Int>
+  fun setSelectedDaySync(dayNumberInTheWeek: Int)
 
-  fun getCurrentWeek(): Observable<RenderWeekDayEvent>
+  fun getSelectedDay(): Observable<com.android.szparag.todoist.models.entities.RenderDay>
+  fun getCurrentWeek(): Observable<RenderWeekDays>
+
 
 }

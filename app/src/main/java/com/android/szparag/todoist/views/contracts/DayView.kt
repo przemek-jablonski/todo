@@ -1,5 +1,6 @@
 package com.android.szparag.todoist.views.contracts
 
+import com.android.szparag.todoist.models.entities.RenderDay
 import io.reactivex.Completable
 import io.reactivex.Observable
 
@@ -7,7 +8,9 @@ interface DayView : View {
 
   fun setupCalendarHeader(headerImageUrl: String): Completable
   fun setupCalendarQuote(quoteText: String): Completable
-  fun setupCalendarCheckList(): Completable //todo: custom data structure in
+  fun setupCalendarExtras(renderDay: RenderDay): Completable
+  fun setupCalendarCheckList(renderDay: RenderDay): Completable
+  fun setupCalendarBackingView(renderDay: RenderDay): Completable
 
   fun subscribeUserAddButtonClicked(): Observable<Any>
   fun subscribeUserChecklistItemCheck(): Observable<Any>

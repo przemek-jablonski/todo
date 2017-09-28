@@ -12,17 +12,15 @@ import com.android.szparag.todoist.R.layout
 import com.android.szparag.todoist.SmoothScrollLinearLayoutManager
 import com.android.szparag.todoist.WeekRvAdapter
 import com.android.szparag.todoist.dagger.DaggerGlobalScopeWrapper
-import com.android.szparag.todoist.events.RenderWeekDayEvent
+import com.android.szparag.todoist.models.entities.RenderWeekDays
 import com.android.szparag.todoist.presenters.contracts.WeekPresenter
 import com.android.szparag.todoist.utils.bindView
 import com.android.szparag.todoist.utils.getDisplayMetrics
 import com.android.szparag.todoist.utils.resize
 import com.android.szparag.todoist.utils.setupGranularClickListener
-import com.android.szparag.todoist.utils.ui
 import com.android.szparag.todoist.views.contracts.WeekView
 import io.reactivex.Completable
 import io.reactivex.Observable
-import java.util.Locale
 import javax.inject.Inject
 
 class TodoistWeekActivity : TodoistBaseActivity<WeekPresenter>(), WeekView {
@@ -60,12 +58,12 @@ class TodoistWeekActivity : TodoistBaseActivity<WeekPresenter>(), WeekView {
   }
 
 
-  override fun setupWeekList(renderWeekDaysEvent: RenderWeekDayEvent): Completable {
-    logger.debug("setupWeekList, event: $renderWeekDaysEvent")
+  override fun setupWeekList(renderWeekDays: RenderWeekDays): Completable {
+    logger.debug("setupWeekList, event: $renderWeekDays")
     return Completable.fromAction {
       calendarWeekRecyclerView.apply {
         recyclerHeight = this.height
-        this.adapter = WeekRvAdapter(renderWeekDaysEvent.weekList)
+        this.adapter = WeekRvAdapter(renderWeekDays.list)
         this.layoutManager = calendarWeekRecyclerViewLayoutManager
         this.addItemDecoration(calendarWeekRecyclerViewDecor)
       }

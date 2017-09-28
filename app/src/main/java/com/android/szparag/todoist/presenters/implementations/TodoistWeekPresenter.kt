@@ -4,7 +4,6 @@ import com.android.szparag.todoist.AnimationEvent
 import com.android.szparag.todoist.models.contracts.CalendarModel
 import com.android.szparag.todoist.presenters.contracts.WeekPresenter
 import com.android.szparag.todoist.utils.computation
-import com.android.szparag.todoist.utils.flatMap
 import com.android.szparag.todoist.utils.ui
 import com.android.szparag.todoist.views.contracts.View.Screen.DAY_SCREEN
 import com.android.szparag.todoist.views.contracts.View.Screen.MONTH_SCREEN
@@ -14,21 +13,20 @@ import java.util.concurrent.TimeUnit
 
 class TodoistWeekPresenter(private val model: CalendarModel) : TodoistBasePresenter<WeekView>(), WeekPresenter {
 
-  private var dayOfTheWeekSelected = -1
-
   override fun onAttached() {
     super.onAttached()
-    logger.debug("onAttached")
+    logger.debug("onAttached, model: $model (${model.hashCode()})")
     model.getCurrentWeek()
         .computation()
         .filter { view != null }
         .flatMapCompletable { view!!.setupWeekList(it).ui() }
-        .subscribeBy(onComplete = {
-          logger.debug("model.getCurrentWeek/view.setupWeekList.onNext")
-        }
-        , onError = { exc ->
-          logger.error("model.getCurrentWeek/view.setupWeekList.onError", exc)
-        })
+        .subscribeBy(
+            onComplete = {
+              logger.debug("model.getCurrentWeek/view.setupWeekList.onNext")
+            },
+            onError = { exc ->
+              logger.error("model.getCurrentWeek/view.setupWeekList.onError", exc)
+            })
         .toModelDisposable()
   }
 
@@ -47,7 +45,7 @@ class TodoistWeekPresenter(private val model: CalendarModel) : TodoistBasePresen
     model
         .attach()
         .computation()
-        .subscribeBy (
+        .subscribeBy(
             onComplete = {
               logger.debug("subscribeModelEvents.model.attach.onComplete")
             },
@@ -78,26 +76,26 @@ class TodoistWeekPresenter(private val model: CalendarModel) : TodoistBasePresen
   }
 
   private fun onUserDayPicked() {
+    var dayNumberInTheWeekSelected: Int = -1
     view?.run {
       this.subscribeUserDayPicked()
           .ui()
-          .doOnNext { dayOfTheWeekSelected = it.second }
+          .doOnNext { dayNumberInTheWeekSelected = it.second }
+          .doOnNext { "onUserDayPicked.subscribeUserDayPicked.doOnNext, dayNumber: ${it.second}" }
           .flatMap { this.animateWeekdayToFullscreen(it.first, it.second).ui() }
-          .doOnEach { logger.debug("subscribeUserDayPicked.onEach, notification: $it") }
-//          .flatMap {  this.animateShiftItemOnScreenPosition(dayOfTheWeekSelected).ui()}
-//          .doOnEach { logger.debug("subscribeUserDayPicked.onEach, notification: $it") }
-//          .flatMap (this.animateShiftItemOnScreenPosition(dayOfTheWeekSelected).ui())
-          .doOnNext {this.animateShiftItemOnScreenPosition(dayOfTheWeekSelected).ui().subscribe()}
+          .doOnNext { this.animateShiftItemOnScreenPosition(dayNumberInTheWeekSelected).ui().subscribe() }
+//          .mergeWith{ model.setSelectedDay(dayNumberInTheWeekSelected) }
+          .doOnNext { model.setSelectedDaySync(dayNumberInTheWeekSelected) }
           .delay(500, TimeUnit.MILLISECONDS)
-//          .ui().subscribeBy(onComplete = {})
-//          .doFinally { logger.debug("onUserDayPicked.subscribeUserDayPicked.doFinally") }
           .subscribeBy(
               onNext = { animationEvent ->
                 logger.debug("onUserDayPicked.subscribeUserDayPicked.onNext, animEvent: $animationEvent")
-                when(animationEvent.eventType) {
-                  AnimationEvent.AnimationEventType.START -> {}
+                when (animationEvent.eventType) {
+                  AnimationEvent.AnimationEventType.START -> {
+                  }
                   AnimationEvent.AnimationEventType.END -> view?.gotoScreen(DAY_SCREEN)
-                  AnimationEvent.AnimationEventType.REPEAT -> {}
+                  AnimationEvent.AnimationEventType.REPEAT -> {
+                  }
                 }
               },
               onError = { exc -> logger.error("onUserDayPicked.subscribeUserDayPicked.onError", exc) },
@@ -106,7 +104,6 @@ class TodoistWeekPresenter(private val model: CalendarModel) : TodoistBasePresen
           .toViewDisposable()
     }
   }
-
 
 
 }
