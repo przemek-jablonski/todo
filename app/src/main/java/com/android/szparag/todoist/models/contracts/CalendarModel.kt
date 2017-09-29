@@ -7,9 +7,6 @@ import java.util.Locale
 
 interface CalendarModel: Model {
 
-  val calendar: Calendar
-  var locale: Locale
-
   fun setupCalendarInstance()
 
   fun updateLocale(locale: Locale)
@@ -18,6 +15,5 @@ interface CalendarModel: Model {
 
   fun getSelectedDay(): Observable<com.android.szparag.todoist.models.entities.RenderDay>
   fun getCurrentWeek(): Observable<RenderWeekDays>
-
 
 }

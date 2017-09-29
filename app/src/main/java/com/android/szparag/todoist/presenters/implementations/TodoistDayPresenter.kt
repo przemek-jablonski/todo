@@ -1,11 +1,17 @@
 package com.android.szparag.todoist.presenters.implementations
 
 import com.android.szparag.todoist.models.contracts.CalendarModel
+import com.android.szparag.todoist.models.entities.RenderDay
 import com.android.szparag.todoist.presenters.contracts.DayPresenter
 import com.android.szparag.todoist.utils.computation
+import com.android.szparag.todoist.utils.flatMap
 import com.android.szparag.todoist.utils.ui
 import com.android.szparag.todoist.views.contracts.DayView
+import io.reactivex.Observable
+import io.reactivex.ObservableSource
+import io.reactivex.functions.Function
 import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.rxkotlin.zipWith
 
 class TodoistDayPresenter(private val model: CalendarModel) : TodoistBasePresenter<DayView>(), DayPresenter {
 
@@ -19,7 +25,8 @@ class TodoistDayPresenter(private val model: CalendarModel) : TodoistBasePresent
     model.getSelectedDay()
         .computation()
         .filter { view != null }
-        .flatMapCompletable { view!!.setupCalendarBackingView(it).ui() }
+        .flatMap { renderDay -> view!!.setupCalendarCheckList(renderDay).map { renderDay } }
+        .flatMap { renderDay -> view!!.setupCalendarExtras(renderDay).map { renderDay } }
         .subscribeBy(
             onComplete = {
               logger.debug("model.getSelectedDay/view.setupWeekList.onNext")
@@ -37,5 +44,6 @@ class TodoistDayPresenter(private val model: CalendarModel) : TodoistBasePresent
   override fun subscribeViewUserEvents() {
     logger.debug("subscribeViewUserEvents")
   }
+
 
 }

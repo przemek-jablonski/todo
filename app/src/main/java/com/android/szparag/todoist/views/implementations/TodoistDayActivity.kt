@@ -14,6 +14,7 @@ import com.android.szparag.todoist.utils.bindView
 import com.android.szparag.todoist.utils.getDisplayMetrics
 import com.android.szparag.todoist.views.contracts.DayView
 import io.reactivex.Completable
+import io.reactivex.CompletableEmitter
 import io.reactivex.Observable
 import javax.inject.Inject
 
@@ -21,14 +22,6 @@ class TodoistDayActivity : TodoistBaseActivity<DayPresenter>(), DayView {
 
   @Inject override lateinit var presenter: DayPresenter
   lateinit var displayMetrics: DisplayMetrics
-
-  internal val calendarWeekGraph: ImageView by bindView(R.id.calendarWeekGraph)
-  internal val calendarWeekDay: TextView by bindView(R.id.calendarWeekDay)
-  internal val calendarWeekDate: TextView by bindView(R.id.calendarWeekDate)
-  internal val calendarWeekTasksDone: TextView by bindView(R.id.calendarWeekTasksDone)
-  internal val calendarWeekTasksRemaining: TextView by bindView(R.id.calendarWeekTasksRemaining)
-  internal val calendarWeekAlarm: ImageView by bindView(R.id.calendarWeekAlarm)
-  internal val calendarWeekAlarmHour: TextView by bindView(R.id.calendarWeekAlarmHour)
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -49,33 +42,38 @@ class TodoistDayActivity : TodoistBaseActivity<DayPresenter>(), DayView {
     presenter.detach()
   }
 
-  override fun setupCalendarHeader(headerImageUrl: String): Completable {
+  override fun setupCalendarHeader(headerImageUrl: String): Observable<Boolean> {
     logger.debug("setupCalendarHeader")
-    return Completable.create {  }
+    return Observable.create {
+      it.onNext(true)
+    }
   }
 
-  override fun setupCalendarQuote(quoteText: String): Completable {
+  override fun setupCalendarQuote(quoteText: String): Observable<Boolean> {
     logger.debug("setupCalendarQuote")
-    return Completable.create {  }
+    return Observable.create {
+      it.onNext(true)
+    }
   }
 
-  override fun setupCalendarExtras(renderDay: RenderDay): Completable {
+  override fun setupCalendarExtras(renderDay: RenderDay): Observable<Boolean> {
     logger.debug("setupCalendarExtras")
-    return Completable.create {  }
+    return Observable.create {
+      it.onNext(true)
+    }
   }
 
-  override fun setupCalendarCheckList(renderDay: RenderDay): Completable {
+  override fun setupCalendarCheckList(renderDay: RenderDay): Observable<Boolean> {
     logger.debug("setupCalendarCheckList")
-    return Completable.create {  }
+    return Observable.create {
+      it.onNext(true)
+    }
   }
 
-  override fun setupCalendarBackingView(renderDay: RenderDay): Completable {
+  override fun setupCalendarBackingView(renderDay: RenderDay): Observable<Boolean> {
     logger.debug("setupCalendarBackingView")
-    return Completable.create {
-      calendarWeekDay.text = renderDay.dayName
-      calendarWeekDate.text = "${renderDay.dayNumber} ${renderDay.monthName} ${renderDay.yearNumber}"
-      calendarWeekTasksDone.text = "${renderDay.tasksDoneCount} tasks done"
-      calendarWeekTasksRemaining.text = "${renderDay.tasksRemainingCount} tasks remaining"
+    return Observable.create {
+      it.onNext(true)
     }
   }
 

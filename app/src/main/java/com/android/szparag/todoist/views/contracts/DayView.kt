@@ -6,11 +6,11 @@ import io.reactivex.Observable
 
 interface DayView : View {
 
-  fun setupCalendarHeader(headerImageUrl: String): Completable
-  fun setupCalendarQuote(quoteText: String): Completable
-  fun setupCalendarExtras(renderDay: RenderDay): Completable
-  fun setupCalendarCheckList(renderDay: RenderDay): Completable
-  fun setupCalendarBackingView(renderDay: RenderDay): Completable
+  fun setupCalendarHeader(headerImageUrl: String): Observable<Boolean>
+  fun setupCalendarQuote(quoteText: String): Observable<Boolean>
+  fun setupCalendarExtras(renderDay: RenderDay): Observable<Boolean>
+  fun setupCalendarCheckList(renderDay: RenderDay): Observable<Boolean>
+  fun setupCalendarBackingView(renderDay: RenderDay): Observable<Boolean>
 
   fun subscribeUserAddButtonClicked(): Observable<Any>
   fun subscribeUserChecklistItemCheck(): Observable<Any>

@@ -21,10 +21,10 @@ import org.joda.time.DateTimeConstants
 
 
 //todo: locale is useless here
-class TodoistCalendarModel(override var locale: Locale) : CalendarModel {
+class TodoistCalendarModel(private var locale: Locale) : CalendarModel {
 
   override lateinit var logger: Logger
-  override val calendar by lazy { Calendar.getInstance(locale) }
+  private val calendar by lazy { Calendar.getInstance(locale) }
   private val currentDay by lazy { LocalDate() }
   private val currentDayStartOfTheWeek by lazy { currentDay.withDayOfWeek(DateTimeConstants.MONDAY) }
   private var selectedDay: LocalDate? = null

@@ -1,5 +1,6 @@
 package com.android.szparag.todoist.utils
 
+import hu.akarnokd.rxjava.interop.RxJavaInterop
 import io.reactivex.Completable
 import io.reactivex.CompletableEmitter
 import io.reactivex.CompletableSource
@@ -11,6 +12,8 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
+import io.realm.RealmModel
+import io.realm.RealmResults
 
 
 private val onNextStub: (Any) -> Unit = {}
@@ -34,6 +37,14 @@ val DISPOSABLE_CONTAINER_NULL_THROWABLE: Throwable by lazy {
       DISPOSABLE_CONTAINER_NULL_THROWABLE)
 }
 
+
+fun <E : RealmModel> RealmResults<E>.asFlowable() = RxJavaInterop.toV2Flowable(
+    this.asObservable()).map { realmResults -> realmResults.toList() }
+
+fun <E : RealmModel> E.asFlowable() = RxJavaInterop.toV2Flowable(
+    this<E>()).map { realmResults -> realmResults.toList() }
+//fun <E : RealmModel> RealmResults<E>.asFlowable() = RxJavaInterop.toV2Flowable(
+//    this.asObservable()).map { realmResults -> realmResults.toList() }
 
 fun CompositeDisposable.add(disposable: Disposable?): Boolean {
   disposable?.let { this.add(disposable); return true }

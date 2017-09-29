@@ -54,6 +54,7 @@ dependencies {
   testCompile 'junit:junit:4.12'
   kapt 'com.google.dagger:dagger-compiler:2.9'
 
+  compile 'com.github.akarnokd:rxjava2-interop:0.10.2'
 
   kapt "io.realm:realm-annotations:3.5.0"
   kapt "io.realm:realm-annotations-processor:3.5.0"
