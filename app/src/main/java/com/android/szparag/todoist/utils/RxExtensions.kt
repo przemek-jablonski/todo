@@ -41,8 +41,8 @@ val DISPOSABLE_CONTAINER_NULL_THROWABLE: Throwable by lazy {
 fun <E : RealmModel> RealmResults<E>.asFlowable() = RxJavaInterop.toV2Flowable(
     this.asObservable()).map { realmResults -> realmResults.toList() }
 
-fun <E : RealmModel> E.asFlowable() = RxJavaInterop.toV2Flowable(
-    this<E>()).map { realmResults -> realmResults.toList() }
+//fun <E : RealmModel> E.asFlowable() = RxJavaInterop.toV2Flowable(
+//    this<E>()).map { realmResults -> realmResults.toList() }
 //fun <E : RealmModel> RealmResults<E>.asFlowable() = RxJavaInterop.toV2Flowable(
 //    this.asObservable()).map { realmResults -> realmResults.toList() }
 

@@ -50,15 +50,15 @@ class TodoistTasksModel: TasksModel {
 //  }
 
 
-  override fun getDay(dayMillis: Long): Observable<TodoistDay> {
-    return RxJavaInterop.toV2Observable(realmInstance
-        .where(TodoistDay::class.java)
-        .equalTo("timestampDayStartUnix", dayMillis)
-        .findFirst()
-        .asObservable())
-  }
-
-  override fun getTasksForDay(dayMillis: Long): Flowable<List<TodoistTask>> {
-    logger.debug("getTasksForDay")
-  }
+//  override fun getDay(dayMillis: Long): Observable<TodoistDay> {
+//    return RxJavaInterop.toV2Observable(realmInstance
+//        .where(TodoistDay::class.java)
+//        .equalTo("timestampDayStartUnix", dayMillis)
+//        .findFirst()
+//        .asObservable())
+//  }
+//
+//  override fun getTasksForDay(dayMillis: Long): Flowable<List<TodoistTask>> {
+//    logger.debug("getTasksForDay")
+//  }
 }

@@ -7,7 +7,7 @@ import io.reactivex.Observable
 
 interface TasksModel: Model {
 
-  fun getDay(dayMillis: Long): Observable<TodoistDay>
-  fun getTasksForDay(dayMillis: Long): Observable<List<TodoistTask>>
+//  fun getDay(dayMillis: Long): Observable<TodoistDay>
+//  fun getTasksForDay(dayMillis: Long): Observable<List<TodoistTask>>
 
 }

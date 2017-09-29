@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'realm-android'
+apply plugin: 'com.getkeepsafe.dexcount'
 
 android {
   compileSdkVersion 25
@@ -13,12 +14,16 @@ android {
     versionCode 1
     versionName "1.0"
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    multiDexEnabled true
   }
   buildTypes {
     release {
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
+  }
+  packagingOptions {
+    exclude 'META-INF/**rxjava.properties**'
   }
 }
 
@@ -58,4 +63,7 @@ dependencies {
 
   kapt "io.realm:realm-annotations:3.5.0"
   kapt "io.realm:realm-annotations-processor:3.5.0"
+
+
+  compile 'com.android.support:multidex:1.0.1'
 }
