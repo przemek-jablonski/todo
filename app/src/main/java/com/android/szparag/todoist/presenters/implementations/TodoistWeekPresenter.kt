@@ -36,9 +36,6 @@ class TodoistWeekPresenter(private val model: CalendarModel) : TodoistBasePresen
     view?.disposeWeekList()?.subscribe()
   }
 
-  override fun onViewReady() {
-    logger.debug("onViewReady")
-  }
 
   override fun subscribeModelEvents() {
     logger.debug("subscribeModelEvents")

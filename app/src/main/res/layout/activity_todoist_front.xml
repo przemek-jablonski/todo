@@ -10,7 +10,7 @@
     >
 
   <ImageView
-      android:id="@+id/imageView"
+      android:id="@+id/image_front_background"
       android:layout_width="0dp"
       android:layout_height="0dp"
       android:layout_marginBottom="0dp"
@@ -18,10 +18,34 @@
       android:layout_marginRight="0dp"
       android:layout_marginTop="0dp"
       android:background="@android:color/holo_orange_dark"
+      android:visibility="gone"
+      tools:visibility="visible"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintLeft_toLeftOf="parent"
       app:layout_constraintRight_toRightOf="parent"
       app:layout_constraintTop_toTopOf="parent"
       app:srcCompat="@mipmap/ic_launcher_round"
+      />
+  <TextView
+      android:id="@+id/textview_front_quote"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="0dp"
+      android:layout_marginRight="0dp"
+      android:layout_marginTop="0dp"
+      android:background="@android:color/holo_purple"
+      android:gravity="center"
+      android:paddingBottom="16dp"
+      android:paddingEnd="16dp"
+      android:paddingStart="16dp"
+      android:paddingTop="32dp"
+      android:text="&quot; Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content
+  here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default
+  model text, and a search for 'lorem ipsum' &quot;"
+      android:visibility="gone"
+      tools:visibility="visible"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
       />
 </android.support.constraint.ConstraintLayout>

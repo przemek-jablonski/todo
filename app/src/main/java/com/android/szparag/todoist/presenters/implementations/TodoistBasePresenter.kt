@@ -47,6 +47,10 @@ abstract class TodoistBasePresenter<V : View> : Presenter<V> {
     modelDisposables.clear()
   }
 
+  override fun onViewReady() {
+    logger.debug("onViewReady")
+  }
+
   @CallSuper override fun subscribeViewPermissionsEvents() {
     logger.debug("subscribeViewPermissionsEvents")
   }
