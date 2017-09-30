@@ -18,7 +18,7 @@ abstract class TodoistBasePresenter<V : View> : Presenter<V> {
   override lateinit var modelDisposables: CompositeDisposable
 
   override fun attach(view: V) {
-    logger = Logger.create(this::class, this.hashCode())
+    logger = Logger.create(this::class.java, this.hashCode())
     logger.debug("attach, view: $view")
     this.view = view
     onAttached()

@@ -35,7 +35,7 @@ abstract class TodoistBaseActivity<P : Presenter<*>> : AppCompatActivity(), View
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     viewReadySubject.doOnSubscribe { viewReadySubject.onNext(hasWindowFocus()) }
-    logger = Logger.create(this::class, this.hashCode())
+    logger = Logger.create(this::class.java, this.hashCode())
     logger.debug("logger created, $logger")
     logger.debug("onCreate, bundle: $savedInstanceState")
   }

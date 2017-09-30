@@ -12,7 +12,7 @@ class Logger {
   private val errorLoggingAvailable = true //todo: check if NOT in debug
 
   companion object {
-    fun create(callerClass : KClass<*>, hashCode: Int) = Logger().apply {
+    fun create(callerClass : Class<*>, hashCode: Int) = Logger().apply {
       this.callerClassString = callerClass.simpleName.toString()
       this.callerClassObjectHashcode = hashCode
     }

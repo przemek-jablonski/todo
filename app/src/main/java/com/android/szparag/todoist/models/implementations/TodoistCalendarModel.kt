@@ -30,7 +30,7 @@ class TodoistCalendarModel(private var locale: Locale) : CalendarModel {
   private var selectedDay: LocalDate? = null
 
   override fun attach(): Completable {
-    logger = Logger.create(this::class, this.hashCode())
+    logger = Logger.create(this::class.java, this.hashCode())
     return Completable.fromAction {
       logger.debug("attach")
       setupCalendarInstance()

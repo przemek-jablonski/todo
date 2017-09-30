@@ -18,7 +18,7 @@ import io.realm.Sort.DESCENDING
 class TodoistTasksModel: TasksModel {
 
   private val realmInstance by lazy { Realm.getDefaultInstance() }
-  override val logger = Logger.create(TodoistTasksModel::class, hashCode())
+  override val logger = Logger.create(TodoistTasksModel::class.java, hashCode())
 
 
   override fun attach() = Completable.create {
