@@ -24,6 +24,15 @@
     </activity>
     <activity android:name=".views.implementations.TodoistDayActivity">
     </activity>
+    <activity
+        android:name=".views.implementations.TodoistFrontActivity"
+        android:theme="@style/AppTheme.NoActionBar">
+      <intent-filter>
+        <action android:name="android.intent.action.FRONT"/>
+
+        <category android:name="android.intent.category.LAUNCHER"/>
+      </intent-filter>
+    </activity>
   </application>
 
 </manifest>

@@ -48,6 +48,10 @@ dependencies {
 
   compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
   compile group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: '1.1.4-3'
+
+
+
+
   compile 'com.android.support:appcompat-v7:25.3.1'
   compile 'com.android.support.constraint:constraint-layout:1.0.2'
   compile 'com.android.support:design:25.3.1'
@@ -56,14 +60,10 @@ dependencies {
   compile 'io.reactivex.rxjava2:rxkotlin:2.0.3'
   compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
   compile 'com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:2.0.0'
+  compile 'com.github.akarnokd:rxjava2-interop:0.10.2'
+  compile 'com.android.support:multidex:1.0.1'
   testCompile 'junit:junit:4.12'
   kapt 'com.google.dagger:dagger-compiler:2.9'
-
-  compile 'com.github.akarnokd:rxjava2-interop:0.10.2'
-
-  kapt "io.realm:realm-annotations:3.5.0"
-  kapt "io.realm:realm-annotations-processor:3.5.0"
-
-
-  compile 'com.android.support:multidex:1.0.1'
+  kapt 'io.realm:realm-annotations:3.5.0'
+  kapt 'io.realm:realm-annotations-processor:3.5.0'
 }
