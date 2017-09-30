@@ -2,6 +2,7 @@
 
 package com.android.szparag.todoist.utils
 
+import android.animation.TimeInterpolator
 import android.app.Activity
 import android.content.Context
 import android.support.v7.widget.LinearLayoutManager
@@ -10,6 +11,7 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.SmoothScroller
 import android.util.DisplayMetrics
 import android.view.View
+import android.view.ViewPropertyAnimator
 import com.android.szparag.todoist.ItemClickSupport
 import com.android.szparag.todoist.R
 import com.android.szparag.todoist.ResizeAnimation
@@ -25,6 +27,9 @@ import org.joda.time.DateTime
 //fun lerp(a: Float, b: Float, amount: Float): Float {
 //
 //}
+
+inline fun ViewPropertyAnimator.duration(durationMillis: Long) = this.apply { duration = durationMillis }
+inline fun ViewPropertyAnimator.interpolator(timeInterpolator: TimeInterpolator) = this.apply { interpolator = timeInterpolator }
 
 inline fun DateTime.unixTime(): Long = (this.millis / 1000F).toLong()
 
