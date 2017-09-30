@@ -5,6 +5,14 @@ apply plugin: 'realm-android'
 apply plugin: 'com.getkeepsafe.dexcount'
 
 android {
+  signingConfigs {
+    debug_default {
+      keyAlias 'androiddebugkey'
+      keyPassword 'android'
+      storeFile file('C:/Users/ciemek/.android/debug.keystore')
+      storePassword 'android'
+    }
+  }
   compileSdkVersion 25
   buildToolsVersion "25.0.3"
   defaultConfig {
@@ -17,9 +25,31 @@ android {
     multiDexEnabled true
   }
   buildTypes {
-    release {
+    noOptimization {
       minifyEnabled false
-      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+      shrinkResources false
+      debuggable true
+      jniDebuggable true
+      renderscriptDebuggable true
+      applicationIdSuffix 'debug_nooptimise'
+      signingConfig signingConfigs.debug_default
+    }
+    debug {
+      minifyEnabled true
+      shrinkResources true
+      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+      debuggable true
+      jniDebuggable true
+      renderscriptDebuggable true
+      applicationIdSuffix 'debug'
+    }
+    release {
+      minifyEnabled true
+      shrinkResources true
+      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+      debuggable false
+      jniDebuggable false
+      renderscriptDebuggable false
     }
   }
   packagingOptions {

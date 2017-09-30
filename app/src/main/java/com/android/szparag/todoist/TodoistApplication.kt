@@ -7,6 +7,8 @@ import android.support.multidex.MultiDexApplication
  */
 class TodoistApplication: MultiDexApplication() {
 
+  override fun onCreate() {
+    super.onCreate()
 
-
+  }
 }
