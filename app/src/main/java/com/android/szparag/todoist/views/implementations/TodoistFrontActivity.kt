@@ -5,7 +5,9 @@ import android.animation.Animator.AnimatorListener
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.DecelerateInterpolator
+import android.view.animation.OvershootInterpolator
 import android.widget.ImageView
 import android.widget.TextView
 import com.android.szparag.todoist.AnimationEvent
@@ -19,6 +21,7 @@ import com.android.szparag.todoist.presenters.contracts.FrontPresenter
 import com.android.szparag.todoist.presenters.contracts.WeekPresenter
 import com.android.szparag.todoist.utils.bindView
 import com.android.szparag.todoist.utils.duration
+import com.android.szparag.todoist.utils.getStatusbarHeight
 import com.android.szparag.todoist.utils.interpolator
 import com.android.szparag.todoist.views.contracts.FrontView
 import com.android.szparag.todoist.views.contracts.View.Screen
@@ -46,31 +49,38 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
     presenter.attach(this) //todo: find a way to generify them in Kotlin
   }
 
+  override fun setupViews() {
+    super.setupViews()
+    logger.debug("setupViews")
+    quoteText.visibility = View.VISIBLE
+    quoteText.y -= quoteText.height + getStatusbarHeight()
+  }
+
   override fun animateShowBackgroundImage(): Observable<AnimationEvent> {
     logger.debug("animateShowBackgroundImage")
     return Observable.create { emitter ->
       backgroundImage.animate()
           .alpha(1F)
-          .setDuration(2000)
-          .setInterpolator(DecelerateInterpolator())
-          .setListener(object: AnimatorListener {
+          .duration(1750)
+          .interpolator(AccelerateDecelerateInterpolator())
+          .setListener(object : AnimatorListener {
             override fun onAnimationRepeat(animation: Animator?) {
-              logger.debug("onAnimationRepeat")
+              logger.debug("animateShowBackgroundImage.onAnimationRepeat")
               emitter.onNext(AnimationEvent(REPEAT))
             }
 
             override fun onAnimationEnd(animation: Animator?) {
-              logger.debug("onAnimationEnd")
+              logger.debug("animateShowBackgroundImage.onAnimationEnd")
               emitter.onNext(AnimationEvent(END))
             }
 
             override fun onAnimationCancel(animation: Animator?) {
-              logger.debug("onAnimationCancel")
+              logger.debug("animateShowBackgroundImage.onAnimationCancel")
               emitter.onNext(AnimationEvent(END))
             }
 
             override fun onAnimationStart(animation: Animator?) {
-              logger.debug("onAnimationStart")
+              logger.debug("animateShowBackgroundImage.onAnimationStart")
               emitter.onNext(AnimationEvent(START))
               backgroundImage.visibility = View.VISIBLE
             }
@@ -82,10 +92,34 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
   override fun animateShowQuote(): Observable<AnimationEvent> {
     logger.debug("animateShowQuote")
     return Observable.create { emitter ->
-      emitter.onNext(AnimationEvent(START))
-      quoteText.visibility = View.VISIBLE
-      emitter.onNext(AnimationEvent(END))
+      logger.debug("animateShowQuote.run")
+      quoteText.animate()
+          .translationY(0F)
+          .setDuration(1000)
+          .setInterpolator(OvershootInterpolator(0.75f))
+          .setListener(object: AnimatorListener {
+            override fun onAnimationRepeat(animation: Animator?) {
+              logger.debug("animateShowQuote.onAnimationRepeat")
+              emitter.onNext(AnimationEvent(REPEAT))
+            }
 
+            override fun onAnimationEnd(animation: Animator?) {
+              logger.debug("animateShowQuote.onAnimationEnd")
+              emitter.onNext(AnimationEvent(END))
+            }
+
+            override fun onAnimationCancel(animation: Animator?) {
+              logger.debug("animateShowQuote.onAnimationCancel")
+              emitter.onNext(AnimationEvent(END))
+            }
+
+            override fun onAnimationStart(animation: Animator?) {
+              logger.debug("animateShowQuote.onAnimationStart")
+              emitter.onNext(AnimationEvent(START))
+            }
+
+          })
+          .start()
     }
   }
 

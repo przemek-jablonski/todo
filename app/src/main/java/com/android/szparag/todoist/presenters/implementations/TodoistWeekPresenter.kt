@@ -16,6 +16,11 @@ class TodoistWeekPresenter(private val model: CalendarModel) : TodoistBasePresen
   override fun onAttached() {
     super.onAttached()
     logger.debug("onAttached, model: $model (${model.hashCode()})")
+
+  }
+
+  override fun onViewReady() {
+    super.onViewReady()
     model.getCurrentWeek()
         .computation()
         .filter { view != null }

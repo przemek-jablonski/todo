@@ -5,6 +5,7 @@ package com.android.szparag.todoist.utils
 import android.animation.TimeInterpolator
 import android.app.Activity
 import android.content.Context
+import android.graphics.Rect
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.LinearSmoothScroller
 import android.support.v7.widget.RecyclerView
@@ -12,6 +13,7 @@ import android.support.v7.widget.RecyclerView.SmoothScroller
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewPropertyAnimator
+import android.view.Window
 import com.android.szparag.todoist.ItemClickSupport
 import com.android.szparag.todoist.R
 import com.android.szparag.todoist.ResizeAnimation
@@ -27,6 +29,20 @@ import org.joda.time.DateTime
 //fun lerp(a: Float, b: Float, amount: Float): Float {
 //
 //}
+
+inline fun Activity.getStatusbarHeight(): Int {
+  val visibleDisplayFrame = window.getVisibleDisplayFrame()
+  val statusBarHeight = visibleDisplayFrame.top
+  val contentViewTop = window.findViewById(Window.ID_ANDROID_CONTENT).top
+  val titleBarHeight = contentViewTop - statusBarHeight
+  return Math.abs(titleBarHeight)
+}
+
+inline fun Window.getVisibleDisplayFrame(): Rect {
+  val displayFrame = Rect()
+  this.decorView.getWindowVisibleDisplayFrame(displayFrame)
+  return displayFrame
+}
 
 inline fun ViewPropertyAnimator.duration(durationMillis: Long) = this.apply { duration = durationMillis }
 inline fun ViewPropertyAnimator.interpolator(timeInterpolator: TimeInterpolator) = this.apply { interpolator = timeInterpolator }

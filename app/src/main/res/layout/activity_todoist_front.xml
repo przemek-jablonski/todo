@@ -43,7 +43,7 @@
       android:text="&quot; Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content
   here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default
   model text, and a search for 'lorem ipsum' &quot;"
-      android:visibility="gone"
+      android:visibility="invisible"
       tools:visibility="visible"
       app:layout_constraintLeft_toLeftOf="parent"
       app:layout_constraintRight_toRightOf="parent"

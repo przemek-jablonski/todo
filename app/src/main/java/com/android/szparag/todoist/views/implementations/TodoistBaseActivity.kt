@@ -44,7 +44,6 @@ abstract class TodoistBaseActivity<P : Presenter<*>> : AppCompatActivity(), View
   override fun onStart() {
     super.onStart()
     logger.debug("onStart")
-    setupViews()
   }
 
   @CallSuper

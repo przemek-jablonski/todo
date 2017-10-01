@@ -49,6 +49,7 @@ abstract class TodoistBasePresenter<V : View> : Presenter<V> {
 
   override fun onViewReady() {
     logger.debug("onViewReady")
+    view?.setupViews()
   }
 
   @CallSuper override fun subscribeViewPermissionsEvents() {
@@ -61,6 +62,7 @@ abstract class TodoistBasePresenter<V : View> : Presenter<V> {
         ?.subscribeOnViewReady()
         ?.ui()
         ?.doOnSubscribe { logger.debug("subscribeViewReadyEvents.sub") }
+        ?.doOnEach{ logger.debug("subscribeViewReadyEvents.onEach") }
         ?.filter { readyFlag -> readyFlag }
         ?.subscribeBy(
             onNext = { readyFlag ->
