@@ -26,6 +26,7 @@ import com.android.szparag.todoist.presenters.contracts.FrontPresenter
 import com.android.szparag.todoist.presenters.contracts.WeekPresenter
 import com.android.szparag.todoist.utils.bindView
 import com.android.szparag.todoist.utils.duration
+import com.android.szparag.todoist.utils.getDisplayMetrics
 import com.android.szparag.todoist.utils.getStatusbarHeight
 import com.android.szparag.todoist.utils.interpolator
 import com.android.szparag.todoist.views.contracts.FrontView
@@ -61,7 +62,7 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
     quoteText.visibility = View.VISIBLE
     quoteText.y -= quoteText.height + getStatusbarHeight()
 
-    daysRecycler.adapter = FrontTestAdapter()
+    daysRecycler.adapter = FrontTestAdapter((getDisplayMetrics().widthPixels * 0.66f).toInt())
     daysRecycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
   }
 

@@ -40,7 +40,7 @@ class TodoistWeekActivity : TodoistBaseActivity<WeekPresenter>(), WeekView {
     super.onCreate(savedInstanceState)
     logger.debug("onCreate, bundle $savedInstanceState")
     setContentView(layout.activity_todoist_week)
-    setSupportActionBar(findViewById(id.toolbar) as Toolbar)
+    setSupportActionBar(findViewById<View>(id.toolbar) as Toolbar)
   }
 
   override fun onStart() {

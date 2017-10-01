@@ -33,7 +33,7 @@ import org.joda.time.DateTime
 inline fun Activity.getStatusbarHeight(): Int {
   val visibleDisplayFrame = window.getVisibleDisplayFrame()
   val statusBarHeight = visibleDisplayFrame.top
-  val contentViewTop = window.findViewById(Window.ID_ANDROID_CONTENT).top
+  val contentViewTop = window.findViewById<View>(Window.ID_ANDROID_CONTENT).top
   val titleBarHeight = contentViewTop - statusBarHeight
   return Math.abs(titleBarHeight)
 }
