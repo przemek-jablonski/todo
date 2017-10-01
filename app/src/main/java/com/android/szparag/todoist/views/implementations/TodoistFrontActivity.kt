@@ -4,6 +4,9 @@ import android.animation.Animator
 import android.animation.Animator.AnimatorListener
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.RecyclerView.LayoutManager
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.DecelerateInterpolator
@@ -14,7 +17,9 @@ import com.android.szparag.todoist.AnimationEvent
 import com.android.szparag.todoist.AnimationEvent.AnimationEventType.END
 import com.android.szparag.todoist.AnimationEvent.AnimationEventType.REPEAT
 import com.android.szparag.todoist.AnimationEvent.AnimationEventType.START
+import com.android.szparag.todoist.FrontTestAdapter
 import com.android.szparag.todoist.R
+import com.android.szparag.todoist.SmoothScrollLinearLayoutManager
 import com.android.szparag.todoist.dagger.DaggerGlobalScopeWrapper
 import com.android.szparag.todoist.events.PermissionEvent
 import com.android.szparag.todoist.presenters.contracts.FrontPresenter
@@ -32,6 +37,7 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
 
   private val backgroundImage: ImageView by bindView(R.id.image_front_background)
   private val quoteText: TextView by bindView(R.id.textview_front_quote)
+  private val daysRecycler: RecyclerView by bindView(R.id.recycler_front)
 
 
   @Inject override lateinit var presenter: FrontPresenter
@@ -54,6 +60,9 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
     logger.debug("setupViews")
     quoteText.visibility = View.VISIBLE
     quoteText.y -= quoteText.height + getStatusbarHeight()
+
+    daysRecycler.adapter = FrontTestAdapter()
+    daysRecycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
   }
 
   override fun animateShowBackgroundImage(): Observable<AnimationEvent> {
