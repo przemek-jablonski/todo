@@ -63,7 +63,7 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
     quoteText.y -= quoteText.height + getStatusbarHeight()
 
     daysRecycler.adapter = FrontTestAdapter((getDisplayMetrics().widthPixels * 0.66f).toInt())
-    daysRecycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+    daysRecycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true)
   }
 
   override fun animateShowBackgroundImage(): Observable<AnimationEvent> {
