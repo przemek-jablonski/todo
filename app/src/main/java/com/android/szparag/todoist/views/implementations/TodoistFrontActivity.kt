@@ -5,8 +5,10 @@ import android.animation.Animator.AnimatorListener
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.LinearSnapHelper
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.LayoutManager
+import android.support.v7.widget.SnapHelper
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.DecelerateInterpolator
@@ -64,6 +66,7 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
 
     daysRecycler.adapter = FrontTestAdapter((getDisplayMetrics().widthPixels * 0.66f).toInt())
     daysRecycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true)
+    LinearSnapHelper().attachToRecyclerView(daysRecycler)
   }
 
   override fun animateShowBackgroundImage(): Observable<AnimationEvent> {

@@ -100,4 +100,6 @@ dependencies {
   // https://mvnrepository.com/artifact/joda-time/joda-time
   compile group: 'joda-time', name: 'joda-time', version: '2.3'
 
+  compile 'com.github.rubensousa:gravitysnaphelper:1.3'
+
 }
