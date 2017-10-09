@@ -2,16 +2,12 @@ package com.android.szparag.todoist.views.implementations
 
 import android.animation.Animator
 import android.animation.Animator.AnimatorListener
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.LinearSnapHelper
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.RecyclerView.LayoutManager
-import android.support.v7.widget.SnapHelper
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.animation.DecelerateInterpolator
 import android.view.animation.OvershootInterpolator
 import android.widget.ImageView
 import android.widget.TextView
@@ -21,27 +17,31 @@ import com.android.szparag.todoist.AnimationEvent.AnimationEventType.REPEAT
 import com.android.szparag.todoist.AnimationEvent.AnimationEventType.START
 import com.android.szparag.todoist.FrontTestAdapter
 import com.android.szparag.todoist.R
-import com.android.szparag.todoist.SmoothScrollLinearLayoutManager
 import com.android.szparag.todoist.dagger.DaggerGlobalScopeWrapper
-import com.android.szparag.todoist.events.PermissionEvent
 import com.android.szparag.todoist.presenters.contracts.FrontPresenter
-import com.android.szparag.todoist.presenters.contracts.WeekPresenter
+import com.android.szparag.todoist.utils.ListScrollEvent
 import com.android.szparag.todoist.utils.bindView
 import com.android.szparag.todoist.utils.duration
-import com.android.szparag.todoist.utils.getDisplayMetrics
+import com.android.szparag.todoist.utils.flatMap
+import com.android.szparag.todoist.utils.getDisplayDimensions
 import com.android.szparag.todoist.utils.getStatusbarHeight
 import com.android.szparag.todoist.utils.interpolator
 import com.android.szparag.todoist.views.contracts.FrontView
-import com.android.szparag.todoist.views.contracts.View.Screen
+import com.jakewharton.rxbinding2.support.v7.widget.RecyclerViewScrollEvent
+import com.jakewharton.rxbinding2.support.v7.widget.RxRecyclerView
 import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
+import io.reactivex.functions.Function
 import javax.inject.Inject
 
 class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
 
-  private val backgroundImage: ImageView by bindView(R.id.image_front_background)
-  private val quoteText: TextView by bindView(R.id.textview_front_quote)
-  private val daysRecycler: RecyclerView by bindView(R.id.recycler_front)
-
+  private val backgroundImage: ImageView by bindView(R.id.imageViewFrontBackground)
+  private val quoteText: TextView by bindView(R.id.textViewFrontQuote)
+  private val daysRecycler: RecyclerView by bindView(R.id.recyclerViewFront)
+  private val daysLayoutManager: LinearLayoutManager by lazy {
+    LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true)
+  }
 
   @Inject override lateinit var presenter: FrontPresenter
 
@@ -64,8 +64,11 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
     quoteText.visibility = View.VISIBLE
     quoteText.y -= quoteText.height + getStatusbarHeight()
 
-    daysRecycler.adapter = FrontTestAdapter((getDisplayMetrics().widthPixels * 0.66f).toInt())
-    daysRecycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true)
+    val displayDimensions = getDisplayDimensions()
+    daysRecycler.adapter = FrontTestAdapter(
+        (displayDimensions.first * 0.66f).toInt()
+        /*,(displayDimensions.second * 0.50f).toInt()*/)
+    daysRecycler.layoutManager = daysLayoutManager
     LinearSnapHelper().attachToRecyclerView(daysRecycler)
   }
 
@@ -110,7 +113,7 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
           .translationY(0F)
           .setDuration(1000)
           .setInterpolator(OvershootInterpolator(0.75f))
-          .setListener(object: AnimatorListener {
+          .setListener(object : AnimatorListener {
             override fun onAnimationRepeat(animation: Animator?) {
               logger.debug("animateShowQuote.onAnimationRepeat")
               emitter.onNext(AnimationEvent(REPEAT))
@@ -147,6 +150,20 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
   override fun subscribeUserBackButtonPressed(): Observable<Any> {
     logger.debug("subscribeUserBackButtonPressed")
     return Observable.create { }
+  }
+
+  //todo: this return type is leaking separation concern (you wouldn't have RecyclerViewScrollEvent in iOS)
+  override fun subscribeDayListScrolls(): Observable<ListScrollEvent> {
+    logger.debug("subscribeDayListScrolls")
+    //todo: every rxbinding call has a strong reference to given view, it should be disposed (or is it done
+    //todo: automagically?)
+    return RxRecyclerView.scrollEvents(daysRecycler)
+        .map { recyclerViewScrollEvent -> ListScrollEvent(recyclerViewScrollEvent.dx(), recyclerViewScrollEvent.dy()) }
+        .flatMap { RxRecyclerView.scrollStateChanges(daysRecycler).map{ stateInt ->
+          it.apply { this.setState(stateInt)} }}
+//        .flatMap { RxRecyclerView.scrollStateChanges(daysRecycler) }
+//        .flatMap(RxRecyclerView.scrollStateChanges(daysRecycler), BiFunction { t1, t2 -> ListScrollEvent() })
+//    return RxRecyclerView.scrollEvents(daysRecycler).mergeWith { RxRecyclerView.scrollStateChanges(daysRecycler) }
   }
 
 }

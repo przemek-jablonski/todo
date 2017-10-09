@@ -30,6 +30,15 @@ import org.joda.time.DateTime
 //
 //}
 
+inline fun View.setViewDimensions(itemWidth: Int?, itemHeight: Int?): View {
+  if (itemWidth == null && itemHeight == null) return this
+  this.layoutParams = this.layoutParams.apply {
+    itemWidth?.let { this.width = it }
+    itemHeight?.let { this.height = it }
+  }
+  return this
+}
+
 inline fun Activity.getStatusbarHeight(): Int {
   val visibleDisplayFrame = window.getVisibleDisplayFrame()
   val statusBarHeight = visibleDisplayFrame.top
@@ -45,14 +54,18 @@ inline fun Window.getVisibleDisplayFrame(): Rect {
 }
 
 inline fun ViewPropertyAnimator.duration(durationMillis: Long) = this.apply { duration = durationMillis }
-inline fun ViewPropertyAnimator.interpolator(timeInterpolator: TimeInterpolator) = this.apply { interpolator = timeInterpolator }
+inline fun ViewPropertyAnimator.interpolator(
+    timeInterpolator: TimeInterpolator) = this.apply { interpolator = timeInterpolator }
 
 inline fun DateTime.unixTime(): Long = (this.millis / 1000F).toLong()
 
 
 inline fun RecyclerView.setupGranularClickListener()
     = this.getTag(
-    R.id.item_click_support) as ItemClickSupport? ?: ItemClickSupport().apply { this.attach(this@setupGranularClickListener) }
+    R.id.item_click_support) as ItemClickSupport? ?: ItemClickSupport().apply {
+  this.attach(this@setupGranularClickListener)
+}
+
 inline fun RecyclerView.clearGranularClickListener() = (this.getTag(
     R.id.item_click_support) as ItemClickSupport?)?.apply { this.detach() }
 
@@ -61,6 +74,10 @@ inline fun Activity.getDisplayMetrics(): DisplayMetrics {
   windowManager.defaultDisplay.getMetrics(displayMetrics)
   return displayMetrics
 }
+
+inline fun DisplayMetrics.getDisplayDimensions() = Pair(this.widthPixels, this.heightPixels)
+
+inline fun Activity.getDisplayDimensions() = getDisplayMetrics().getDisplayDimensions()
 
 inline fun RecyclerView.getSmoothScrollTime() {
   this.layoutManager
@@ -75,7 +92,8 @@ inline fun LinearLayoutManager.setupSmoothScrolling(context: Context, durationFa
 
 inline fun LinearSmoothScroller.configureDurationFactor(context: Context, durationFactor: Float): LinearSmoothScroller {
   return object : LinearSmoothScroller(context) {
-    override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics) = 25f * durationFactor / displayMetrics.densityDpi
+    override fun calculateSpeedPerPixel(
+        displayMetrics: DisplayMetrics) = 25f * durationFactor / displayMetrics.densityDpi
   }
 }
 

@@ -10,7 +10,7 @@
     >
 
   <ImageView
-      android:id="@+id/image_front_background"
+      android:id="@+id/imageViewFrontBackground"
       android:layout_width="0dp"
       android:layout_height="0dp"
       android:alpha="0"
@@ -25,7 +25,7 @@
       tools:visibility="visible"
       />
   <TextView
-      android:id="@+id/textview_front_quote"
+      android:id="@+id/textViewFrontQuote"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:background="@android:color/holo_purple"
@@ -44,7 +44,7 @@
       tools:visibility="visible"
       />
   <android.support.v7.widget.RecyclerView
-      android:id="@+id/recycler_front"
+      android:id="@+id/recyclerViewFront"
       android:layout_width="0dp"
       android:layout_height="0dp"
       android:layout_marginBottom="0dp"
