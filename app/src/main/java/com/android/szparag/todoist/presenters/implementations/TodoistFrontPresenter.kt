@@ -29,6 +29,7 @@ class TodoistFrontPresenter : TodoistBasePresenter<FrontView>(), FrontPresenter 
     view?.subscribeDayListScrolls()
         ?.ui()
         ?.subscribeBy(onNext = { scrollEvent ->
+
           logger.debug("view?.subscribeDayListScrolls.onNext, event: $scrollEvent")
         }, onError = { exc ->
           logger.error("view?.subscribeDayListScrolls.onError, exc: $exc")

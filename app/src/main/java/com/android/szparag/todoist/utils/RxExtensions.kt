@@ -63,11 +63,7 @@ data class ListScrollEvent(
     }
   }
 
-
-//  constructor(dx: Int, dy: Int) : this(dx, dy) {
-//
-//  }
-
+  override fun toString() = "ListScrollEvent[${hashCode()}] state: $state, dx: $dx, dy: $dy"
 }
 
 private val scrollEventSubject: Subject<ListScrollEvent> = PublishSubject.create<ListScrollEvent>()

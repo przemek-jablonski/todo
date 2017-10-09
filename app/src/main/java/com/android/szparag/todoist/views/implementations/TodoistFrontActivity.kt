@@ -17,6 +17,7 @@ import com.android.szparag.todoist.AnimationEvent.AnimationEventType.REPEAT
 import com.android.szparag.todoist.AnimationEvent.AnimationEventType.START
 import com.android.szparag.todoist.FrontTestAdapter
 import com.android.szparag.todoist.R
+import com.android.szparag.todoist.RecyclerViewScrollEndListener
 import com.android.szparag.todoist.dagger.DaggerGlobalScopeWrapper
 import com.android.szparag.todoist.presenters.contracts.FrontPresenter
 import com.android.szparag.todoist.utils.ListScrollEvent
@@ -70,6 +71,15 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
         /*,(displayDimensions.second * 0.50f).toInt()*/)
     daysRecycler.layoutManager = daysLayoutManager
     LinearSnapHelper().attachToRecyclerView(daysRecycler)
+    daysRecycler.addOnScrollListener(object : RecyclerViewScrollEndListener(daysLayoutManager) {
+      override fun onLoadMore() {
+        logger.debug("onLoadMore")
+      }
+//      override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
+//        logger.debug("RecyclerViewScrollEndListener.onLoadMore, page: $page, totalItems: $totalItemsCount")
+//      }
+    })
+    daysRecycler.scrollToPosition(6)
   }
 
   override fun animateShowBackgroundImage(): Observable<AnimationEvent> {
@@ -157,13 +167,16 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
     logger.debug("subscribeDayListScrolls")
     //todo: every rxbinding call has a strong reference to given view, it should be disposed (or is it done
     //todo: automagically?)
+
+    return Observable.create {  }
+
     return RxRecyclerView.scrollEvents(daysRecycler)
         .map { recyclerViewScrollEvent -> ListScrollEvent(recyclerViewScrollEvent.dx(), recyclerViewScrollEvent.dy()) }
-        .flatMap { RxRecyclerView.scrollStateChanges(daysRecycler).map{ stateInt ->
-          it.apply { this.setState(stateInt)} }}
-//        .flatMap { RxRecyclerView.scrollStateChanges(daysRecycler) }
-//        .flatMap(RxRecyclerView.scrollStateChanges(daysRecycler), BiFunction { t1, t2 -> ListScrollEvent() })
-//    return RxRecyclerView.scrollEvents(daysRecycler).mergeWith { RxRecyclerView.scrollStateChanges(daysRecycler) }
+        .flatMap {
+          RxRecyclerView.scrollStateChanges(daysRecycler).map { stateInt ->
+            it.apply { this.setState(stateInt) }
+          }
+        }
   }
 
 }
