@@ -12,8 +12,10 @@ class Logger {
   private val errorLoggingAvailable = true //todo: check if NOT in debug
 
   companion object {
-    fun create(callerClass : KClass<*>, hashCode: Int) = Logger().apply {
-      this.callerClassString = callerClass.simpleName.toString()
+    fun create(callerClass: Class<*>, hashCode: Int) = create(callerClass.simpleName.toString(), hashCode)
+
+    fun create(callerString: String, hashCode: Int) = Logger().apply {
+      this.callerClassString = callerString
       this.callerClassObjectHashcode = hashCode
     }
   }
@@ -23,6 +25,8 @@ class Logger {
   }
 
   fun debug(string: String?) = log(Log.DEBUG, string)
+  fun info(string:String?) = log (Log.INFO, string)
+  fun warn(string: String?) = log (Log.WARN, string)
   fun error(string: String?) = log(Log.ERROR, string)
   fun error(string: String?, exception: Exception) = log(Log.ERROR, string, exception)
   fun error(string: String?, throwable: Throwable) = log(Log.ERROR, string, throwable)

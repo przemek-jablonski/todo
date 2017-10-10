@@ -35,7 +35,7 @@ abstract class TodoistBaseActivity<P : Presenter<*>> : AppCompatActivity(), View
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     viewReadySubject.doOnSubscribe { viewReadySubject.onNext(hasWindowFocus()) }
-    logger = Logger.create(this::class, this.hashCode())
+    logger = Logger.create(this::class.java, this.hashCode())
     logger.debug("logger created, $logger")
     logger.debug("onCreate, bundle: $savedInstanceState")
   }
@@ -44,7 +44,6 @@ abstract class TodoistBaseActivity<P : Presenter<*>> : AppCompatActivity(), View
   override fun onStart() {
     super.onStart()
     logger.debug("onStart")
-    setupViews()
   }
 
   @CallSuper
@@ -65,12 +64,12 @@ abstract class TodoistBaseActivity<P : Presenter<*>> : AppCompatActivity(), View
     windowFocusCache = hasFocus
   }
 
-  override fun subscribeOnViewReady(): Observable<Boolean> {
+  override final fun subscribeOnViewReady(): Observable<Boolean> {
     logger.debug("subscribeOnViewReady")
     return viewReadySubject
   }
 
-  override fun gotoScreen(targetScreen: Screen) {
+  override final fun gotoScreen(targetScreen: Screen) {
     logger.debug("gotoScreen, targetScreen: $targetScreen")
     startActivity(when (targetScreen) {
       View.Screen.DAY_SCREEN -> Intent(applicationContext, TodoistDayActivity::class.java)
@@ -81,7 +80,7 @@ abstract class TodoistBaseActivity<P : Presenter<*>> : AppCompatActivity(), View
   }
 
 
-  override fun checkPermissions(vararg permissions: PermissionType) {
+  override final fun checkPermissions(vararg permissions: PermissionType) {
     logger.debug("checkPermissions, permissions: $permissions")
     permissions.forEach {
       val permissionResponseInt = checkSelfPermission(permissionTypeToString(it))
@@ -91,12 +90,12 @@ abstract class TodoistBaseActivity<P : Presenter<*>> : AppCompatActivity(), View
     }
   }
 
-  override fun requestPermissions(vararg permissions: PermissionType) {
+  override final fun requestPermissions(vararg permissions: PermissionType) {
     logger.debug("requestPermissions, permissions: $permissions")
     requestPermissions(permissions.map(this::permissionTypeToString).toTypedArray(), requestCode())
   }
 
-  override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+  override final fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
     logger.debug("onRequestPermissionsResult, requestCode: $requestCode, permissions: $permissions, results: $grantResults")
   }
 
@@ -109,7 +108,7 @@ abstract class TodoistBaseActivity<P : Presenter<*>> : AppCompatActivity(), View
     defaultUserAlert?.dismiss() //omitting userAlertMessage check, since Snackbars can be dismissed manually any time.
   }
 
-  override fun subscribeForPermissionsChange(): Observable<PermissionEvent> {
+  override final fun subscribeForPermissionsChange(): Observable<PermissionEvent> {
     logger.debug("requestPermissions")
     return permissionsSubject
   }

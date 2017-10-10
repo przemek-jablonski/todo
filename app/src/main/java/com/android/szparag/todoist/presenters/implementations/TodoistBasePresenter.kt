@@ -18,7 +18,7 @@ abstract class TodoistBasePresenter<V : View> : Presenter<V> {
   override lateinit var modelDisposables: CompositeDisposable
 
   override fun attach(view: V) {
-    logger = Logger.create(this::class, this.hashCode())
+    logger = Logger.create(this::class.java, this.hashCode())
     logger.debug("attach, view: $view")
     this.view = view
     onAttached()
@@ -47,6 +47,11 @@ abstract class TodoistBasePresenter<V : View> : Presenter<V> {
     modelDisposables.clear()
   }
 
+  override fun onViewReady() {
+    logger.debug("onViewReady")
+    view?.setupViews()
+  }
+
   @CallSuper override fun subscribeViewPermissionsEvents() {
     logger.debug("subscribeViewPermissionsEvents")
   }
@@ -57,6 +62,7 @@ abstract class TodoistBasePresenter<V : View> : Presenter<V> {
         ?.subscribeOnViewReady()
         ?.ui()
         ?.doOnSubscribe { logger.debug("subscribeViewReadyEvents.sub") }
+        ?.doOnEach{ logger.debug("subscribeViewReadyEvents.onEach") }
         ?.filter { readyFlag -> readyFlag }
         ?.subscribeBy(
             onNext = { readyFlag ->

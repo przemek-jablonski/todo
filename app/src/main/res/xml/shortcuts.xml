@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+  <shortcut
+      android:shortcutId="front"
+      android:enabled="true"
+      android:icon="@drawable/ic_action_circle"
+      android:shortcutShortLabel="@string/shortcut_front"
+      android:shortcutLongLabel="@string/shortcut_front"
+      android:shortcutDisabledMessage="@string/shortcut_front">
+    <intent
+        android:action="com.android.szparag.todoist.intent.FRONT"
+        android:targetPackage="com.android.szparag.todoist"
+        android:targetClass="com.android.szparag.todoist.views.implementations.TodoistFrontActivity" />
+    <categories android:name="com.android.szparag.todoist.shortcuts" />
+  </shortcut>
+</shortcuts>
