@@ -26,6 +26,7 @@ import com.android.szparag.todoist.utils.duration
 import com.android.szparag.todoist.utils.flatMap
 import com.android.szparag.todoist.utils.getDisplayDimensions
 import com.android.szparag.todoist.utils.getStatusbarHeight
+import com.android.szparag.todoist.utils.getVisibleItemsPositions
 import com.android.szparag.todoist.utils.interpolator
 import com.android.szparag.todoist.views.contracts.FrontView
 import com.jakewharton.rxbinding2.support.v7.widget.RecyclerViewScrollEvent
@@ -164,14 +165,14 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
 
   override fun subscribeDayListScrolls(): Observable<ListScrollEvent> {
     logger.debug("subscribeDayListScrolls")
+
     return RxRecyclerView.scrollEvents(daysRecycler)
-        .map { recyclerViewScrollEvent -> ListScrollEvent(recyclerViewScrollEvent.dx(), recyclerViewScrollEvent.dy()) }
-        .flatMap {
-          RxRecyclerView.scrollStateChanges(daysRecycler).map { stateInt ->
-            it.apply { this.setState(stateInt) }
-          }
+        .concatMap { rvScrollEvent ->
+          RxRecyclerView
+              .scrollStateChanges(daysRecycler)
+              .map { scrollStateInt -> ListScrollEvent(rvScrollEvent.dx(), rvScrollEvent.dy(), scrollStateInt) }
         }
-        .distinctUntilChanged { t1, t2 -> t1.state == t2.state }
+        .map { listScrollEvent -> listScrollEvent.apply { this.setVisiblePositions(daysLayoutManager.getVisibleItemsPositions())} }
   }
 
 }

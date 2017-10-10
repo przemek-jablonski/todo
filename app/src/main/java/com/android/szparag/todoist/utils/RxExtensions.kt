@@ -47,9 +47,26 @@ data class ListScrollEvent(
     private val dy: Int
 ) {
 
-  lateinit var state: ScrollEventState
+  constructor(dx: Int, dy: Int, state: ScrollEventState) : this(dx, dy) {
+    this.state = state
+  }
 
-  fun setState(state: Int) {
+  constructor(dx: Int, dy: Int, state: Int) : this(dx, dy) {
+    mapState(state)
+  }
+
+  lateinit var state: ScrollEventState
+  private var firstVisibleItemPos: Int? = null
+  private var lastVisibleItemPos: Int? = null
+
+  private fun setVisiblePositions(firstVisibleItemPos: Int, lastVisibleItemPos: Int) {
+    this.firstVisibleItemPos = firstVisibleItemPos
+    this.lastVisibleItemPos = lastVisibleItemPos
+  }
+
+  fun setVisiblePositions(visibleItemsPair: Pair<Int, Int>) = setVisiblePositions(visibleItemsPair.first, visibleItemsPair.second)
+
+  private fun mapState(state: Int): ListScrollEvent {
     this.state = when (state) {
       RecyclerView.SCROLL_STATE_DRAGGING -> {
         ScrollEventState.DRAGGING
@@ -57,13 +74,15 @@ data class ListScrollEvent(
       RecyclerView.SCROLL_STATE_SETTLING -> {
         ScrollEventState.SETTLING
       }
-      else                               -> {
+      else -> {
         ScrollEventState.IDLE
       }
     }
+    return this
   }
 
-  override fun toString() = "ListScrollEvent[${hashCode()}] state: $state, dx: $dx, dy: $dy"
+  override fun toString() = "ListScrollEvent[${hashCode()}] firstPos: $firstVisibleItemPos, lastPos: $lastVisibleItemPos " +
+      "state: $state, dx: $dx, dy: $dy"
 }
 
 private val scrollEventSubject: Subject<ListScrollEvent> = PublishSubject.create<ListScrollEvent>()

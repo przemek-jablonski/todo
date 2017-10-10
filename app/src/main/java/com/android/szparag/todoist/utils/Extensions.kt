@@ -6,6 +6,7 @@ import android.animation.TimeInterpolator
 import android.app.Activity
 import android.content.Context
 import android.graphics.Rect
+import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.LinearSmoothScroller
 import android.support.v7.widget.RecyclerView
@@ -29,6 +30,12 @@ import org.joda.time.DateTime
 //fun lerp(a: Float, b: Float, amount: Float): Float {
 //
 //}
+
+inline fun LinearLayoutManager.getVisibleItemsPositions() = Pair(
+    this.findFirstVisibleItemPosition(),
+    this.findLastVisibleItemPosition()
+)
+
 
 inline fun View.setViewDimensions(itemWidth: Int?, itemHeight: Int?): View {
   if (itemWidth == null && itemHeight == null) return this
