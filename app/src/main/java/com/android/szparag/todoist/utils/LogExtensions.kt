@@ -25,6 +25,8 @@ class Logger {
   }
 
   fun debug(string: String?) = log(Log.DEBUG, string)
+  fun info(string:String?) = log (Log.INFO, string)
+  fun warn(string: String?) = log (Log.WARN, string)
   fun error(string: String?) = log(Log.ERROR, string)
   fun error(string: String?, exception: Exception) = log(Log.ERROR, string, exception)
   fun error(string: String?, throwable: Throwable) = log(Log.ERROR, string, throwable)

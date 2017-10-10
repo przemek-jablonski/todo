@@ -42,7 +42,7 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
   private val quoteText: TextView by bindView(R.id.textViewFrontQuote)
   private val daysRecycler: RecyclerView by bindView(R.id.recyclerViewFront)
   private val daysLayoutManager: LinearLayoutManager by lazy {
-    LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true)
+    LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
   }
 
   @Inject override lateinit var presenter: FrontPresenter
@@ -172,7 +172,10 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
               .scrollStateChanges(daysRecycler)
               .map { scrollStateInt -> ListScrollEvent(rvScrollEvent.dx(), rvScrollEvent.dy(), scrollStateInt) }
         }
-        .map { listScrollEvent -> listScrollEvent.apply { this.setVisiblePositions(daysLayoutManager.getVisibleItemsPositions())} }
+        .map { listScrollEvent -> listScrollEvent.apply {
+          this.setVisiblePositions(daysLayoutManager.getVisibleItemsPositions())
+          this.lastItemOnListPos = daysLayoutManager.itemCount
+        } }
   }
 
 }

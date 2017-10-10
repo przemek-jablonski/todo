@@ -31,6 +31,13 @@ import org.joda.time.DateTime
 //
 //}
 
+inline fun <A : Any, B : Any, C : Any> checkNotNull(arg1: A?, arg2: B?, arg3: C?, succeededBlock: (A, B, C) -> (Unit?)) =
+    if (arg1 != null && arg2 != null && arg3 != null) {
+      succeededBlock(arg1, arg2, arg3)
+    } else {
+      null
+    }
+
 inline fun LinearLayoutManager.getVisibleItemsPositions() = Pair(
     this.findFirstVisibleItemPosition(),
     this.findLastVisibleItemPosition()

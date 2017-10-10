@@ -42,6 +42,7 @@ val DISPOSABLE_CONTAINER_NULL_THROWABLE: Throwable by lazy {
 enum class ScrollEventState { IDLE, DRAGGING, SETTLING
 }
 
+//todo: move this out of here
 data class ListScrollEvent(
     private val dx: Int,
     private val dy: Int
@@ -55,9 +56,10 @@ data class ListScrollEvent(
     mapState(state)
   }
 
-  lateinit var state: ScrollEventState
-  private var firstVisibleItemPos: Int? = null
-  private var lastVisibleItemPos: Int? = null
+  private lateinit var state: ScrollEventState
+  var lastItemOnListPos: Int? = null
+  var firstVisibleItemPos: Int? = null
+  var lastVisibleItemPos: Int? = null
 
   private fun setVisiblePositions(firstVisibleItemPos: Int, lastVisibleItemPos: Int) {
     this.firstVisibleItemPos = firstVisibleItemPos
