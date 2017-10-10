@@ -71,14 +71,14 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
         /*,(displayDimensions.second * 0.50f).toInt()*/)
     daysRecycler.layoutManager = daysLayoutManager
     LinearSnapHelper().attachToRecyclerView(daysRecycler)
-    daysRecycler.addOnScrollListener(object : RecyclerViewScrollEndListener(daysLayoutManager) {
-      override fun onLoadMore() {
-        logger.debug("onLoadMore")
-      }
-//      override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
-//        logger.debug("RecyclerViewScrollEndListener.onLoadMore, page: $page, totalItems: $totalItemsCount")
+//    daysRecycler.addOnScrollListener(object : RecyclerViewScrollEndListener(daysLayoutManager) {
+//      override fun onLoadMore() {
+//        logger.debug("onLoadMore")
 //      }
-    })
+////      override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
+////        logger.debug("RecyclerViewScrollEndListener.onLoadMore, page: $page, totalItems: $totalItemsCount")
+////      }
+//    })
     daysRecycler.scrollToPosition(6)
   }
 
@@ -162,14 +162,8 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
     return Observable.create { }
   }
 
-  //todo: this return type is leaking separation concern (you wouldn't have RecyclerViewScrollEvent in iOS)
   override fun subscribeDayListScrolls(): Observable<ListScrollEvent> {
     logger.debug("subscribeDayListScrolls")
-    //todo: every rxbinding call has a strong reference to given view, it should be disposed (or is it done
-    //todo: automagically?)
-
-    return Observable.create {  }
-
     return RxRecyclerView.scrollEvents(daysRecycler)
         .map { recyclerViewScrollEvent -> ListScrollEvent(recyclerViewScrollEvent.dx(), recyclerViewScrollEvent.dy()) }
         .flatMap {
@@ -177,6 +171,7 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
             it.apply { this.setState(stateInt) }
           }
         }
+        .distinctUntilChanged { t1, t2 -> t1.state == t2.state }
   }
 
 }

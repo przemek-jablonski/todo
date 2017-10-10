@@ -98,11 +98,11 @@ abstract class RecyclerViewScrollEndListener(private val layoutManager: LinearLa
     val findLastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
     val firstItemPosition = 0
     val lastItemPosition = layoutManager.itemCount
-    logger.error("onListLimitReached, firstItemPos: $firstItemPosition, lastItemPos: $lastItemPosition, firstVisibleItemPos: " +
-        "$findFirstVisibleItemPosition, " +
-        "lastVisibleItemPos: " +
-        "$lastVisibleItemPosition, " +
-        "dx: $dx, dy: $dy")
+//    logger.error("onListLimitReached, firstItemPos: $firstItemPosition, lastItemPos: $lastItemPosition, firstVisibleItemPos: " +
+//        "$findFirstVisibleItemPosition, " +
+//        "lastVisibleItemPos: " +
+//        "$lastVisibleItemPosition, " +
+//        "dx: $dx, dy: $dy")
   }
 
   // Call this method whenever performing new searches
