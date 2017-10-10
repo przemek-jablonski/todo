@@ -50,10 +50,6 @@ class TodoistFrontPresenter : TodoistBasePresenter<FrontView>(), FrontPresenter 
         })
   }
 
-//  private fun calculateFrontListCrossingLoadingThreshold(): Boolean {
-//
-//  }
-
   override fun subscribeModelEvents() {
     logger.debug("subscribeModelEvents")
   }
