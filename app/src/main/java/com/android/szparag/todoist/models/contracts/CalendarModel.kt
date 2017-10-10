@@ -2,10 +2,9 @@ package com.android.szparag.todoist.models.contracts
 
 import com.android.szparag.todoist.models.entities.RenderWeekDays
 import io.reactivex.Observable
-import java.util.Calendar
 import java.util.Locale
 
-interface CalendarModel: Model {
+interface CalendarModel : Model {
 
   fun setupCalendarInstance()
 

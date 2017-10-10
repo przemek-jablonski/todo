@@ -3,7 +3,7 @@ package com.android.szparag.todoist.views.contracts
 import io.reactivex.Completable
 import io.reactivex.Observable
 
-interface MonthView: View {
+interface MonthView : View {
 
   fun setupMonthList(): Completable //todo: custom data structure in
 

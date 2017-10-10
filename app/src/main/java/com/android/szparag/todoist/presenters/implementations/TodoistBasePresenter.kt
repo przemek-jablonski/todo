@@ -1,9 +1,9 @@
 package com.android.szparag.todoist.presenters.implementations
 
 import android.support.annotation.CallSuper
+import com.android.szparag.todoist.presenters.contracts.Presenter
 import com.android.szparag.todoist.utils.Logger
 import com.android.szparag.todoist.utils.add
-import com.android.szparag.todoist.presenters.contracts.Presenter
 import com.android.szparag.todoist.utils.ui
 import com.android.szparag.todoist.views.contracts.View
 import io.reactivex.disposables.CompositeDisposable
@@ -62,7 +62,7 @@ abstract class TodoistBasePresenter<V : View> : Presenter<V> {
         ?.subscribeOnViewReady()
         ?.ui()
         ?.doOnSubscribe { logger.debug("subscribeViewReadyEvents.sub") }
-        ?.doOnEach{ logger.debug("subscribeViewReadyEvents.onEach") }
+        ?.doOnEach { logger.debug("subscribeViewReadyEvents.onEach") }
         ?.filter { readyFlag -> readyFlag }
         ?.subscribeBy(
             onNext = { readyFlag ->

@@ -10,7 +10,7 @@
     <intent
         android:action="com.android.szparag.todoist.intent.FRONT"
         android:targetPackage="com.android.szparag.todoist"
-        android:targetClass="com.android.szparag.todoist.views.implementations.TodoistFrontActivity" />
-    <categories android:name="com.android.szparag.todoist.shortcuts" />
+        android:targetClass="com.android.szparag.todoist.views.implementations.TodoistFrontActivity"/>
+    <categories android:name="com.android.szparag.todoist.shortcuts"/>
   </shortcut>
 </shortcuts>

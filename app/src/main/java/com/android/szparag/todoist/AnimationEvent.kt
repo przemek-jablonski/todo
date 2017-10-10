@@ -12,5 +12,4 @@ data class AnimationEvent(val eventType: AnimationEventType) {
   }
 
 
-
 }

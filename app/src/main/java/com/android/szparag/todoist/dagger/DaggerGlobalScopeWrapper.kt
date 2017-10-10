@@ -8,7 +8,7 @@ class DaggerGlobalScopeWrapper {
   companion object {
     private var component: TodoistMainComponent? = null
 
-    fun getComponent(context: Context): TodoistMainComponent =  if (component == null) constructComponent(context) else component!!
+    fun getComponent(context: Context): TodoistMainComponent = if (component == null) constructComponent(context) else component!!
 
     private fun constructComponent(context: Context): TodoistMainComponent {
       component = DaggerTodoistMainComponent.builder()

@@ -17,23 +17,18 @@ import com.android.szparag.todoist.AnimationEvent.AnimationEventType.REPEAT
 import com.android.szparag.todoist.AnimationEvent.AnimationEventType.START
 import com.android.szparag.todoist.FrontTestAdapter
 import com.android.szparag.todoist.R
-import com.android.szparag.todoist.RecyclerViewScrollEndListener
 import com.android.szparag.todoist.dagger.DaggerGlobalScopeWrapper
 import com.android.szparag.todoist.presenters.contracts.FrontPresenter
 import com.android.szparag.todoist.utils.ListScrollEvent
 import com.android.szparag.todoist.utils.bindView
 import com.android.szparag.todoist.utils.duration
-import com.android.szparag.todoist.utils.flatMap
 import com.android.szparag.todoist.utils.getDisplayDimensions
 import com.android.szparag.todoist.utils.getStatusbarHeight
 import com.android.szparag.todoist.utils.getVisibleItemsPositions
 import com.android.szparag.todoist.utils.interpolator
 import com.android.szparag.todoist.views.contracts.FrontView
-import com.jakewharton.rxbinding2.support.v7.widget.RecyclerViewScrollEvent
 import com.jakewharton.rxbinding2.support.v7.widget.RxRecyclerView
 import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
-import io.reactivex.functions.Function
 import javax.inject.Inject
 
 class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
@@ -172,10 +167,12 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
               .scrollStateChanges(daysRecycler)
               .map { scrollStateInt -> ListScrollEvent(rvScrollEvent.dx(), rvScrollEvent.dy(), scrollStateInt) }
         }
-        .map { listScrollEvent -> listScrollEvent.apply {
-          this.setVisiblePositions(daysLayoutManager.getVisibleItemsPositions())
-          this.lastItemOnListPos = daysLayoutManager.itemCount
-        } }
+        .map { listScrollEvent ->
+          listScrollEvent.apply {
+            this.setVisiblePositions(daysLayoutManager.getVisibleItemsPositions())
+            this.lastItemOnListPos = daysLayoutManager.itemCount
+          }
+        }
   }
 
 }

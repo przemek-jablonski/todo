@@ -1,20 +1,14 @@
 package com.android.szparag.todoist.views.implementations
 
-import android.app.ActionBar.LayoutParams
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.DisplayMetrics
-import android.widget.ImageView
-import android.widget.TextView
 import com.android.szparag.todoist.R
 import com.android.szparag.todoist.dagger.DaggerGlobalScopeWrapper
 import com.android.szparag.todoist.models.entities.RenderDay
 import com.android.szparag.todoist.presenters.contracts.DayPresenter
-import com.android.szparag.todoist.utils.bindView
 import com.android.szparag.todoist.utils.getDisplayMetrics
 import com.android.szparag.todoist.views.contracts.DayView
 import io.reactivex.Completable
-import io.reactivex.CompletableEmitter
 import io.reactivex.Observable
 import javax.inject.Inject
 
@@ -79,42 +73,42 @@ class TodoistDayActivity : TodoistBaseActivity<DayPresenter>(), DayView {
 
   override fun subscribeUserAddButtonClicked(): Observable<Any> {
     logger.debug("subscribeUserAddButtonClicked")
-    return Observable.create {  }
+    return Observable.create { }
   }
 
   override fun subscribeUserChecklistItemCheck(): Observable<Any> {
     logger.debug("subscribeUserChecklistItemCheck")
-    return Observable.create {  }
+    return Observable.create { }
   }
 
   override fun subscribeUserChecklistItemLongPressed(): Observable<Any> {
     logger.debug("subscribeUserChecklistItemLongPressed")
-    return Observable.create {  }
+    return Observable.create { }
   }
 
   override fun animateCalendarHeader(): Completable {
     logger.debug("animateCalendarHeader")
-    return Completable.create {  }
+    return Completable.create { }
   }
 
   override fun animateCalendarQuote(): Completable {
     logger.debug("animateCalendarQuote")
-    return Completable.create {  }
+    return Completable.create { }
   }
 
   override fun animateCalendarChecklist(): Completable {
     logger.debug("animateCalendarChecklist")
-    return Completable.create {  }
+    return Completable.create { }
   }
 
   override fun animateCalendarAddButton(): Completable {
     logger.debug("animateCalendarAddButton")
-    return Completable.create {  }
+    return Completable.create { }
   }
 
   override fun subscribeUserBackButtonPressed(): Observable<Any> {
     logger.debug("subscribeUserBackButtonPressed")
-    return Observable.create {  }
+    return Observable.create { }
   }
 
 }

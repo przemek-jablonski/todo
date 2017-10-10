@@ -1,7 +1,7 @@
 package com.android.szparag.todoist
 
-import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import com.android.szparag.todoist.utils.Logger
 
 

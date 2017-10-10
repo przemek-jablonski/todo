@@ -2,20 +2,11 @@ package com.android.szparag.todoist.models.implementations
 
 import com.android.szparag.todoist.models.contracts.TasksModel
 import com.android.szparag.todoist.models.entities.TodoistDay
-import com.android.szparag.todoist.models.entities.TodoistTask
 import com.android.szparag.todoist.utils.Logger
-import com.android.szparag.todoist.utils.Logger.Companion
-import com.android.szparag.todoist.utils.asFlowable
-import hu.akarnokd.rxjava.interop.RxJavaInterop
 import io.reactivex.Completable
-import io.reactivex.CompletableEmitter
-import io.reactivex.Flowable
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.realm.Realm
-import io.realm.Sort.DESCENDING
 
-class TodoistTasksModel: TasksModel {
+class TodoistTasksModel : TasksModel {
 
   private val realmInstance by lazy { Realm.getDefaultInstance() }
   override val logger = Logger.create(TodoistTasksModel::class.java, hashCode())

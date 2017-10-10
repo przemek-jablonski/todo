@@ -1,6 +1,5 @@
 package com.android.szparag.todoist.utils
 
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import hu.akarnokd.rxjava.interop.RxJavaInterop
 import io.reactivex.Completable

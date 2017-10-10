@@ -1,7 +1,7 @@
 package com.android.szparag.todoist.views.contracts
 
-import com.android.szparag.todoist.utils.Logger
 import com.android.szparag.todoist.events.PermissionEvent
+import com.android.szparag.todoist.utils.Logger
 import io.reactivex.Observable
 import io.reactivex.subjects.Subject
 
