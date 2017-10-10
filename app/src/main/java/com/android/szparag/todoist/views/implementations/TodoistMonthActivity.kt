@@ -16,36 +16,36 @@ class TodoistMonthActivity : TodoistBaseActivity<MonthPresenter>(), MonthView {
 
   override fun setupMonthList(): Completable {
     logger.debug("setupMonthList")
-    return Completable.create {  }
+    return Completable.create { }
   }
 
   override fun subscribeUserDayClicked(): Observable<Int> {
     logger.debug("subscribeUserDayClicked")
-    return Observable.create {  }
+    return Observable.create { }
   }
 
   override fun subscribeUserDayLongClicked(): Observable<Int> {
     logger.debug("subscribeUserDayLongClicked")
-    return Observable.create {  }
+    return Observable.create { }
   }
 
   override fun subscribeUserWeekClicked(): Observable<Int> {
     logger.debug("subscribeUserWeekClicked")
-    return Observable.create {  }
+    return Observable.create { }
   }
 
   override fun subscribeUserWeekLongClicked(): Observable<Int> {
     logger.debug("subscribeUserWeekLongClicked")
-    return Observable.create {  }
+    return Observable.create { }
   }
 
   override fun animateMonthListFadeIn(): Completable {
     logger.debug("animateMonthListFadeIn")
-    return Completable.create {  }
+    return Completable.create { }
   }
 
   override fun subscribeUserBackButtonPressed(): Observable<Any> {
     logger.debug("subscribeUserBackButtonPressed")
-    return Observable.create {  }
+    return Observable.create { }
   }
 }

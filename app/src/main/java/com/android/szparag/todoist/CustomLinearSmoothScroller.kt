@@ -34,8 +34,9 @@ class CustomLinearSmoothScroller(context: Context) : LinearSmoothScroller(contex
   override fun calculateTimeForScrolling(dx: Int): Int {
     val resultSuper = super.calculateTimeForScrolling(dx)
     val resultAdjusted = if (resultSuper <= 10) resultSuper else minOf(resultSuper, SCROLLING_TIME_CEIL_MILLIS)
-    Log.d("RV", "${hashCode()} calculateTimeForScrolling, dx: $dx, resultSuper: $resultSuper, resultAdjusted: $resultAdjusted, scrollingCeil: " +
-        "$SCROLLING_TIME_CEIL_MILLIS")
+    Log.d("RV",
+        "${hashCode()} calculateTimeForScrolling, dx: $dx, resultSuper: $resultSuper, resultAdjusted: $resultAdjusted, scrollingCeil: " +
+            "$SCROLLING_TIME_CEIL_MILLIS")
     return resultAdjusted
   }
 }

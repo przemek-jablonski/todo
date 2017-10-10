@@ -15,7 +15,7 @@ import io.reactivex.subjects.Subject
  */
 abstract class BaseAnimation(internal val targetView: View) : Animation() {
 
-  private val listenerSubject : Subject<AnimationEvent> = PublishSubject.create()
+  private val listenerSubject: Subject<AnimationEvent> = PublishSubject.create()
 
   init {
     setAnimationListener(object : Animation.AnimationListener {
@@ -40,7 +40,8 @@ abstract class BaseAnimation(internal val targetView: View) : Animation() {
     return this
   }
 
-  fun duration(durationMillis: Int = 500, interpolator: AccelerateDecelerateInterpolator = AccelerateDecelerateInterpolator()) : BaseAnimation{
+  fun duration(durationMillis: Int = 500,
+      interpolator: AccelerateDecelerateInterpolator = AccelerateDecelerateInterpolator()): BaseAnimation {
     this.duration = durationMillis.toLong()
     this.interpolator = interpolator
     return this

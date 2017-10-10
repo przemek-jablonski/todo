@@ -7,17 +7,16 @@ import com.android.szparag.todoist.utils.Logger
 import com.android.szparag.todoist.utils.unixTime
 import io.reactivex.Completable
 import io.reactivex.Observable
-import io.reactivex.Observable.create
-import java.util.Calendar
-import java.util.Locale
-import org.joda.time.DateTimeZone
 import org.joda.time.DateTime
+import org.joda.time.DateTimeConstants
+import org.joda.time.DateTimeZone
 import org.joda.time.LocalDate
 import org.joda.time.LocalDateTime
 import org.joda.time.LocalTime
 import org.joda.time.Period
 import org.joda.time.Weeks
-import org.joda.time.DateTimeConstants
+import java.util.Calendar
+import java.util.Locale
 
 
 //todo: locale is useless here

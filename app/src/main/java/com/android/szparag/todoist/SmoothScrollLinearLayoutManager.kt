@@ -5,7 +5,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.State
 import android.util.Log
-import io.reactivex.Observable
 
 
 class SmoothScrollLinearLayoutManager(context: Context) : LinearLayoutManager(context) {

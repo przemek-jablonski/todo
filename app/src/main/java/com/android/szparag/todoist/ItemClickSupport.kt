@@ -2,9 +2,6 @@ package com.android.szparag.todoist
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import android.view.View.OnLongClickListener
-import com.android.szparag.todoist.R.id
-import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 
@@ -14,7 +11,7 @@ import io.reactivex.subjects.Subject
  */
 class ItemClickSupport {
 
-  private lateinit var recyclerView : RecyclerView
+  private lateinit var recyclerView: RecyclerView
   private val itemClickSubject: Subject<Pair<View, Int>> by lazy { PublishSubject.create<Pair<View, Int>>() }
   private val itemLongClickSubject: Subject<Pair<View, Int>> by lazy { PublishSubject.create<Pair<View, Int>>() }
   private var consumesLongClicks = false
