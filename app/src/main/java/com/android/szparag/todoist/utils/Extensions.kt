@@ -126,8 +126,12 @@ inline fun View.scale(targetWidth: Int = this.width, targetHeight: Int = this.he
     = this.resize(targetWidth, targetHeight)
 
 inline fun emptyString() = ""
-inline fun <E: Any> emptyMutableList() = mutableListOf<E>()
+inline fun <E> emptyMutableList() = mutableListOf<E>()
 
-inline fun LocalDate.getWeekDays() = (0..6).map { this.plusDays(it) }
+inline fun LocalDate.weekAsDays() = (0..6).map { this.plusDays(it) }
 
-inline fun <E: Any> MutableList<E>.add(elements: Collection<E>) = this.addAll(elements)
+inline fun <E> MutableList<E>.add(elements: Collection<E>) = this.addAll(elements)
+
+inline fun <E> Collection<E>.boundary(forward: Boolean): E = if (forward) last() else first()
+
+inline fun range(from: Int, to: Int) = if (from < to) (from..to) else (to..from)

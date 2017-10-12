@@ -5,8 +5,11 @@ import com.android.szparag.todoist.models.entities.RenderDay
 import com.android.szparag.todoist.models.entities.RenderWeekDays
 import com.android.szparag.todoist.utils.Logger
 import com.android.szparag.todoist.utils.add
-import com.android.szparag.todoist.utils.getWeekDays
+import com.android.szparag.todoist.utils.boundary
+import com.android.szparag.todoist.utils.emptyMutableList
+import com.android.szparag.todoist.utils.range
 import com.android.szparag.todoist.utils.unixTime
+import com.android.szparag.todoist.utils.weekAsDays
 import io.reactivex.Completable
 import io.reactivex.Observable
 import org.joda.time.DateTime
@@ -38,19 +41,32 @@ class TodoistCalendarModel(private var locale: Locale) : CalendarModel {
       tasksRemainingCount = random.nextInt(20)
   )
 
-  override fun getRelativeWeekAsDays(weekRelativeIndex: Int, fetchMultiplier: Int): List<RenderDay> {
-    logger.debug("getRelativeWeekAsDays, weekRelativeIndex: $weekRelativeIndex")
-//    if (weekRelativeIndex)
-    val localDate = LocalDate().plusWeeks(weekRelativeIndex)
-    val asd1 = localDate.getWeekDays().map { localDate -> mapToRenderDay(localDate) }
-    val asd2 = asd1.toMutableList()
-    asd2.add(asd1)
-    asd2.add(asd1)
-    return asd2.also { logger.debug("getRelativeWeekAsDays, listOfDays: $it") }
+  override fun requestRelativeWeekAsDays(weekForward: Boolean, fetchMultiplier: Int) {
+    logger.debug("requestRelativeWeekAsDays, weekForward: $weekForward, fetchMultiplier: $fetchMultiplier")
+    val boundaryLocalDate = relativeLocalDates.boundary(weekForward)
+    range(1, fetchMultiplier - 1).forEach { weekIndex ->
+      val appendingLocalDates = boundaryLocalDate.plusWeeks(weekIndex).weekAsDays()
+      relativeLocalDates.add(appendingLocalDates)
+      logger.debug("requestRelativeWeekAsDays, index: $weekIndex, appending: $appendingLocalDates")
+    }.also {
+      logger.debug("requestRelativeWeekAsDays, modifiedLocalDates: $relativeLocalDates")
+    }
   }
+
+  override fun fetchRelativeWeekAsDays(): Observable<RenderDay> {
+    logger.debug("fetchRelativeWeekAsDays, relativeLocalDates: $relativeLocalDates")
+    return Observable.fromIterable(relativeLocalDates)
+        .doOnSubscribe { resetRelativeWeekAsDays() }
+        .map { localDate -> mapToRenderDay(localDate) }
+        .doOnEach {
+          logger.debug("fetchRelativeWeekAsDays, Observable.fromIterable(relativeLocalDates), notification: $it")
+        }
+  }
+
 
   override fun resetRelativeWeekAsDays() {
     logger.debug("resetRelativeWeekAsDays")
+    relativeLocalDates.add(currentDay.weekAsDays())
   }
 
   override lateinit var logger: Logger
@@ -59,8 +75,8 @@ class TodoistCalendarModel(private var locale: Locale) : CalendarModel {
   private val currentDayStartOfTheWeek by lazy { currentDay.withDayOfWeek(DateTimeConstants.MONDAY) }
   private var selectedDay: LocalDate? = null
 
-  private val weekRelativeIndexNegative = 0
-  private val weekRelativeIndexPositive = 0
+  private var relativeLocalDates = emptyMutableList<LocalDate>()
+
 
   //_____________
 //  private var relative
@@ -84,7 +100,8 @@ class TodoistCalendarModel(private var locale: Locale) : CalendarModel {
     val endOfWeek = dateTime.plusDays(7 - dateTime.dayOfWeek().get())
     val currentWeekPeriod = Period(startOfWeek.unixTime(), endOfWeek.unixTime())
     val currentWeekWeeks = Weeks.standardWeeksIn(currentWeekPeriod)
-    logger.debug("setupCalendarInstance")
+
+    resetRelativeWeekAsDays()
   }
 
   override fun detach() = Completable.fromAction { logger.debug("detach") }

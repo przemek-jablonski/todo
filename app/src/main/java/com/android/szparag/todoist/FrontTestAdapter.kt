@@ -47,6 +47,11 @@ class FrontTestAdapter(private val itemWidth: Int? = null, private val itemHeigh
     daysList.addAll(renderDays)
   }
 
+  fun addToList(renderDay: RenderDay) {
+    logger.debug("addToList, renderDay: $renderDay")
+    daysList.add(renderDay)
+  }
+
   override fun onBindViewHolder(holder: DayViewHolder?, position: Int) {
     val item = daysList[position]
     logger.debug("onBindViewHolder, day: $item, position: $position, holder: $holder")

@@ -29,7 +29,7 @@ import javax.inject.Inject
 abstract class TodoistBaseActivity<P : Presenter<*>> : AppCompatActivity(), View {
 
   override lateinit var logger: Logger
-  @Inject lateinit open var presenter: P //todo: close this
+  @Inject lateinit open var presenter: P //todo: close and private this somehow
   override val viewReadySubject: Subject<Boolean> = PublishSubject.create()
   override val permissionsSubject: Subject<PermissionEvent> = ReplaySubject.create()
   private var defaultUserAlert: Snackbar? = null

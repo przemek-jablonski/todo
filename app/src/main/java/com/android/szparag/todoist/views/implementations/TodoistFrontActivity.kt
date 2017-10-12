@@ -171,9 +171,10 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
         }
   }
 
-  override fun addToDayList(renderDays: List<RenderDay>) {
+  override fun addToDayList(renderDays: RenderDay) {
     logger.debug("addToDayList, renderDays: $renderDays")
     daysRecyclerAdapter.addToList(renderDays)
   }
+
 
 }
