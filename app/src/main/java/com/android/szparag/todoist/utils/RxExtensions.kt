@@ -1,6 +1,7 @@
 package com.android.szparag.todoist.utils
 
 import android.support.v7.widget.RecyclerView
+import com.android.szparag.todoist.events.ListScrollEvent.ScrollEventState
 import hu.akarnokd.rxjava.interop.RxJavaInterop
 import io.reactivex.Completable
 import io.reactivex.CompletableEmitter
@@ -38,55 +39,7 @@ val DISPOSABLE_CONTAINER_NULL_THROWABLE: Throwable by lazy {
       DISPOSABLE_CONTAINER_NULL_THROWABLE)
 }
 
-enum class ScrollEventState { IDLE, DRAGGING, SETTLING
-}
 
-//todo: move this out of here
-data class ListScrollEvent(
-    private val dx: Int,
-    private val dy: Int
-) {
-
-  constructor(dx: Int, dy: Int, state: ScrollEventState) : this(dx, dy) {
-    this.state = state
-  }
-
-  constructor(dx: Int, dy: Int, state: Int) : this(dx, dy) {
-    mapState(state)
-  }
-
-  private lateinit var state: ScrollEventState
-  var lastItemOnListPos: Int? = null
-  var firstVisibleItemPos: Int? = null
-  var lastVisibleItemPos: Int? = null
-
-  private fun setVisiblePositions(firstVisibleItemPos: Int, lastVisibleItemPos: Int) {
-    this.firstVisibleItemPos = firstVisibleItemPos
-    this.lastVisibleItemPos = lastVisibleItemPos
-  }
-
-  fun setVisiblePositions(visibleItemsPair: Pair<Int, Int>) = setVisiblePositions(visibleItemsPair.first, visibleItemsPair.second)
-
-  private fun mapState(state: Int): ListScrollEvent {
-    this.state = when (state) {
-      RecyclerView.SCROLL_STATE_DRAGGING -> {
-        ScrollEventState.DRAGGING
-      }
-      RecyclerView.SCROLL_STATE_SETTLING -> {
-        ScrollEventState.SETTLING
-      }
-      else -> {
-        ScrollEventState.IDLE
-      }
-    }
-    return this
-  }
-
-  override fun toString() = "ListScrollEvent[${hashCode()}] firstPos: $firstVisibleItemPos, lastPos: $lastVisibleItemPos " +
-      "state: $state, dx: $dx, dy: $dy"
-}
-
-private val scrollEventSubject: Subject<ListScrollEvent> = PublishSubject.create<ListScrollEvent>()
 
 //inline fun RecyclerView.scrollEvents(linearLayoutManager: LinearLayoutManager): Flowable<ListScrollEvent> {
 //
@@ -174,7 +127,7 @@ fun <T> Observable<T>.flatMap(completable: Completable, onComplete: () -> Unit =
 
 
 //fun itemSelections(view: Spinner): Observable<String> {
-//  checkNotNull(view, {"view == null"})
+//  ifNotNull(view, {"view == null"})
 //  return SpinnerSelectionObservable(view)
 //}
 

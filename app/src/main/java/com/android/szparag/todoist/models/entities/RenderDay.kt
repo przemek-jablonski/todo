@@ -6,6 +6,6 @@ data class RenderDay(
     val monthNumber: Int,
     val monthName: String,
     val yearNumber: Int,
-    val tasksDoneCount: Int,
+    val tasksCompletedCount: Int,
     val tasksRemainingCount: Int
 )

@@ -18,8 +18,9 @@ import com.android.szparag.todoist.AnimationEvent.AnimationEventType.START
 import com.android.szparag.todoist.FrontTestAdapter
 import com.android.szparag.todoist.R
 import com.android.szparag.todoist.dagger.DaggerGlobalScopeWrapper
+import com.android.szparag.todoist.events.ListScrollEvent
+import com.android.szparag.todoist.models.entities.RenderDay
 import com.android.szparag.todoist.presenters.contracts.FrontPresenter
-import com.android.szparag.todoist.utils.ListScrollEvent
 import com.android.szparag.todoist.utils.bindView
 import com.android.szparag.todoist.utils.duration
 import com.android.szparag.todoist.utils.getDisplayDimensions
@@ -29,18 +30,17 @@ import com.android.szparag.todoist.utils.interpolator
 import com.android.szparag.todoist.views.contracts.FrontView
 import com.jakewharton.rxbinding2.support.v7.widget.RxRecyclerView
 import io.reactivex.Observable
-import javax.inject.Inject
+import io.reactivex.ObservableEmitter
 
 class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
 
   private val backgroundImage: ImageView by bindView(R.id.imageViewFrontBackground)
   private val quoteText: TextView by bindView(R.id.textViewFrontQuote)
   private val daysRecycler: RecyclerView by bindView(R.id.recyclerViewFront)
+  private lateinit var daysRecyclerAdapter: FrontTestAdapter
   private val daysLayoutManager: LinearLayoutManager by lazy {
     LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
   }
-
-  @Inject override lateinit var presenter: FrontPresenter
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -51,8 +51,8 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
   override fun onStart() {
     super.onStart()
     logger.debug("onStart")
-    DaggerGlobalScopeWrapper.getComponent(this).inject(this) //todo: find a way to generify them in Kotlin
-    presenter.attach(this) //todo: find a way to generify them in Kotlin
+    DaggerGlobalScopeWrapper.getComponent(this).inject(this)
+    presenter.attach(this)
   }
 
   override fun setupViews() {
@@ -62,20 +62,14 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
     quoteText.y -= quoteText.height + getStatusbarHeight()
 
     val displayDimensions = getDisplayDimensions()
-    daysRecycler.adapter = FrontTestAdapter(
-        (displayDimensions.first * 0.66f).toInt()
-        /*,(displayDimensions.second * 0.50f).toInt()*/)
+    daysRecyclerAdapter = FrontTestAdapter(
+        (displayDimensions.first * 0.66f).toInt())
+    daysRecycler.adapter = daysRecyclerAdapter
+        /*,(displayDimensions.second * 0.50f).toInt()*/
     daysRecycler.layoutManager = daysLayoutManager
     LinearSnapHelper().attachToRecyclerView(daysRecycler)
-//    daysRecycler.addOnScrollListener(object : RecyclerViewScrollEndListener(daysLayoutManager) {
-//      override fun onLoadMore() {
-//        logger.debug("onLoadMore")
-//      }
-////      override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
-////        logger.debug("RecyclerViewScrollEndListener.onLoadMore, page: $page, totalItems: $totalItemsCount")
-////      }
-//    })
     daysRecycler.scrollToPosition(6)
+    daysRecycler.setScrollingTouchSlop(RecyclerView.TOUCH_SLOP_PAGING)
   }
 
   override fun animateShowBackgroundImage(): Observable<AnimationEvent> {
@@ -163,16 +157,23 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
 
     return RxRecyclerView.scrollEvents(daysRecycler)
         .concatMap { rvScrollEvent ->
-          RxRecyclerView
-              .scrollStateChanges(daysRecycler)
-              .map { scrollStateInt -> ListScrollEvent(rvScrollEvent.dx(), rvScrollEvent.dy(), scrollStateInt) }
+          RxRecyclerView.scrollStateChanges(daysRecycler)
+              .map { scrollStateInt ->
+                ListScrollEvent(
+                    rvScrollEvent.dx(),
+                    rvScrollEvent.dy(),
+                    scrollStateInt,
+                    daysLayoutManager.findFirstVisibleItemPosition(),
+                    daysLayoutManager.findLastVisibleItemPosition(),
+                    daysLayoutManager.itemCount
+                )
+              }
         }
-        .map { listScrollEvent ->
-          listScrollEvent.apply {
-            this.setVisiblePositions(daysLayoutManager.getVisibleItemsPositions())
-            this.lastItemOnListPos = daysLayoutManager.itemCount
-          }
-        }
+  }
+
+  override fun addToDayList(renderDays: List<RenderDay>) {
+    logger.debug("addToDayList, renderDays: $renderDays")
+    daysRecyclerAdapter.addToList(renderDays)
   }
 
 }

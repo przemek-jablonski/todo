@@ -2,6 +2,8 @@
 
 package com.android.szparag.todoist.dagger
 
+import com.android.szparag.todoist.presenters.contracts.Presenter
+import com.android.szparag.todoist.views.implementations.TodoistBaseActivity
 import com.android.szparag.todoist.views.implementations.TodoistDayActivity
 import com.android.szparag.todoist.views.implementations.TodoistFrontActivity
 import com.android.szparag.todoist.views.implementations.TodoistWeekActivity

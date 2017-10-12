@@ -18,6 +18,7 @@ import com.android.szparag.todoist.ItemClickSupport
 import com.android.szparag.todoist.R
 import com.android.szparag.todoist.ResizeAnimation
 import org.joda.time.DateTime
+import org.joda.time.LocalDate
 
 /**
  * Created by Przemyslaw Jablonski (github.com/sharaquss, pszemek.me) on 9/17/2017.
@@ -30,7 +31,14 @@ import org.joda.time.DateTime
 //
 //}
 
-inline fun <A : Any, B : Any, C : Any> checkNotNull(arg1: A?, arg2: B?, arg3: C?, succeededBlock: (A, B, C) -> (Unit?)) =
+inline fun checkNotNull(vararg args: Any?): Boolean {
+  args.forEach { arg ->
+    if (arg == null) return false
+  }
+  return true
+}
+
+inline fun <A : Any, B : Any, C : Any> ifNotNull(arg1: A?, arg2: B?, arg3: C?, succeededBlock: (A, B, C) -> (Unit?)) =
     if (arg1 != null && arg2 != null && arg3 != null) {
       succeededBlock(arg1, arg2, arg3)
     } else {
@@ -118,3 +126,8 @@ inline fun View.scale(targetWidth: Int = this.width, targetHeight: Int = this.he
     = this.resize(targetWidth, targetHeight)
 
 inline fun emptyString() = ""
+inline fun <E: Any> emptyMutableList() = mutableListOf<E>()
+
+inline fun LocalDate.getWeekDays() = (0..6).map { this.plusDays(it) }
+
+inline fun <E: Any> MutableList<E>.add(elements: Collection<E>) = this.addAll(elements)

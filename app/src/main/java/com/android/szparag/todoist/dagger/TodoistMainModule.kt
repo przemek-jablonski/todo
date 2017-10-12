@@ -21,7 +21,7 @@ class TodoistMainModule(private val context: Context) {
   @Provides @Singleton fun provideContext() = context
   @Provides fun provideWeekPresenter(calendarModel: CalendarModel): WeekPresenter = TodoistWeekPresenter(calendarModel)
   @Provides fun provideDayPresenter(calendarModel: CalendarModel): DayPresenter = TodoistDayPresenter(calendarModel)
-  @Provides fun provideFrontPresenter(): FrontPresenter = TodoistFrontPresenter()
+  @Provides fun provideFrontPresenter(calendarModel: CalendarModel): FrontPresenter = TodoistFrontPresenter(calendarModel)
   @Provides @Singleton fun provideCalendarModel(currentLocale: Locale): CalendarModel = TodoistCalendarModel(currentLocale)
 
   @Suppress("DEPRECATION") @Provides fun provideCurrentLocale() =

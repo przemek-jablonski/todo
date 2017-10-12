@@ -4,6 +4,8 @@ import com.android.szparag.todoist.models.contracts.CalendarModel
 import com.android.szparag.todoist.models.entities.RenderDay
 import com.android.szparag.todoist.models.entities.RenderWeekDays
 import com.android.szparag.todoist.utils.Logger
+import com.android.szparag.todoist.utils.add
+import com.android.szparag.todoist.utils.getWeekDays
 import com.android.szparag.todoist.utils.unixTime
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -17,16 +19,51 @@ import org.joda.time.Period
 import org.joda.time.Weeks
 import java.util.Calendar
 import java.util.Locale
+import java.util.Random
 
 
 //todo: locale is useless here
+//todo: or is it not?
 class TodoistCalendarModel(private var locale: Locale) : CalendarModel {
+
+  private val random by lazy { Random() }
+
+  private fun mapToRenderDay(date: LocalDate) = RenderDay(
+      dayName = date.dayOfWeek().getAsText(locale),
+      dayNumber = date.dayOfMonth,
+      monthNumber = date.monthOfYear,
+      monthName = date.monthOfYear().getAsText(locale),
+      yearNumber = date.year,
+      tasksCompletedCount = random.nextInt(20),
+      tasksRemainingCount = random.nextInt(20)
+  )
+
+  override fun getRelativeWeekAsDays(weekRelativeIndex: Int, fetchMultiplier: Int): List<RenderDay> {
+    logger.debug("getRelativeWeekAsDays, weekRelativeIndex: $weekRelativeIndex")
+//    if (weekRelativeIndex)
+    val localDate = LocalDate().plusWeeks(weekRelativeIndex)
+    val asd1 = localDate.getWeekDays().map { localDate -> mapToRenderDay(localDate) }
+    val asd2 = asd1.toMutableList()
+    asd2.add(asd1)
+    asd2.add(asd1)
+    return asd2.also { logger.debug("getRelativeWeekAsDays, listOfDays: $it") }
+  }
+
+  override fun resetRelativeWeekAsDays() {
+    logger.debug("resetRelativeWeekAsDays")
+  }
 
   override lateinit var logger: Logger
   private val calendar by lazy { Calendar.getInstance(locale) }
   private val currentDay by lazy { LocalDate() }
   private val currentDayStartOfTheWeek by lazy { currentDay.withDayOfWeek(DateTimeConstants.MONDAY) }
   private var selectedDay: LocalDate? = null
+
+  private val weekRelativeIndexNegative = 0
+  private val weekRelativeIndexPositive = 0
+
+  //_____________
+//  private var relative
 
   override fun attach(): Completable {
     logger = Logger.create(this::class.java, this.hashCode())
@@ -76,7 +113,7 @@ class TodoistCalendarModel(private var locale: Locale) : CalendarModel {
                 monthNumber = it.monthOfYear,
                 monthName = it.monthOfYear().getAsText(locale),
                 yearNumber = it.year,
-                tasksDoneCount = 0,
+                tasksCompletedCount = 0,
                 tasksRemainingCount = 0
             )
         )
@@ -100,7 +137,7 @@ class TodoistCalendarModel(private var locale: Locale) : CalendarModel {
                 monthNumber = it.monthOfYear,
                 monthName = it.monthOfYear().getAsText(locale),
                 yearNumber = it.year,
-                tasksDoneCount = 0,
+                tasksCompletedCount = 0,
                 tasksRemainingCount = 0
             )
           }

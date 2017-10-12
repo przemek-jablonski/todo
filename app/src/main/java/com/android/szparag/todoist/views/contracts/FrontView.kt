@@ -1,7 +1,8 @@
 package com.android.szparag.todoist.views.contracts
 
 import com.android.szparag.todoist.AnimationEvent
-import com.android.szparag.todoist.utils.ListScrollEvent
+import com.android.szparag.todoist.events.ListScrollEvent
+import com.android.szparag.todoist.models.entities.RenderDay
 import io.reactivex.Observable
 
 interface FrontView : View {
@@ -11,5 +12,7 @@ interface FrontView : View {
   fun animatePeekCalendar(): Observable<AnimationEvent>
   //todo: this return type is leaking separation concern (you wouldn't have RecyclerViewScrollEvent in iOS)
   fun subscribeDayListScrolls(): Observable<ListScrollEvent>
+
+  fun addToDayList(renderDays: List<RenderDay>)
 
 }
