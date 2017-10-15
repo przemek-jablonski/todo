@@ -19,6 +19,7 @@ import com.android.szparag.todoist.R
 import com.android.szparag.todoist.ResizeAnimation
 import org.joda.time.DateTime
 import org.joda.time.LocalDate
+import java.util.Random
 
 /**
  * Created by Przemyslaw Jablonski (github.com/sharaquss, pszemek.me) on 9/17/2017.
@@ -104,6 +105,8 @@ inline fun RecyclerView.getSmoothScrollTime() {
   this.layoutManager
 }
 
+fun <T: Comparable<T>> rangeListOf(vararg ranges: Iterable<T>) = ranges.flatMap { it }
+
 inline fun LinearLayoutManager.setupSmoothScrolling(context: Context, durationFactor: Float = 2F): LinearLayoutManager {
   val linearSmoothScroller = LinearSmoothScroller(context).configureDurationFactor(context, durationFactor)
   return object : LinearLayoutManager(context) {
@@ -135,3 +138,5 @@ inline fun <E> MutableList<E>.add(elements: Collection<E>) = this.addAll(element
 inline fun <E> Collection<E>.boundary(forward: Boolean): E = if (forward) last() else first()
 
 inline fun range(from: Int, to: Int) = if (from < to) (from..to) else (to..from)
+
+inline fun Random.nextIntPositive(bound: Int = 64) = this.nextInt(bound - 1) + 1
