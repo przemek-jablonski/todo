@@ -9,26 +9,30 @@ import io.reactivex.rxkotlin.subscribeBy
 
 private const val FRONT_LIST_LOADING_THRESHOLD = 4
 
-class TodoistFrontPresenter(private val calendarModel: CalendarModel) : TodoistBasePresenter<FrontView>(), FrontPresenter {
+//todo: change to constructor injection
+//todo: model should be FrontModel (presenter's own Model), not CalendarModel (Model of given feature)
+//todo: refactor to interactor, or some fancy naming shit like that
+class TodoistFrontPresenter(calendarModel: CalendarModel) : TodoistBasePresenter<FrontView, CalendarModel>(calendarModel), FrontPresenter {
 
   override fun attach(view: FrontView) {
     super.attach(view)
-    calendarModel.attach()
+    logger.debug("attach, view: $view")
   }
 
   override fun onAttached() {
-    super.onAttached()
     logger.debug("onAttached")
+    super.onAttached()
   }
 
   override fun onBeforeDetached() {
-    super.onBeforeDetached()
-    calendarModel.detach()
     logger.debug("onBeforeDetached")
+    super.onBeforeDetached()
+    model.detach()
   }
 
   override fun onViewReady() {
     super.onViewReady()
+    logger.debug("onViewReady")
 
     view?.animateShowBackgroundImage()
         ?.ui()
@@ -53,16 +57,15 @@ class TodoistFrontPresenter(private val calendarModel: CalendarModel) : TodoistB
         }
         ?.subscribeBy(onNext = { direction ->
           logger.debug("view?.subscribeDayListScrolls.onNext, direction: $direction")
-          calendarModel.requestRelativeWeekAsDays(direction > 0, 2)
+          model.requestRelativeWeekAsDays(direction > 0, 2)
         }, onError = { exc ->
           logger.error("view?.subscribeDayListScrolls.onError, exc: $exc")
-//          calendarModel.resetRelativeWeekAsDays()
         }, onComplete = {
           logger.debug("view?.subscribeDayListScrolls.onComplete")
-//          calendarModel.resetRelativeWeekAsDays()
         })
   }
 
+  //todo: why this shit is here
   private fun checkIfListOutOfRange(firstVisibleItemPos: Int, lastVisibleItemPos: Int, lastItemOnListPos: Int) = when {
     FRONT_LIST_LOADING_THRESHOLD >= firstVisibleItemPos -> -1
     lastVisibleItemPos >= lastItemOnListPos - FRONT_LIST_LOADING_THRESHOLD -> 1
@@ -72,10 +75,9 @@ class TodoistFrontPresenter(private val calendarModel: CalendarModel) : TodoistB
 
   override fun subscribeModelEvents() {
     logger.debug("subscribeModelEvents")
-
-    calendarModel.subscribeForDaysList()
+    model.subscribeForDaysList()
         .ui()
-        .subscribeBy (
+        .subscribeBy(
             onNext = { event ->
               logger.debug("calendarModel.subscribeForDaysList.onNext, event: $event")
             },
@@ -86,23 +88,6 @@ class TodoistFrontPresenter(private val calendarModel: CalendarModel) : TodoistB
               logger.debug("calendarModel.subscribeForDaysList.onComplete")
             }
         )
-
-//    calendarModel.fetchRelativeWeekAsDays()
-//        .ui()
-//        .subscribeBy(
-//            onNext = { renderDay ->
-//              logger.debug("calendarModel.fetchRelativeWeekAsDays().onNext, event: $renderDay")
-//              view?.addToDayList(renderDay)
-//            },
-//            onError = { exc ->
-//              logger.debug("calendarModel.fetchRelativeWeekAsDays().onError, exc: $exc")
-//            },
-//            onComplete = {
-//              logger.debug("calendarModel.fetchRelativeWeekAsDays().onComplete")
-//            }
-//        )
-
-
   }
 
   override fun subscribeViewUserEvents() {

@@ -70,12 +70,13 @@ abstract class TodoistBaseActivity<P : Presenter<*>> : AppCompatActivity(), View
     return viewReadySubject
   }
 
+  //todo: this has to be fixed
   override final fun gotoScreen(targetScreen: Screen) {
     logger.debug("gotoScreen, targetScreen: $targetScreen")
     startActivity(when (targetScreen) {
-      View.Screen.DAY_SCREEN -> Intent(applicationContext, TodoistDayActivity::class.java)
-      View.Screen.WEEK_SCREEN -> Intent(applicationContext, TodoistWeekActivity::class.java)
-      else -> Intent(applicationContext, TodoistMonthActivity::class.java)
+//      View.Screen.DAY_SCREEN -> Intent(applicationContext, TodoistDayActivity::class.java)
+//      View.Screen.WEEK_SCREEN -> Intent(applicationContext, TodoistWeekActivity::class.java)
+      else -> Intent(applicationContext, TodoistFrontActivity::class.java)
     })
     if (targetScreen == DAY_SCREEN) overridePendingTransition(0, 0)
   }
