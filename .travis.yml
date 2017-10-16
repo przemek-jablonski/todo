@@ -31,7 +31,8 @@ android:
 
 #fixing internal Travis permission error when installing android imgs
 before_install:
-  - chmod +x gradlew
+  gradle wrapper
+#  - chmod +x gradlew
 
 #http://szagurskii.com/blog/how-to-deploy-apk-to-github-releases-with-travis-ci/
 
