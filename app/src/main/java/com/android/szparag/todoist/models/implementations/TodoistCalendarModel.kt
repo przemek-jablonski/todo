@@ -39,7 +39,7 @@ class TodoistCalendarModel(private var locale: Locale) : CalendarModel {
 
   override fun subscribeForDaysList(): Observable<ReactiveListEvent> {
     logger.debug("subscribeForDaysList")
-    return datesList.subscribeForListEvents().doOnSubscribe { fillDaysListInitial() }
+    return datesList.subscribeForListEvents()
   }
 
   override fun requestRelativeWeekAsDays(weekForward: Boolean, fetchMultiplier: Int) {
@@ -69,7 +69,8 @@ class TodoistCalendarModel(private var locale: Locale) : CalendarModel {
       tasksRemainingCount = random.nextInt(20)
   )
 
-  private fun fillDaysListInitial() {
+  override fun fillDaysListInitial() {
+    logger.debug("fillDaysListInitial")
     datesList.insert(currentDay.minusWeeks(1).weekAsDays())
     datesList.insert(currentDay.weekAsDays())
   }

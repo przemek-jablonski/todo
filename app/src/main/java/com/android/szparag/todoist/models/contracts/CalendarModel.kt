@@ -17,6 +17,8 @@ interface CalendarModel : Model {
 //  fun getCurrentWeek(): Observable<RenderWeekDays>
 //
   fun requestRelativeWeekAsDays(weekForward: Boolean, fetchMultiplier: Int)
+
+  fun fillDaysListInitial()
 //  fun fetchRelativeWeekAsDays(): Observable<RenderDay>
 
 

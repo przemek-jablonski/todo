@@ -28,7 +28,7 @@ interface ReactiveList<E : Any> {
   fun get(index: Int): E
 
   fun subscribeForListEvents(): Observable<ReactiveListEvent>
-//  fun subscribeForDataChanges(): Observable<>
+  fun subscribeForListData(): Observable<ReactiveList<E>>
 
   //  fun find(elem)
   fun first(): E

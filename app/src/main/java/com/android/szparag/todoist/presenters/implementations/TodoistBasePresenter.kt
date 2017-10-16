@@ -29,10 +29,10 @@ abstract class TodoistBasePresenter<V : View, out M : Model>(val model: M) : Pre
     logger.debug("onAttached")
     viewDisposables = CompositeDisposable()
     modelDisposables = CompositeDisposable()
+    subscribeModelEvents()
     subscribeViewReadyEvents()
     subscribeViewPermissionsEvents()
     subscribeViewUserEvents()
-    subscribeModelEvents()
   }
 
 

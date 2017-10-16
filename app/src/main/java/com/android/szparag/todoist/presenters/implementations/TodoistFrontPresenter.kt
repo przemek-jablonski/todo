@@ -5,7 +5,11 @@ import com.android.szparag.todoist.models.contracts.CalendarModel
 import com.android.szparag.todoist.presenters.contracts.FrontPresenter
 import com.android.szparag.todoist.utils.ui
 import com.android.szparag.todoist.views.contracts.FrontView
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
+import java.util.concurrent.TimeUnit.MILLISECONDS
+import java.util.concurrent.TimeUnit.SECONDS
 
 private const val FRONT_LIST_LOADING_THRESHOLD = 4
 
@@ -54,6 +58,7 @@ class TodoistFrontPresenter(calendarModel: CalendarModel) : TodoistBasePresenter
         }
         ?.doOnSubscribe {
           logger.debug("view?.subscribeDayListScrolls.onSubscribe")
+          model.fillDaysListInitial()
         }
         ?.subscribeBy(onNext = { direction ->
           logger.debug("view?.subscribeDayListScrolls.onNext, direction: $direction")
@@ -77,6 +82,7 @@ class TodoistFrontPresenter(calendarModel: CalendarModel) : TodoistBasePresenter
     logger.debug("subscribeModelEvents")
     model.subscribeForDaysList()
         .ui()
+        .doOnSubscribe { logger.debug("calendarModel.subscribeForDaysList.onSubscribe") }
         .subscribeBy(
             onNext = { event ->
               logger.debug("calendarModel.subscribeForDaysList.onNext, event: $event")
@@ -88,6 +94,7 @@ class TodoistFrontPresenter(calendarModel: CalendarModel) : TodoistBasePresenter
               logger.debug("calendarModel.subscribeForDaysList.onComplete")
             }
         )
+        .toModelDisposable()
   }
 
   override fun subscribeViewUserEvents() {
