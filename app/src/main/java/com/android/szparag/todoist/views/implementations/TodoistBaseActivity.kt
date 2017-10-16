@@ -21,11 +21,12 @@ import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.ReplaySubject
 import io.reactivex.subjects.Subject
+import javax.inject.Inject
 
 abstract class TodoistBaseActivity<P : Presenter<*>> : AppCompatActivity(), View {
 
   override lateinit var logger: Logger
-  lateinit open var presenter: P
+  @Inject lateinit open var presenter: P //todo: close and private this somehow
   override val viewReadySubject: Subject<Boolean> = PublishSubject.create()
   override val permissionsSubject: Subject<PermissionEvent> = ReplaySubject.create()
   private var defaultUserAlert: Snackbar? = null
@@ -129,6 +130,5 @@ abstract class TodoistBaseActivity<P : Presenter<*>> : AppCompatActivity(), View
   }
 
   private fun requestCode() = Math.abs(this.packageName.hashCode())
-
 
 }

@@ -18,6 +18,8 @@ import com.android.szparag.todoist.ItemClickSupport
 import com.android.szparag.todoist.R
 import com.android.szparag.todoist.ResizeAnimation
 import org.joda.time.DateTime
+import org.joda.time.LocalDate
+import java.util.Random
 
 /**
  * Created by Przemyslaw Jablonski (github.com/sharaquss, pszemek.me) on 9/17/2017.
@@ -30,7 +32,14 @@ import org.joda.time.DateTime
 //
 //}
 
-inline fun <A : Any, B : Any, C : Any> checkNotNull(arg1: A?, arg2: B?, arg3: C?, succeededBlock: (A, B, C) -> (Unit?)) =
+inline fun checkNotNull(vararg args: Any?): Boolean {
+  args.forEach { arg ->
+    if (arg == null) return false
+  }
+  return true
+}
+
+inline fun <A : Any, B : Any, C : Any> ifNotNull(arg1: A?, arg2: B?, arg3: C?, succeededBlock: (A, B, C) -> (Unit?)) =
     if (arg1 != null && arg2 != null && arg3 != null) {
       succeededBlock(arg1, arg2, arg3)
     } else {
@@ -96,6 +105,8 @@ inline fun RecyclerView.getSmoothScrollTime() {
   this.layoutManager
 }
 
+fun <T: Comparable<T>> rangeListOf(vararg ranges: Iterable<T>) = ranges.flatMap { it }
+
 inline fun LinearLayoutManager.setupSmoothScrolling(context: Context, durationFactor: Float = 2F): LinearLayoutManager {
   val linearSmoothScroller = LinearSmoothScroller(context).configureDurationFactor(context, durationFactor)
   return object : LinearLayoutManager(context) {
@@ -118,3 +129,14 @@ inline fun View.scale(targetWidth: Int = this.width, targetHeight: Int = this.he
     = this.resize(targetWidth, targetHeight)
 
 inline fun emptyString() = ""
+inline fun <E> emptyMutableList() = mutableListOf<E>()
+
+inline fun LocalDate.weekAsDays() = (0..6).map { this.plusDays(it) }
+
+inline fun <E> MutableList<E>.add(elements: Collection<E>) = this.addAll(elements)
+
+inline fun <E> Collection<E>.boundary(forward: Boolean): E = if (forward) last() else first()
+
+inline fun range(from: Int, to: Int) = if (from < to) (from..to) else (to..from)
+
+inline fun Random.nextIntPositive(bound: Int = 64) = this.nextInt(bound - 1) + 1

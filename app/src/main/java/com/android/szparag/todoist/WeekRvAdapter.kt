@@ -23,7 +23,7 @@ class WeekRvAdapter(private val list: List<RenderDay>) : RecyclerView.Adapter<We
     val weekDay = list[position]
     holder.calendarWeekDay.text = weekDay.dayName
     holder.calendarWeekDate.text = "${weekDay.dayNumber} ${weekDay.monthName} ${weekDay.yearNumber}"
-    holder.calendarWeekTasksDone.text = "${weekDay.tasksDoneCount} tasks done"
+    holder.calendarWeekTasksDone.text = "${weekDay.tasksCompletedCount} tasks done"
     holder.calendarWeekTasksRemaining.text = "${weekDay.tasksRemainingCount} tasks remaining"
   }
 

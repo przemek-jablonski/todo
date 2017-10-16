@@ -14,7 +14,7 @@ abstract class TodoistBasePresenter<V : View> : Presenter<V> {
 
   override lateinit var logger: Logger
   override var view: V? = null
-  override lateinit var viewDisposables: CompositeDisposable
+  override lateinit var viewDisposables: CompositeDisposable //todo: i can access this in implemented presenters, that's bad
   override lateinit var modelDisposables: CompositeDisposable
 
   override fun attach(view: V) {
