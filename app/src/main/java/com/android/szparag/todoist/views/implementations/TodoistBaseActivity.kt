@@ -25,7 +25,7 @@ import javax.inject.Inject
 
 abstract class TodoistBaseActivity<P : Presenter<*>> : AppCompatActivity(), View {
 
-  override lateinit var logger: Logger
+  override val logger by lazy { Logger.create(this::class.java, this.hashCode()) }
   @Inject lateinit open var presenter: P //todo: close and private this somehow
   override val viewReadySubject: Subject<Boolean> = PublishSubject.create()
   override val permissionsSubject: Subject<PermissionEvent> = ReplaySubject.create()
@@ -36,7 +36,6 @@ abstract class TodoistBaseActivity<P : Presenter<*>> : AppCompatActivity(), View
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     viewReadySubject.doOnSubscribe { viewReadySubject.onNext(hasWindowFocus()) }
-    logger = Logger.create(this::class.java, this.hashCode())
     logger.debug("logger created, $logger")
     logger.debug("onCreate, bundle: $savedInstanceState")
   }

@@ -13,14 +13,13 @@ import io.reactivex.rxkotlin.subscribeBy
 
 abstract class TodoistBasePresenter<V : View, out M : Model>(val model: M) : Presenter<V> {
 
-  override lateinit var logger: Logger
+  override val logger by lazy { Logger.create(this::class.java, this.hashCode()) }
   override var view: V? = null
   override lateinit var viewDisposables: CompositeDisposable //todo: i can access this in implemented presenters, that's bad
   override lateinit var modelDisposables: CompositeDisposable
 
   //todo: logger creation is probably heavy, move to another thread
   override fun attach(view: V) {
-    logger = Logger.create(this::class.java, this.hashCode())
     logger.debug("attach.action, view: $view")
     this.view = view
     onAttached()

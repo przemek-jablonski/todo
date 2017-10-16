@@ -22,14 +22,13 @@ private const val INITIAL_DAYS_CAPACITY = 7 * 8
 
 class TodoistCalendarModel(private var locale: Locale) : CalendarModel {
 
-  override lateinit var logger: Logger
+  override val logger by lazy { Logger.create(this::class.java, this.hashCode()) }
   private lateinit var currentDay: LocalDate
   private val random by lazy { Random() }
   private val datesList: ReactiveList<LocalDate> = ReactiveMutableList(INITIAL_DAYS_CAPACITY, true)
 
   override fun attach(): Completable {
     return Completable.fromAction {
-      logger = Logger.create(this::class.java, this.hashCode())
       logger.debug("attach")
       setupCalendarInstance()
     }

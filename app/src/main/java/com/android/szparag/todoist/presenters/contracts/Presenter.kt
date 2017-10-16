@@ -6,7 +6,7 @@ import io.reactivex.disposables.CompositeDisposable
 
 interface Presenter<V : View> {
 
-  var logger: Logger
+  val logger: Logger
   var view: V?
   var viewDisposables: CompositeDisposable
   var modelDisposables: CompositeDisposable

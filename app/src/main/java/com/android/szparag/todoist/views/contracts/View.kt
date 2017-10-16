@@ -7,7 +7,7 @@ import io.reactivex.subjects.Subject
 
 interface View {
 
-  var logger: Logger
+  val logger: Logger
   val viewReadySubject: Subject<Boolean>
   val permissionsSubject: Subject<PermissionEvent>
 
