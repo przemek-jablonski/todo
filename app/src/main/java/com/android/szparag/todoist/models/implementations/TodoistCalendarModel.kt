@@ -37,9 +37,14 @@ class TodoistCalendarModel(private var locale: Locale) : CalendarModel {
 
   override fun detach(): Completable = Completable.fromAction { logger.debug("detach") }
 
-  override fun subscribeForDaysList(): Observable<ReactiveListEvent> {
-    logger.debug("subscribeForDaysList")
+  override fun subscribeForDaysListEvents(): Observable<ReactiveListEvent> {
+    logger.debug("subscribeForDaysListEvents")
     return datesList.subscribeForListEvents()
+  }
+
+  override fun subscribeForDaysListData(): Observable<ReactiveList<LocalDate>> {
+    logger.debug("subscribeForDaysListData")
+    return datesList.subscribeForListData()
   }
 
   override fun requestRelativeWeekAsDays(weekForward: Boolean, fetchMultiplier: Int) {
@@ -59,7 +64,8 @@ class TodoistCalendarModel(private var locale: Locale) : CalendarModel {
     currentDay = LocalDate()
   }
 
-  private fun mapToRenderDay(date: LocalDate) = RenderDay(
+  //todo: this should not be here (or its badly used)
+   override fun mapToRenderDay(date: LocalDate) = RenderDay(
       dayName = date.dayOfWeek().getAsText(locale),
       dayNumber = date.dayOfMonth,
       monthNumber = date.monthOfYear,

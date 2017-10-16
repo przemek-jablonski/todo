@@ -17,7 +17,7 @@ class FrontTestAdapter(private val itemWidth: Int? = null, private val itemHeigh
     RecyclerView.Adapter<DayViewHolder>() {
 
   private val logger by lazy { Logger.create(this::class.java, hashCode()) }
-  private val daysList = emptyMutableList<RenderDay>()
+  private var daysList = emptyList<RenderDay>()
   private var layoutInflater: LayoutInflater? = null
     private set(value) {
       if (value == null) return else field = value
@@ -41,14 +41,14 @@ class FrontTestAdapter(private val itemWidth: Int? = null, private val itemHeigh
 
   override fun getItemCount() = daysList.size
 
-  fun addToList(renderDays: List<RenderDay>) {
-    logger.debug("addToList, renderDays: $renderDays")
-    daysList.addAll(renderDays)
-  }
+//  fun addToList(renderDays: List<RenderDay>) {
+//    logger.debug("addToList, renderDays: $renderDays")
+//    daysList.addAll(renderDays)
+//  }
 
-  fun addToList(renderDay: RenderDay) {
-    logger.debug("addToList, renderDay: $renderDay")
-    daysList.add(renderDay)
+  fun updateData(renderDaysList: List<RenderDay>) {
+    logger.debug("updateData, renderDay: $renderDaysList")
+    daysList = renderDaysList
   }
 
   override fun onBindViewHolder(holder: DayViewHolder?, position: Int) {
