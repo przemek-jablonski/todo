@@ -31,6 +31,7 @@ interface ReactiveList<E : Any> {
 //  fun subscribeForDataChanges(): Observable<>
 
 //  fun find(elem)
-//  fun first()
-//  fun last()
+  fun first(): E
+  fun last(): E
+  fun boundary(forward: Boolean): E
 }

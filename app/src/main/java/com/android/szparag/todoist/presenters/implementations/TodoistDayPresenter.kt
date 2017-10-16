@@ -15,19 +15,19 @@ class TodoistDayPresenter(private val model: CalendarModel) : TodoistBasePresent
   override fun onAttached() {
     super.onAttached()
     logger.debug("onAttached, model: $model (${model.hashCode()})")
-    model.getSelectedDay()
-        .computation()
-        .filter { view != null }
-        .flatMap { renderDay -> view!!.setupCalendarCheckList(renderDay).map { renderDay } }
-        .flatMap { renderDay -> view!!.setupCalendarExtras(renderDay).map { renderDay } }
-        .subscribeBy(
-            onComplete = {
-              logger.debug("model.getSelectedDay/view.setupWeekList.onNext")
-            },
-            onError = { exc ->
-              logger.error("model.getSelectedDay/view.setupWeekList.onError", exc)
-            })
-        .toModelDisposable()
+//    model.getSelectedDay()
+//        .computation()
+//        .filter { view != null }
+//        .flatMap { renderDay -> view!!.setupCalendarCheckList(renderDay).map { renderDay } }
+//        .flatMap { renderDay -> view!!.setupCalendarExtras(renderDay).map { renderDay } }
+//        .subscribeBy(
+//            onComplete = {
+//              logger.debug("model.getSelectedDay/view.setupWeekList.onNext")
+//            },
+//            onError = { exc ->
+//              logger.error("model.getSelectedDay/view.setupWeekList.onError", exc)
+//            })
+//        .toModelDisposable()
   }
 
   override fun subscribeModelEvents() {

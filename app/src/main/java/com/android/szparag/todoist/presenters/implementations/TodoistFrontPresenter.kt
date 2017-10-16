@@ -11,14 +11,12 @@ private const val FRONT_LIST_LOADING_THRESHOLD = 4
 
 class TodoistFrontPresenter(private val calendarModel: CalendarModel) : TodoistBasePresenter<FrontView>(), FrontPresenter {
 
-//  //todo: this fun should be not accessible for children
-//  //todo: figure out what to do with passed models, they have to be attached or initialized here, not in onAttached()
-//  override fun attach(view: FrontView) {
-//    super.attach(view)
-//  }
+  override fun attach(view: FrontView) {
+    super.attach(view)
+    calendarModel.attach()
+  }
 
   override fun onAttached() {
-    calendarModel.attach()
     super.onAttached()
     logger.debug("onAttached")
   }
@@ -58,10 +56,10 @@ class TodoistFrontPresenter(private val calendarModel: CalendarModel) : TodoistB
           calendarModel.requestRelativeWeekAsDays(direction > 0, 2)
         }, onError = { exc ->
           logger.error("view?.subscribeDayListScrolls.onError, exc: $exc")
-          calendarModel.resetRelativeWeekAsDays()
+//          calendarModel.resetRelativeWeekAsDays()
         }, onComplete = {
           logger.debug("view?.subscribeDayListScrolls.onComplete")
-          calendarModel.resetRelativeWeekAsDays()
+//          calendarModel.resetRelativeWeekAsDays()
         })
   }
 
@@ -75,20 +73,34 @@ class TodoistFrontPresenter(private val calendarModel: CalendarModel) : TodoistB
   override fun subscribeModelEvents() {
     logger.debug("subscribeModelEvents")
 
-    calendarModel.fetchRelativeWeekAsDays()
+    calendarModel.subscribeForDaysList()
         .ui()
-        .subscribeBy(
-            onNext = { renderDay ->
-              logger.debug("calendarModel.fetchRelativeWeekAsDays().onNext, event: $renderDay")
-              view?.addToDayList(renderDay)
+        .subscribeBy (
+            onNext = { event ->
+              logger.debug("calendarModel.subscribeForDaysList.onNext, event: $event")
             },
             onError = { exc ->
-              logger.debug("calendarModel.fetchRelativeWeekAsDays().onError, exc: $exc")
+              logger.error("calendarModel.subscribeForDaysList.onError, exc: $exc")
             },
             onComplete = {
-              logger.debug("calendarModel.fetchRelativeWeekAsDays().onComplete")
+              logger.debug("calendarModel.subscribeForDaysList.onComplete")
             }
         )
+
+//    calendarModel.fetchRelativeWeekAsDays()
+//        .ui()
+//        .subscribeBy(
+//            onNext = { renderDay ->
+//              logger.debug("calendarModel.fetchRelativeWeekAsDays().onNext, event: $renderDay")
+//              view?.addToDayList(renderDay)
+//            },
+//            onError = { exc ->
+//              logger.debug("calendarModel.fetchRelativeWeekAsDays().onError, exc: $exc")
+//            },
+//            onComplete = {
+//              logger.debug("calendarModel.fetchRelativeWeekAsDays().onComplete")
+//            }
+//        )
 
 
   }

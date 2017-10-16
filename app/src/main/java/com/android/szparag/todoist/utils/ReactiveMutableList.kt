@@ -22,7 +22,7 @@ class ReactiveMutableList<E : Any>(private val initialCapacity: Int = 64, privat
 
   //todo: fix -1's where they occur
   override fun insert(element: E) {
-    logger.debug("insert")
+    logger.debug("insert, element: $element")
     add(element)
         .also { listEventsSubject.onNext(ReactiveListEvent(INSERTED, size)) }
   }
@@ -46,14 +46,14 @@ class ReactiveMutableList<E : Any>(private val initialCapacity: Int = 64, privat
   }
 
   override fun delete(element: E) {
-    logger.debug("delete")
+    logger.debug("delete, element: $element")
     super.indexOf(element).let { index ->
       remove(element).also { listEventsSubject.onNext(ReactiveListEvent(DELETED, index)) }
     }
   }
 
   override fun delete(index: Int) {
-    logger.debug("delete")
+    logger.debug("delete, index: $index")
     removeAt(index)
         .also { listEventsSubject.onNext(ReactiveListEvent(DELETED, index)) }
   }
@@ -96,4 +96,10 @@ class ReactiveMutableList<E : Any>(private val initialCapacity: Int = 64, privat
     return super.get(index)
   }
 
+  //todo: test - check if when 0-indexed element is deleted, list shrinks and fills the space of this element
+  override fun first() = get(0)
+
+  override fun last() = get(size-1)
+
+  override fun boundary(forward: Boolean) = if (forward) last() else first()
 }

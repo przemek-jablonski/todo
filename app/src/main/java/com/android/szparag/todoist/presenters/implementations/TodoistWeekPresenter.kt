@@ -21,18 +21,18 @@ class TodoistWeekPresenter(private val model: CalendarModel) : TodoistBasePresen
 
   override fun onViewReady() {
     super.onViewReady()
-    model.getCurrentWeek()
-        .computation()
-        .filter { view != null }
-        .flatMapCompletable { view!!.setupWeekList(it).ui() }
-        .subscribeBy(
-            onComplete = {
-              logger.debug("model.getCurrentWeek/view.setupWeekList.onNext")
-            },
-            onError = { exc ->
-              logger.error("model.getCurrentWeek/view.setupWeekList.onError", exc)
-            })
-        .toModelDisposable()
+//    model.getCurrentWeek()
+//        .computation()
+//        .filter { view != null }
+//        .flatMapCompletable { view!!.setupWeekList(it).ui() }
+//        .subscribeBy(
+//            onComplete = {
+//              logger.debug("model.getCurrentWeek/view.setupWeekList.onNext")
+//            },
+//            onError = { exc ->
+//              logger.error("model.getCurrentWeek/view.setupWeekList.onError", exc)
+//            })
+//        .toModelDisposable()
   }
 
   override fun onBeforeDetached() {
@@ -87,7 +87,7 @@ class TodoistWeekPresenter(private val model: CalendarModel) : TodoistBasePresen
           .flatMap { this.animateWeekdayToFullscreen(it.first, it.second).ui() }
           .doOnNext { this.animateShiftItemOnScreenPosition(dayNumberInTheWeekSelected).ui().subscribe() }
 //          .mergeWith{ model.setSelectedDay(dayNumberInTheWeekSelected) }
-          .doOnNext { model.setSelectedDaySync(dayNumberInTheWeekSelected) }
+//          .doOnNext { model.setSelectedDaySync(dayNumberInTheWeekSelected) }
           .delay(500, TimeUnit.MILLISECONDS)
           .subscribeBy(
               onNext = { animationEvent ->

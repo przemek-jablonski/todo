@@ -61,8 +61,6 @@ abstract class TodoistBasePresenter<V : View> : Presenter<V> {
     view
         ?.subscribeOnViewReady()
         ?.ui()
-        ?.doOnSubscribe { logger.debug("subscribeViewReadyEvents.sub") }
-        ?.doOnEach { logger.debug("subscribeViewReadyEvents.onEach") }
         ?.filter { readyFlag -> readyFlag }
         ?.subscribeBy(
             onNext = { readyFlag ->
