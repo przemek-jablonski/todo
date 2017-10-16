@@ -5,15 +5,12 @@ import android.os.Bundle
 import android.support.annotation.CallSuper
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
-import com.android.szparag.todoist.dagger.DaggerGlobalScopeWrapper
 import com.android.szparag.todoist.events.PermissionEvent
 import com.android.szparag.todoist.events.PermissionEvent.PermissionResponse
 import com.android.szparag.todoist.events.PermissionEvent.PermissionResponse.PERMISSION_DENIED
-import com.android.szparag.todoist.presenters.contracts.FrontPresenter
 import com.android.szparag.todoist.presenters.contracts.Presenter
 import com.android.szparag.todoist.utils.Logger
 import com.android.szparag.todoist.utils.emptyString
-import com.android.szparag.todoist.views.contracts.FrontView
 import com.android.szparag.todoist.views.contracts.View
 import com.android.szparag.todoist.views.contracts.View.PermissionType
 import com.android.szparag.todoist.views.contracts.View.PermissionType.NULL
@@ -133,6 +130,5 @@ abstract class TodoistBaseActivity<P : Presenter<*>> : AppCompatActivity(), View
   }
 
   private fun requestCode() = Math.abs(this.packageName.hashCode())
-
 
 }

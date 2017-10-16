@@ -4,6 +4,8 @@ import com.android.szparag.todoist.models.contracts.CalendarModel
 import com.android.szparag.todoist.models.entities.RenderDay
 import com.android.szparag.todoist.models.entities.RenderWeekDays
 import com.android.szparag.todoist.utils.Logger
+import com.android.szparag.todoist.utils.ReactiveList
+import com.android.szparag.todoist.utils.ReactiveMutableList
 import com.android.szparag.todoist.utils.add
 import com.android.szparag.todoist.utils.boundary
 import com.android.szparag.todoist.utils.emptyMutableList
@@ -31,6 +33,8 @@ class TodoistCalendarModel(private var locale: Locale) : CalendarModel {
 
   private val random by lazy { Random() }
 
+  private val testList: ReactiveList<LocalDate> = ReactiveMutableList()
+
   private fun mapToRenderDay(date: LocalDate) = RenderDay(
       dayName = date.dayOfWeek().getAsText(locale),
       dayNumber = date.dayOfMonth,
@@ -40,6 +44,9 @@ class TodoistCalendarModel(private var locale: Locale) : CalendarModel {
       tasksCompletedCount = random.nextInt(20),
       tasksRemainingCount = random.nextInt(20)
   )
+
+
+
 
   override fun requestRelativeWeekAsDays(weekForward: Boolean, fetchMultiplier: Int) {
     logger.debug("requestRelativeWeekAsDays, weekForward: $weekForward, fetchMultiplier: $fetchMultiplier")

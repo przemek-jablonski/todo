@@ -3,11 +3,9 @@ package com.android.szparag.todoist.presenters.implementations
 import com.android.szparag.todoist.AnimationEvent.AnimationEventType.END
 import com.android.szparag.todoist.models.contracts.CalendarModel
 import com.android.szparag.todoist.presenters.contracts.FrontPresenter
-import com.android.szparag.todoist.utils.flatMap
 import com.android.szparag.todoist.utils.ui
 import com.android.szparag.todoist.views.contracts.FrontView
 import io.reactivex.rxkotlin.subscribeBy
-import javax.inject.Inject
 
 private const val FRONT_LIST_LOADING_THRESHOLD = 4
 
@@ -49,7 +47,9 @@ class TodoistFrontPresenter(private val calendarModel: CalendarModel) : TodoistB
         ?.doOnEach { scrollEvent -> logger.debug("view?.subscribeDayListScrolls.onEach, event: $scrollEvent") }
         ?.map { checkIfListOutOfRange(it.firstVisibleItemPos, it.lastVisibleItemPos, it.lastItemOnListPos) }
         ?.filter { direction -> direction != 0 }
-        ?.doOnEach { outOfRangeDirection -> logger.debug("view?.subscribeDayListScrolls.onEach (FILTERED), direction: $outOfRangeDirection") }
+        ?.doOnEach { outOfRangeDirection ->
+          logger.debug("view?.subscribeDayListScrolls.onEach (FILTERED), direction: $outOfRangeDirection")
+        }
         ?.doOnSubscribe {
           logger.debug("view?.subscribeDayListScrolls.onSubscribe")
         }
@@ -70,7 +70,6 @@ class TodoistFrontPresenter(private val calendarModel: CalendarModel) : TodoistB
     lastVisibleItemPos >= lastItemOnListPos - FRONT_LIST_LOADING_THRESHOLD -> 1
     else -> 0
   }
-
 
 
   override fun subscribeModelEvents() {
