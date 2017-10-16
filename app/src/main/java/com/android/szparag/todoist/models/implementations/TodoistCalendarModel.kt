@@ -35,7 +35,7 @@ class TodoistCalendarModel(private var locale: Locale) : CalendarModel {
     }
   }
 
-  override fun detach() = Completable.fromAction { logger.debug("detach") }
+  override fun detach(): Completable = Completable.fromAction { logger.debug("detach") }
 
   override fun subscribeForDaysList(): Observable<ReactiveListEvent> {
     logger.debug("subscribeForDaysList")
