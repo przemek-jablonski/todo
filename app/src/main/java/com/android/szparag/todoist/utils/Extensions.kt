@@ -105,7 +105,7 @@ inline fun RecyclerView.getSmoothScrollTime() {
   this.layoutManager
 }
 
-fun <T: Comparable<T>> rangeListOf(vararg ranges: Iterable<T>) = ranges.flatMap { it }
+fun <T : Comparable<T>> rangeListOf(vararg ranges: Iterable<T>) = ranges.flatMap { it }
 
 inline fun LinearLayoutManager.setupSmoothScrolling(context: Context, durationFactor: Float = 2F): LinearLayoutManager {
   val linearSmoothScroller = LinearSmoothScroller(context).configureDurationFactor(context, durationFactor)

@@ -2,7 +2,7 @@ package com.android.szparag.todoist.utils
 
 import io.reactivex.Observable
 
-interface ReactiveList<E : Any> {
+interface ReactiveList<E : Any>: Iterable<E> {
 
   enum class ReactiveChangeType {
     INSERTED, DELETED, UPDATED, RESET
@@ -28,9 +28,11 @@ interface ReactiveList<E : Any> {
   fun get(index: Int): E
 
   fun subscribeForListEvents(): Observable<ReactiveListEvent>
-//  fun subscribeForDataChanges(): Observable<>
+  fun subscribeForListData(): Observable<ReactiveList<E>>
 
-//  fun find(elem)
-//  fun first()
-//  fun last()
+  //  fun find(elem)
+  fun first(): E
+
+  fun last(): E
+  fun boundary(forward: Boolean): E
 }

@@ -2,34 +2,38 @@ package com.android.szparag.todoist.presenters.implementations
 
 import com.android.szparag.todoist.AnimationEvent.AnimationEventType.END
 import com.android.szparag.todoist.models.contracts.CalendarModel
+import com.android.szparag.todoist.models.entities.RenderDay
 import com.android.szparag.todoist.presenters.contracts.FrontPresenter
 import com.android.szparag.todoist.utils.ui
 import com.android.szparag.todoist.views.contracts.FrontView
 import io.reactivex.rxkotlin.subscribeBy
+import org.joda.time.LocalDate
 
 private const val FRONT_LIST_LOADING_THRESHOLD = 4
 
-class TodoistFrontPresenter(private val calendarModel: CalendarModel) : TodoistBasePresenter<FrontView>(), FrontPresenter {
+//todo: change to constructor injection
+//todo: model should be FrontModel (presenter's own Model), not CalendarModel (Model of given feature)
+//todo: refactor to interactor, or some fancy naming shit like that
+class TodoistFrontPresenter(calendarModel: CalendarModel) : TodoistBasePresenter<FrontView, CalendarModel>(calendarModel), FrontPresenter {
 
-//  //todo: this fun should be not accessible for children
-//  //todo: figure out what to do with passed models, they have to be attached or initialized here, not in onAttached()
-//  override fun attach(view: FrontView) {
-//    super.attach(view)
-//  }
+  override fun attach(view: FrontView) {
+    logger.debug("attach, view: $view")
+    super.attach(view)
+  }
 
   override fun onAttached() {
-    calendarModel.attach()
-    super.onAttached()
     logger.debug("onAttached")
+    super.onAttached()
   }
 
   override fun onBeforeDetached() {
-    super.onBeforeDetached()
-    calendarModel.detach()
     logger.debug("onBeforeDetached")
+    super.onBeforeDetached()
+    model.detach()
   }
 
   override fun onViewReady() {
+    logger.debug("onViewReady")
     super.onViewReady()
 
     view?.animateShowBackgroundImage()
@@ -52,19 +56,19 @@ class TodoistFrontPresenter(private val calendarModel: CalendarModel) : TodoistB
         }
         ?.doOnSubscribe {
           logger.debug("view?.subscribeDayListScrolls.onSubscribe")
+          model.fillDaysListInitial()
         }
         ?.subscribeBy(onNext = { direction ->
           logger.debug("view?.subscribeDayListScrolls.onNext, direction: $direction")
-          calendarModel.requestRelativeWeekAsDays(direction > 0, 2)
+          model.requestRelativeWeekAsDays(direction > 0, 2)
         }, onError = { exc ->
           logger.error("view?.subscribeDayListScrolls.onError, exc: $exc")
-          calendarModel.resetRelativeWeekAsDays()
         }, onComplete = {
           logger.debug("view?.subscribeDayListScrolls.onComplete")
-          calendarModel.resetRelativeWeekAsDays()
         })
   }
 
+  //todo: why this shit is here
   private fun checkIfListOutOfRange(firstVisibleItemPos: Int, lastVisibleItemPos: Int, lastItemOnListPos: Int) = when {
     FRONT_LIST_LOADING_THRESHOLD >= firstVisibleItemPos -> -1
     lastVisibleItemPos >= lastItemOnListPos - FRONT_LIST_LOADING_THRESHOLD -> 1
@@ -74,27 +78,43 @@ class TodoistFrontPresenter(private val calendarModel: CalendarModel) : TodoistB
 
   override fun subscribeModelEvents() {
     logger.debug("subscribeModelEvents")
-
-    calendarModel.fetchRelativeWeekAsDays()
+    model.subscribeForDaysListEvents()
         .ui()
+        .doOnSubscribe { logger.debug("calendarModel.subscribeForDaysListEvents.onSubscribe") }
         .subscribeBy(
-            onNext = { renderDay ->
-              logger.debug("calendarModel.fetchRelativeWeekAsDays().onNext, event: $renderDay")
-              view?.addToDayList(renderDay)
+            onNext = { event ->
+              logger.debug("calendarModel.subscribeForDaysListEvents.onNext, event: $event")
             },
             onError = { exc ->
-              logger.debug("calendarModel.fetchRelativeWeekAsDays().onError, exc: $exc")
+              logger.error("calendarModel.subscribeForDaysListEvents.onError, exc: $exc")
             },
             onComplete = {
-              logger.debug("calendarModel.fetchRelativeWeekAsDays().onComplete")
+              logger.debug("calendarModel.subscribeForDaysListEvents.onComplete")
             }
         )
+        .toModelDisposable()
 
-
+    model.subscribeForDaysListData()
+        .ui()
+        .doOnSubscribe { logger.debug("calendarModel.subscribeForDaysListData.onSubscribe") }
+        .subscribeBy(
+            onNext = { event ->
+              logger.debug("calendarModel.subscribeForDaysListData.onNext, list: $event")
+              view?.updateRenderDays(event.map { model.mapToRenderDay(it) })
+            },
+            onError = { exc ->
+              logger.error("calendarModel.subscribeForDaysListData.onError, exc: $exc")
+            },
+            onComplete = {
+              logger.debug("calendarModel.subscribeForDaysListData.onComplete")
+            }
+        )
+        .toModelDisposable()
   }
 
   override fun subscribeViewUserEvents() {
     logger.debug("subscribeViewUserEvents")
   }
+
 
 }

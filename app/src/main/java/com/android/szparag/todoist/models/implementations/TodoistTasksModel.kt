@@ -9,7 +9,7 @@ import io.realm.Realm
 class TodoistTasksModel : TasksModel {
 
   private val realmInstance by lazy { Realm.getDefaultInstance() }
-  override val logger = Logger.create(TodoistTasksModel::class.java, hashCode())
+  override val logger by lazy { Logger.create(TodoistTasksModel::class.java, hashCode()) }
 
 
   override fun attach() = Completable.create {

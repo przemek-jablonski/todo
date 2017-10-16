@@ -1,7 +1,6 @@
 package com.android.szparag.todoist.utils
 
 import android.util.Log
-import com.android.szparag.todoist.BuildConfig
 
 val APPLICATION_TAG = "todoist"
 

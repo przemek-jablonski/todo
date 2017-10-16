@@ -16,8 +16,8 @@ import com.android.szparag.todoist.utils.setViewDimensions
 class FrontTestAdapter(private val itemWidth: Int? = null, private val itemHeight: Int? = null) :
     RecyclerView.Adapter<DayViewHolder>() {
 
-  private val logger : Logger by lazy {Logger.create(this::class.java, hashCode())}
-  private val daysList = emptyMutableList<RenderDay>()
+  private val logger by lazy { Logger.create(this::class.java, hashCode()) }
+  private var daysList = emptyList<RenderDay>()
   private var layoutInflater: LayoutInflater? = null
     private set(value) {
       if (value == null) return else field = value
@@ -32,7 +32,6 @@ class FrontTestAdapter(private val itemWidth: Int? = null, private val itemHeigh
   }
 
 
-
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = DayViewHolder(
       getLayoutInflater(parent.context)
           .inflate(R.layout.item_recycler_calendar_day, parent, false)
@@ -42,14 +41,14 @@ class FrontTestAdapter(private val itemWidth: Int? = null, private val itemHeigh
 
   override fun getItemCount() = daysList.size
 
-  fun addToList(renderDays: List<RenderDay>) {
-    logger.debug("addToList, renderDays: $renderDays")
-    daysList.addAll(renderDays)
-  }
+//  fun addToList(renderDays: List<RenderDay>) {
+//    logger.debug("addToList, renderDays: $renderDays")
+//    daysList.addAll(renderDays)
+//  }
 
-  fun addToList(renderDay: RenderDay) {
-    logger.debug("addToList, renderDay: $renderDay")
-    daysList.add(renderDay)
+  fun updateData(renderDaysList: List<RenderDay>) {
+    logger.debug("updateData, renderDay: $renderDaysList")
+    daysList = renderDaysList
   }
 
   override fun onBindViewHolder(holder: DayViewHolder?, position: Int) {
