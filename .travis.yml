@@ -1,0 +1,75 @@
+language: android
+sudo: false
+jdk: oraclejdk8 #fixing 'Unsupported major.minor version 52.0' issue
+android:
+  components:
+    - tools
+    - build-tools-25.0.2
+    - platform-tools
+
+    - android-25
+#    - android-22
+#    - android-21
+#    - android-16
+
+    - extra-google-google_play_services
+    - extra-google-m2repository
+    - extra-android-m2repository
+#    - addon-google_apis-google-19
+
+##    - sys-img-armeabi-v7a-android-25
+#    - sys-img-armeabi-v7a-android-15
+    - sys-img-armeabi-v7a-android-25
+#    - sys-img-armeabi-v7a-android-21
+#    - sys-img-armeabi-v7a-android-16
+
+  licenses:
+    - 'android-sdk-preview-license-.+'
+    - 'android-sdk-license-.+'
+    - 'google-gdk-license-.+'
+
+
+#fixing internal Travis permission error when installing android imgs
+before_install:
+  - chmod +x gradlew
+
+#http://szagurskii.com/blog/how-to-deploy-apk-to-github-releases-with-travis-ci/
+
+before_script:
+  - chmod +x gradlew
+  - echo "Travis branch is $TRAVIS_BRANCH"
+  - android list target
+  - echo no | android -v create avd --force -n test -t android-21 --abi armeabi-v7a
+  - emulator -avd test -no-skin -no-audio -no-window &
+  - android-wait-for-emulator
+  - adb shell input keyevent 82 &
+
+script:
+  - ./gradlew assemble lint jacocoTestReport --stacktrace
+  - ./gradlew check -PdisablePreDex --continue #only local unit tests
+  - ./gradlew jacocoTestReport
+
+#  - android-wait-for-emulator
+#  - adb devices
+#  - ./gradlew connectedAndroidTest
+#  - ./gradlew test --stacktrace
+#    # now run the tests
+#  - ./gradlew connectedCheck
+
+
+after_success:
+  - ./gradlew jacocoTestReport
+  - .utility/publish-javadoc.sh
+  - coverage run tests/
+  - bash <(curl -s https://codecov.io/bash) -t e1d9ea0e-2deb-4131-b1a1-8db18634ec00
+
+before_cache:
+  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+    - $HOME/.android/build-cache
+    - $HOME/.gradle/caches/2.10
