@@ -28,9 +28,10 @@ class TodoistCalendarModel(private var locale: Locale) : CalendarModel {
   private val datesList: ReactiveList<LocalDate> = ReactiveMutableList(INITIAL_DAYS_CAPACITY, true)
 
   override fun attach(): Completable {
+    logger.debug("attach")
     return Completable.fromAction {
-      logger.debug("attach")
       setupCalendarInstance()
+      logger.debug("attach.action.finished")
     }
   }
 

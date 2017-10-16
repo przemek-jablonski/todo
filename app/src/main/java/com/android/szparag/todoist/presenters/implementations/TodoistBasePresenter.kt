@@ -22,7 +22,7 @@ abstract class TodoistBasePresenter<V : View, out M : Model>(val model: M) : Pre
   override fun attach(view: V) {
     logger.debug("attach.action, view: $view")
     this.view = view
-    onAttached()
+    model.attach().subscribe { onAttached() }
   }
 
   @CallSuper override fun onAttached() {

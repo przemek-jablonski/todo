@@ -15,8 +15,8 @@ private const val FRONT_LIST_LOADING_THRESHOLD = 4
 class TodoistFrontPresenter(calendarModel: CalendarModel) : TodoistBasePresenter<FrontView, CalendarModel>(calendarModel), FrontPresenter {
 
   override fun attach(view: FrontView) {
-    super.attach(view)
     logger.debug("attach, view: $view")
+    super.attach(view)
   }
 
   override fun onAttached() {
@@ -31,8 +31,8 @@ class TodoistFrontPresenter(calendarModel: CalendarModel) : TodoistBasePresenter
   }
 
   override fun onViewReady() {
-    super.onViewReady()
     logger.debug("onViewReady")
+    super.onViewReady()
 
     view?.animateShowBackgroundImage()
         ?.ui()
