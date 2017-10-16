@@ -11,7 +11,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 
-abstract class TodoistBasePresenter<V : View, out M: Model>(val model: M) : Presenter<V> {
+abstract class TodoistBasePresenter<V : View, out M : Model>(val model: M) : Presenter<V> {
 
   override lateinit var logger: Logger
   override var view: V? = null

@@ -1,7 +1,5 @@
 package com.android.szparag.todoist.utils
 
-import android.support.v7.widget.RecyclerView
-import com.android.szparag.todoist.events.ListScrollEvent.ScrollEventState
 import hu.akarnokd.rxjava.interop.RxJavaInterop
 import io.reactivex.Completable
 import io.reactivex.CompletableEmitter
@@ -12,8 +10,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.Subject
 import io.realm.RealmModel
 import io.realm.RealmResults
 
@@ -38,7 +34,6 @@ val DISPOSABLE_CONTAINER_NULL_THROWABLE: Throwable by lazy {
   Throwable(
       DISPOSABLE_CONTAINER_NULL_THROWABLE)
 }
-
 
 
 //inline fun RecyclerView.scrollEvents(linearLayoutManager: LinearLayoutManager): Flowable<ListScrollEvent> {

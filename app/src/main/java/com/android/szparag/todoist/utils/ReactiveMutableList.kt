@@ -99,7 +99,7 @@ class ReactiveMutableList<E : Any>(private val initialCapacity: Int = 64, privat
   //todo: test - check if when 0-indexed element is deleted, list shrinks and fills the space of this element
   override fun first() = get(0)
 
-  override fun last() = get(size-1)
+  override fun last() = get(size - 1)
 
   override fun boundary(forward: Boolean) = if (forward) last() else first()
 }

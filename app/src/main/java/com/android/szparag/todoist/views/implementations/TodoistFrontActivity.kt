@@ -25,12 +25,10 @@ import com.android.szparag.todoist.utils.bindView
 import com.android.szparag.todoist.utils.duration
 import com.android.szparag.todoist.utils.getDisplayDimensions
 import com.android.szparag.todoist.utils.getStatusbarHeight
-import com.android.szparag.todoist.utils.getVisibleItemsPositions
 import com.android.szparag.todoist.utils.interpolator
 import com.android.szparag.todoist.views.contracts.FrontView
 import com.jakewharton.rxbinding2.support.v7.widget.RxRecyclerView
 import io.reactivex.Observable
-import io.reactivex.ObservableEmitter
 
 class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
 
@@ -65,7 +63,7 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
     daysRecyclerAdapter = FrontTestAdapter(
         (displayDimensions.first * 0.66f).toInt())
     daysRecycler.adapter = daysRecyclerAdapter
-        /*,(displayDimensions.second * 0.50f).toInt()*/
+    /*,(displayDimensions.second * 0.50f).toInt()*/
     daysRecycler.layoutManager = daysLayoutManager
     LinearSnapHelper().attachToRecyclerView(daysRecycler)
     daysRecycler.scrollToPosition(6)

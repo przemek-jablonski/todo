@@ -1,10 +1,7 @@
 package com.android.szparag.todoist.models.contracts
 
-import com.android.szparag.todoist.models.entities.RenderDay
-import com.android.szparag.todoist.models.entities.RenderWeekDays
 import com.android.szparag.todoist.utils.ReactiveListEvent
 import io.reactivex.Observable
-import java.util.Locale
 
 interface CalendarModel : Model {
 
@@ -12,7 +9,7 @@ interface CalendarModel : Model {
 
   fun subscribeForDaysList(): Observable<ReactiveListEvent>
 
-//  fun updateLocale(locale: Locale)
+  //  fun updateLocale(locale: Locale)
 //  fun setSelectedDay(dayNumberInTheWeek: Int): Observable<Int>
 //  fun setSelectedDaySync(dayNumberInTheWeek: Int)
 //

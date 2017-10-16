@@ -4,9 +4,7 @@ import android.content.Context
 import android.os.Build
 import com.android.szparag.todoist.models.contracts.CalendarModel
 import com.android.szparag.todoist.models.implementations.TodoistCalendarModel
-import com.android.szparag.todoist.presenters.contracts.DayPresenter
 import com.android.szparag.todoist.presenters.contracts.FrontPresenter
-import com.android.szparag.todoist.presenters.contracts.WeekPresenter
 import com.android.szparag.todoist.presenters.implementations.TodoistFrontPresenter
 import dagger.Module
 import dagger.Provides

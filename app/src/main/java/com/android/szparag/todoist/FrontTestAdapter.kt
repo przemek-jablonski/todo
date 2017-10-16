@@ -16,7 +16,7 @@ import com.android.szparag.todoist.utils.setViewDimensions
 class FrontTestAdapter(private val itemWidth: Int? = null, private val itemHeight: Int? = null) :
     RecyclerView.Adapter<DayViewHolder>() {
 
-  private val logger : Logger by lazy {Logger.create(this::class.java, hashCode())}
+  private val logger: Logger by lazy { Logger.create(this::class.java, hashCode()) }
   private val daysList = emptyMutableList<RenderDay>()
   private var layoutInflater: LayoutInflater? = null
     private set(value) {
@@ -30,7 +30,6 @@ class FrontTestAdapter(private val itemWidth: Int? = null, private val itemHeigh
     }
     return layoutInflater!!
   }
-
 
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = DayViewHolder(
