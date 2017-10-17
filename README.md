@@ -4,3 +4,4 @@
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/8e9c4ac628924a099da22603260cd654)](https://www.codacy.com/app/contact_78/todo?utm_source=github.com&utm_medium=referral&utm_content=sharaquss/todo&utm_campaign=badger)
 
+[![BCH compliance](https://bettercodehub.com/edge/badge/sharaquss/todo?branch=master)](https://bettercodehub.com/)
