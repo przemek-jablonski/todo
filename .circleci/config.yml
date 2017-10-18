@@ -11,6 +11,9 @@ jobs:
       - run:
           name: Gradle permission chmod
           command: chmod +x ./gradlew
+      - run:
+          name: Echoing ANDROID_HOME
+          command: echo $ANDROID_HOME
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:
