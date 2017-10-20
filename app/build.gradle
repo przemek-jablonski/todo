@@ -6,14 +6,6 @@ apply plugin: 'com.getkeepsafe.dexcount'
 apply plugin: 'jacoco-android'
 
 android {
-  signingConfigs {
-    debug_default {
-      keyAlias 'androiddebugkey'
-      keyPassword 'android'
-      storeFile file('C:/Users/ciemek/.android/debug.keystore')
-      storePassword 'android'
-    }
-  }
   compileSdkVersion 26
   buildToolsVersion "26.0.2"
   defaultConfig {
@@ -33,7 +25,7 @@ android {
       jniDebuggable true
       renderscriptDebuggable true
       applicationIdSuffix '.debug_nooptimise'
-      signingConfig signingConfigs.debug_default
+      signingConfig signingConfigs.debug
     }
     debug {
       minifyEnabled true
@@ -57,34 +49,34 @@ android {
     exclude 'META-INF/**rxjava.properties**'
   }
 
-//  tasks.withType(Test) {
-//    testLogging {
-//      // set options for log level LIFECYCLE
-//      events "passed", "skipped", "failed", "standardOut"
-//      showExceptions true
-//      exceptionFormat "full"
-//      showCauses true
-//      showStackTraces true
-//
-//      // set options for log level DEBUG and INFO
-//      debug {
-//        events "started", "passed", "skipped", "failed", "standardOut", "standardError"
-//        exceptionFormat "full"
-//      }
-//      info.events = debug.events
-//      info.exceptionFormat = debug.exceptionFormat
-//
-//
-//      afterSuite { desc, result ->
-//        if (!desc.parent) { // will match the outermost suite
-//          def output = "Results: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} successes, ${result.failedTestCount} failures, ${result.skippedTestCount} skipped)"
-//          def startItem = '|  ', endItem = '  |'
-//          def repeatLength = startItem.length() + output.length() + endItem.length()
-//          println('\n' + '\n' + '\n' + ('-' * repeatLength) + ('-' * repeatLength) + '\n' + startItem + output + endItem + '\n' + ('-' * repeatLength) + '\n' + '\n' + '\n')
-//        }
-//      }
-//    }
-//  }
+  tasks.withType(Test) {
+    testLogging {
+      // set options for log level LIFECYCLE
+      events "passed", "skipped", "failed", "standardOut"
+      showExceptions true
+      exceptionFormat "full"
+      showCauses true
+      showStackTraces true
+
+      // set options for log level DEBUG and INFO
+      debug {
+        events "started", "passed", "skipped", "failed", "standardOut", "standardError"
+        exceptionFormat "full"
+      }
+      info.events = debug.events
+      info.exceptionFormat = debug.exceptionFormat
+
+
+      afterSuite { desc, result ->
+        if (!desc.parent) { // will match the outermost suite
+          def output = "Results: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} successes, ${result.failedTestCount} failures, ${result.skippedTestCount} skipped)"
+          def startItem = '|  ', endItem = '  |'
+          def repeatLength = startItem.length() + output.length() + endItem.length()
+          println('\n' + '\n' + '\n' + ('-' * repeatLength) + ('-' * repeatLength) + '\n' + startItem + output + endItem + '\n' + ('-' * repeatLength) + '\n' + '\n' + '\n')
+        }
+      }
+    }
+  }
 }
 
 kapt {
