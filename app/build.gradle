@@ -49,6 +49,11 @@ android {
     exclude 'META-INF/**rxjava.properties**'
   }
 
+//  todo: only in debug build
+  lintOptions {
+    abortOnError false
+  }
+
   tasks.withType(Test) {
     testLogging {
       // set options for log level LIFECYCLE
