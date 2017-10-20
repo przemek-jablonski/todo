@@ -9,6 +9,11 @@
 
   <!-- application colour archetypes -->
   <color name="todoistWhite">@color/material_grey_300</color>
+  <color name="todoistAlpha">#00000000</color>
+  <color name="todoistBackShadeGradientHeavyBase">#5a000000</color>
+  <color name="todoistBackShadeGradientHeavyMidpoint">#33000000</color>
+  <color name="todoistBackShadeGradientLightBase">#41000000</color>
+  <color name="todoistBackShadeGradientLightMidpoint">#32000000</color>
 
   <!--&lt;!&ndash; colour definitions &ndash;&gt;-->
   <!--<color name="mater">#BDBDBD</color>-->

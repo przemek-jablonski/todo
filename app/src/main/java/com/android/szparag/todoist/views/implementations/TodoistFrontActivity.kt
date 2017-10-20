@@ -8,6 +8,8 @@ import android.support.v7.widget.LinearSnapHelper
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.DecelerateInterpolator
 import android.view.animation.OvershootInterpolator
 import android.widget.ImageView
 import android.widget.TextView
@@ -35,7 +37,9 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
 
   private val backgroundImage: ImageView by bindView(R.id.imageViewFrontBackground)
   private val quoteText: TextView by bindView(R.id.textViewFrontQuote)
+  private val quoteTextBackground: View by bindView(R.id.gradientTopText)
   private val daysRecycler: RecyclerView by bindView(R.id.recyclerViewFront)
+  private val daysRecyclerBackground: View by bindView(R.id.gradientBottomRecycler)
   private lateinit var daysRecyclerAdapter: FrontTestAdapter
   private val daysLayoutManager: LinearLayoutManager by lazy {
     LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -135,6 +139,15 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
 
           })
           .start()
+
+      quoteTextBackground.layoutParams = quoteTextBackground.layoutParams.apply { this.height = (quoteText.height * 1.33F).toInt() }
+      quoteTextBackground.animate()
+          .alpha(1F)
+          .setStartDelay(250)
+          .duration(1000)
+          .interpolator(AccelerateInterpolator())
+          .start()
+
     }
   }
 
@@ -142,6 +155,12 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
     logger.debug("animatePeekCalendar")
     return Observable.create { emitter ->
       emitter.onNext(AnimationEvent(END))
+      daysRecyclerBackground.layoutParams = daysRecyclerBackground.layoutParams.apply { this.height = (daysRecycler.height * 2F).toInt() }
+      daysRecyclerBackground.animate()
+          .alpha(1F)
+          .duration(750)
+          .interpolator(AccelerateInterpolator())
+          .start()
     }
   }
 

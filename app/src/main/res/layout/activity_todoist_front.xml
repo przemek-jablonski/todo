@@ -29,20 +29,24 @@
       android:id="@+id/gradientBottomRecycler"
       android:layout_width="0dp"
       android:layout_height="0dp"
+      android:alpha="0"
       android:background="@drawable/gradient_bottom_list"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintLeft_toLeftOf="parent"
       app:layout_constraintRight_toRightOf="parent"
       app:layout_constraintTop_toTopOf="@+id/guideline8"
+      tools:alpha="1"
       />
   <View
       android:id="@+id/gradientTopText"
       android:layout_width="0dp"
       android:layout_height="100dp"
+      android:alpha="0"
       android:background="@drawable/gradient_top_text"
       app:layout_constraintLeft_toLeftOf="parent"
       app:layout_constraintRight_toRightOf="parent"
       app:layout_constraintTop_toTopOf="parent"
+      tools:alpha="1"
       />
   <TextView
       android:id="@+id/textViewFrontQuote"
@@ -73,12 +77,12 @@
       app:layout_constraintTop_toTopOf="@+id/guideline8"
       />
   <android.support.constraint.Guideline
+      android:id="@+id/guideline8"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:id="@+id/guideline8"
       android:orientation="horizontal"
       app:layout_constraintGuide_percent="0.66"
-      tools:layout_editor_absoluteY="451dp"
       tools:layout_editor_absoluteX="0dp"
+      tools:layout_editor_absoluteY="451dp"
       />
 </android.support.constraint.ConstraintLayout>
