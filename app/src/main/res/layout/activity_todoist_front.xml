@@ -9,12 +9,13 @@
     tools:context=".views.implementations.TodoistFrontActivity"
     >
 
+
   <ImageView
       android:id="@+id/imageViewFrontBackground"
       android:layout_width="0dp"
       android:layout_height="0dp"
       android:alpha="0"
-      android:background="#616161"
+      android:background="#e6cc28"
       android:visibility="gone"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintLeft_toLeftOf="parent"
@@ -24,19 +25,37 @@
       tools:alpha="1"
       tools:visibility="visible"
       />
+  <View
+      android:id="@+id/gradientBottomRecycler"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      android:background="@drawable/gradient_bottom_list"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintTop_toTopOf="@+id/guideline8"
+      />
+  <View
+      android:id="@+id/gradientTopText"
+      android:layout_width="0dp"
+      android:layout_height="100dp"
+      android:background="@drawable/gradient_top_text"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      />
   <TextView
       android:id="@+id/textViewFrontQuote"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:background="@android:color/holo_purple"
       android:gravity="center"
       android:paddingBottom="16dp"
       android:paddingEnd="16dp"
       android:paddingStart="16dp"
       android:paddingTop="32dp"
       android:text="&quot; Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content
-  here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default
-  model text, and a search for 'lorem ipsum' &quot;"
+  here', making it look like readable English.  &quot;"
+      android:textColor="@color/textQuoteColor"
       android:visibility="invisible"
       app:layout_constraintLeft_toLeftOf="parent"
       app:layout_constraintRight_toRightOf="parent"
@@ -47,10 +66,6 @@
       android:id="@+id/recyclerViewFront"
       android:layout_width="0dp"
       android:layout_height="0dp"
-      android:layout_marginBottom="0dp"
-      android:layout_marginLeft="0dp"
-      android:layout_marginRight="0dp"
-      android:layout_marginTop="0dp"
       android:orientation="horizontal"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintLeft_toLeftOf="parent"
@@ -63,5 +78,7 @@
       android:id="@+id/guideline8"
       android:orientation="horizontal"
       app:layout_constraintGuide_percent="0.66"
+      tools:layout_editor_absoluteY="451dp"
+      tools:layout_editor_absoluteX="0dp"
       />
 </android.support.constraint.ConstraintLayout>
