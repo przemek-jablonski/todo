@@ -140,3 +140,19 @@ inline fun <E> Collection<E>.boundary(forward: Boolean): E = if (forward) last()
 inline fun range(from: Int, to: Int) = if (from < to) (from..to) else (to..from)
 
 inline fun Random.nextIntPositive(bound: Int = 64) = this.nextInt(bound - 1) + 1
+
+inline fun <E> Collection<E>.asString(): String {
+  val it = iterator()
+  if (!it.hasNext())
+    return "[]"
+
+  val sb = StringBuilder()
+  sb.append("\n[")
+  while (true) {
+    val e = it.next()
+    sb.append(if (e === this) "(this Collection)" else e)
+    if (!it.hasNext())
+      return sb.append(']').toString()
+    sb.append(',').append("\n")
+  }
+}

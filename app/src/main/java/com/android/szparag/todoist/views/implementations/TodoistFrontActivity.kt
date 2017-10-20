@@ -21,6 +21,7 @@ import com.android.szparag.todoist.dagger.DaggerGlobalScopeWrapper
 import com.android.szparag.todoist.events.ListScrollEvent
 import com.android.szparag.todoist.models.entities.RenderDay
 import com.android.szparag.todoist.presenters.contracts.FrontPresenter
+import com.android.szparag.todoist.utils.asString
 import com.android.szparag.todoist.utils.bindView
 import com.android.szparag.todoist.utils.duration
 import com.android.szparag.todoist.utils.getDisplayDimensions
@@ -170,7 +171,7 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
   }
 
   override fun updateRenderDays(renderDays: List<RenderDay>) {
-    logger.debug("updateRenderDays, renderDays: $renderDays")
+    logger.debug("updateRenderDays, renderDays: ${renderDays.asString()}")
     daysRecyclerAdapter.updateData(renderDays)
     daysRecyclerAdapter.notifyDataSetChanged()
   }
