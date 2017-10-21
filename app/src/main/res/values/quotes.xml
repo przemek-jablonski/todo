@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <string name="quote_placeholder_content_0">Genius is one percent inspiration, ninety-nine percent perspiration.</string>
+  <string name="quote_placeholder_author_0">Thomas A. Edison</string>
+
+  <string name="quote_placeholder_content_1">When the intellect and affections are in harmony; when intellectual consciousness is calm
+    and deep; inspiration will not be confounded with fancy.</string>
+  <string name="quote_placeholder_author_1">Margaret Fuller</string>
+
+  <string name="quote_placeholder_content_2">Inspiration is the windfall from hard work and focus. Muses are too unreliable to keep on
+    the payroll.</string>
+  <string name="quote_placeholder_author_2">Helen Hanson</string>
+
+  <string name="quote_placeholder_content_3">It’s not about ideas. It’s about making ideas happen.</string>
+  <string name="quote_placeholder_author_3">Scott Belsky</string>
+
+  <string name="quote_placeholder_content_4">I’ve missed more than 9,000 shots in my career. (…)  I’ve failed over and over and over
+    again in my life and that\'s why I succeed.</string>
+  <string name="quote_placeholder_author_4">Michael Jordan</string>
+
+  <string name="quote_placeholder_content_5">The best time to plant a tree was 20 years ago. The second best time is now.</string>
+  <string name="quote_placeholder_author_5">Chinese proverb</string>
+
+  <string name="quote_placeholder_content_6">A person who never made a mistake never tried anything new.</string>
+  <string name="quote_placeholder_author_6">Albert Einstein</string>
+
+  <string name="quote_placeholder_content_7">Risk more than others think is safe. Dream more than others think is practical.</string>
+  <string name="quote_placeholder_author_7">Howard Schultz</string>
+
+  <string name="quote_placeholder_content_8">You miss 100 percent of the shots you don\'t take.</string>
+  <string name="quote_placeholder_author_8">Wayne Gretzky</string>
+
+  <string name="quote_placeholder_content_9">It does not matter how slowly you go as long as you do not stop.</string>
+  <string name="quote_placeholder_author_9">Confucius</string>
+
+</resources>

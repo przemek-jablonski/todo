@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <array name="background_placeholders">
+    <item>@drawable/background_placeholder_1</item>
+    <item>@drawable/background_placeholder_2</item>
+    <item>@drawable/background_placeholder_3</item>
+    <item>@drawable/background_placeholder_4</item>
+    <item>@drawable/background_placeholder_5</item>
+    <item>@drawable/background_placeholder_6</item>
+    <item>@drawable/background_placeholder_7</item>
+    <item>@drawable/background_placeholder_8</item>
+    <item>@drawable/background_placeholder_9</item>
+    <item>@drawable/background_placeholder_10</item>
+    <item>@drawable/background_placeholder_11</item>
+  </array>
+
+  <string-array name="quote_placeholders_content">
+    <item>@string/quote_placeholder_content_0</item>
+    <item>@string/quote_placeholder_content_1</item>
+    <item>@string/quote_placeholder_content_2</item>
+    <item>@string/quote_placeholder_content_3</item>
+    <item>@string/quote_placeholder_content_4</item>
+    <item>@string/quote_placeholder_content_5</item>
+    <item>@string/quote_placeholder_content_6</item>
+    <item>@string/quote_placeholder_content_7</item>
+    <item>@string/quote_placeholder_content_8</item>
+    <item>@string/quote_placeholder_content_9</item>
+  </string-array>
+
+  <string-array name="quote_placeholders_author">
+    <item>@string/quote_placeholder_author_0</item>
+    <item>@string/quote_placeholder_author_1</item>
+    <item>@string/quote_placeholder_author_2</item>
+    <item>@string/quote_placeholder_author_3</item>
+    <item>@string/quote_placeholder_author_4</item>
+    <item>@string/quote_placeholder_author_5</item>
+    <item>@string/quote_placeholder_author_6</item>
+    <item>@string/quote_placeholder_author_7</item>
+    <item>@string/quote_placeholder_author_8</item>
+    <item>@string/quote_placeholder_author_9</item>
+  </string-array>
+
+</resources>

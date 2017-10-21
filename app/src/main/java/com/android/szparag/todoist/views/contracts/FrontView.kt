@@ -14,5 +14,7 @@ interface FrontView : View {
   fun subscribeDayListScrolls(): Observable<ListScrollEvent>
 
   fun updateRenderDays(renderDays: List<RenderDay>)
+  fun subscribeBackgroundClicked(): Observable<Any>
+  fun randomizeContents()
 
 }

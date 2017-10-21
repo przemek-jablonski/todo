@@ -7,9 +7,9 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.LinearSnapHelper
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.DecelerateInterpolator
 import android.view.animation.OvershootInterpolator
-import android.widget.ImageView
 import android.widget.TextView
 import com.android.szparag.todoist.AnimationEvent
 import com.android.szparag.todoist.AnimationEvent.AnimationEventType.END
@@ -29,13 +29,19 @@ import com.android.szparag.todoist.utils.getStatusbarHeight
 import com.android.szparag.todoist.utils.interpolator
 import com.android.szparag.todoist.views.contracts.FrontView
 import com.jakewharton.rxbinding2.support.v7.widget.RxRecyclerView
+import com.jakewharton.rxbinding2.view.RxView
+import com.nvanbenschoten.motion.ParallaxImageView
+import com.squareup.picasso.Callback
+import com.squareup.picasso.Picasso
 import io.reactivex.Observable
 
 class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
 
-  private val backgroundImage: ImageView by bindView(R.id.imageViewFrontBackground)
+  private val backgroundImage: ParallaxImageView by bindView(R.id.imageViewFrontBackground)
   private val quoteText: TextView by bindView(R.id.textViewFrontQuote)
+  private val quoteTextBackground: View by bindView(R.id.gradientTopText)
   private val daysRecycler: RecyclerView by bindView(R.id.recyclerViewFront)
+  private val daysRecyclerBackground: View by bindView(R.id.gradientBottomRecycler)
   private lateinit var daysRecyclerAdapter: FrontTestAdapter
   private val daysLayoutManager: LinearLayoutManager by lazy {
     LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -71,13 +77,28 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
     daysRecycler.setScrollingTouchSlop(RecyclerView.TOUCH_SLOP_PAGING)
   }
 
+  override fun onResume() {
+    super.onResume()
+    backgroundImage.setTiltSensitivity(0.60f)
+    backgroundImage.setParallaxIntensity(1.35f)
+  }
+
+  override fun onPause() {
+    super.onPause()
+    backgroundImage.unregisterSensorManager()
+  }
+
   override fun animateShowBackgroundImage(): Observable<AnimationEvent> {
     logger.debug("animateShowBackgroundImage")
     return Observable.create { emitter ->
+
+      //todo here check if internet is in place or whatever
+      randomizeContents()
+
       backgroundImage.animate()
           .alpha(1F)
           .duration(1750)
-          .interpolator(AccelerateDecelerateInterpolator())
+          .interpolator(DecelerateInterpolator())
           .setListener(object : AnimatorListener {
             override fun onAnimationRepeat(animation: Animator?) {
               logger.debug("animateShowBackgroundImage.onAnimationRepeat")
@@ -87,6 +108,7 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
             override fun onAnimationEnd(animation: Animator?) {
               logger.debug("animateShowBackgroundImage.onAnimationEnd")
               emitter.onNext(AnimationEvent(END))
+              backgroundImage.registerSensorManager(16600)
             }
 
             override fun onAnimationCancel(animation: Animator?) {
@@ -104,10 +126,57 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
     }
   }
 
+  override fun subscribeBackgroundClicked() = RxView.clicks(backgroundImage)
+
+  override fun randomizeContents() {
+    randomizePhoto()
+    randomizeQuote()
+  }
+
+  private fun randomizePhoto() {
+    val backgroundPlaceholdersArray = resources.obtainTypedArray(R.array.background_placeholders)
+    val randomResourceId = backgroundPlaceholdersArray.getResourceId(
+        (Math.random() * backgroundPlaceholdersArray.length()).toInt(), R.drawable.background_placeholder_5)
+    Picasso.with(this)
+        .load(randomResourceId)
+        .priority(Picasso.Priority.HIGH)
+        .fetch(object: Callback {
+          override fun onSuccess() {
+            logger.debug("onSuccess")
+            Picasso.with(this@TodoistFrontActivity).load(randomResourceId).into(backgroundImage)
+          }
+
+          override fun onError() {
+            logger.debug("onError")
+          }
+        })
+    backgroundPlaceholdersArray.recycle()
+  }
+
+  //todo feature: in settings - change background effect (PicassoTransformations)
+  private fun randomizeQuote() {
+
+    val quotePlaceholdersContentsArray = resources.getStringArray(R.array.quote_placeholders_content)
+    val quotePlaceholdersAuthorsArray = resources.getStringArray(R.array.quote_placeholders_author)
+    val randomResourceIndex = (Math.random() * quotePlaceholdersContentsArray.size).toInt()
+    val randomContent = quotePlaceholdersContentsArray[randomResourceIndex]
+    val randomAuthor = quotePlaceholdersAuthorsArray[randomResourceIndex]
+    quoteText.text = "\" $randomContent \" - $randomAuthor"
+    quoteTextBackground.layoutParams = quoteTextBackground.layoutParams.apply { this.height = (quoteText.height * 1.50F).toInt() }
+    quoteTextBackground.animate()
+        .alpha(1F)
+        .setStartDelay(250)
+        .duration(1000)
+        .interpolator(AccelerateInterpolator())
+        .start()
+  }
+
   override fun animateShowQuote(): Observable<AnimationEvent> {
     logger.debug("animateShowQuote")
     return Observable.create { emitter ->
       logger.debug("animateShowQuote.run")
+      randomizeQuote()
+
       quoteText.animate()
           .translationY(0F)
           .setDuration(1000)
@@ -135,6 +204,9 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
 
           })
           .start()
+
+
+
     }
   }
 
@@ -142,6 +214,12 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
     logger.debug("animatePeekCalendar")
     return Observable.create { emitter ->
       emitter.onNext(AnimationEvent(END))
+      daysRecyclerBackground.layoutParams = daysRecyclerBackground.layoutParams.apply { this.height = (daysRecycler.height * 2F).toInt() }
+      daysRecyclerBackground.animate()
+          .alpha(1F)
+          .duration(750)
+          .interpolator(AccelerateInterpolator())
+          .start()
     }
   }
 
