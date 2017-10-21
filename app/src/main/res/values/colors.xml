@@ -7,10 +7,10 @@
   <!-- colours usages -->
   <color name="textQuoteColor">@color/todoistWhite</color>
   <color name="appBackgroundColor">@color/todoistBlack</color>
-  <color name="todoistBackShadeGradientHeavyBase">#96000000</color>
-  <color name="todoistBackShadeGradientHeavyMidpoint">#7d000000</color>
-  <color name="todoistBackShadeGradientLightBase">#50000000</color>
-  <color name="todoistBackShadeGradientLightMidpoint">#32000000</color>
+  <color name="todoistBackShadeGradientHeavyBase">#be000000</color>
+  <color name="todoistBackShadeGradientHeavyMidpoint">#8c000000</color>
+  <color name="todoistBackShadeGradientLightBase">#a0000000</color>
+  <color name="todoistBackShadeGradientLightMidpoint">#64000000</color>
 
 
   <!-- application colour archetypes -->

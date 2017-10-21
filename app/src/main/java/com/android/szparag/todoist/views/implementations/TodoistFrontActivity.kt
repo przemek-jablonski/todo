@@ -7,11 +7,9 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.LinearSnapHelper
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.OvershootInterpolator
-import android.widget.ImageView
 import android.widget.TextView
 import com.android.szparag.todoist.AnimationEvent
 import com.android.szparag.todoist.AnimationEvent.AnimationEventType.END
@@ -31,7 +29,10 @@ import com.android.szparag.todoist.utils.getStatusbarHeight
 import com.android.szparag.todoist.utils.interpolator
 import com.android.szparag.todoist.views.contracts.FrontView
 import com.jakewharton.rxbinding2.support.v7.widget.RxRecyclerView
+import com.jakewharton.rxbinding2.view.RxView
 import com.nvanbenschoten.motion.ParallaxImageView
+import com.squareup.picasso.Callback
+import com.squareup.picasso.Picasso
 import io.reactivex.Observable
 
 class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
@@ -80,7 +81,6 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
     super.onResume()
     backgroundImage.setTiltSensitivity(0.60f)
     backgroundImage.setParallaxIntensity(1.35f)
-    backgroundImage.registerSensorManager()
   }
 
   override fun onPause() {
@@ -93,10 +93,7 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
     return Observable.create { emitter ->
 
       //todo here check if internet is in place or whatever
-      val backgroundPlaceholdersArray = resources.obtainTypedArray(R.array.background_placeholders)
-      backgroundImage.setImageResource(backgroundPlaceholdersArray.getResourceId(
-          (Math.random() * backgroundPlaceholdersArray.length()).toInt(), R.drawable.background_placeholder_5))
-      backgroundPlaceholdersArray.recycle()
+      randomizeContents()
 
       backgroundImage.animate()
           .alpha(1F)
@@ -111,6 +108,7 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
             override fun onAnimationEnd(animation: Animator?) {
               logger.debug("animateShowBackgroundImage.onAnimationEnd")
               emitter.onNext(AnimationEvent(END))
+              backgroundImage.registerSensorManager(16600)
             }
 
             override fun onAnimationCancel(animation: Animator?) {
@@ -128,10 +126,57 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
     }
   }
 
+  override fun subscribeBackgroundClicked() = RxView.clicks(backgroundImage)
+
+  override fun randomizeContents() {
+    randomizePhoto()
+    randomizeQuote()
+  }
+
+  private fun randomizePhoto() {
+    val backgroundPlaceholdersArray = resources.obtainTypedArray(R.array.background_placeholders)
+    val randomResourceId = backgroundPlaceholdersArray.getResourceId(
+        (Math.random() * backgroundPlaceholdersArray.length()).toInt(), R.drawable.background_placeholder_5)
+    Picasso.with(this)
+        .load(randomResourceId)
+        .priority(Picasso.Priority.HIGH)
+        .fetch(object: Callback {
+          override fun onSuccess() {
+            logger.debug("onSuccess")
+            Picasso.with(this@TodoistFrontActivity).load(randomResourceId).into(backgroundImage)
+          }
+
+          override fun onError() {
+            logger.debug("onError")
+          }
+        })
+    backgroundPlaceholdersArray.recycle()
+  }
+
+  //todo feature: in settings - change background effect (PicassoTransformations)
+  private fun randomizeQuote() {
+
+    val quotePlaceholdersContentsArray = resources.getStringArray(R.array.quote_placeholders_content)
+    val quotePlaceholdersAuthorsArray = resources.getStringArray(R.array.quote_placeholders_author)
+    val randomResourceIndex = (Math.random() * quotePlaceholdersContentsArray.size).toInt()
+    val randomContent = quotePlaceholdersContentsArray[randomResourceIndex]
+    val randomAuthor = quotePlaceholdersAuthorsArray[randomResourceIndex]
+    quoteText.text = "\" $randomContent \" - $randomAuthor"
+    quoteTextBackground.layoutParams = quoteTextBackground.layoutParams.apply { this.height = (quoteText.height * 1.50F).toInt() }
+    quoteTextBackground.animate()
+        .alpha(1F)
+        .setStartDelay(250)
+        .duration(1000)
+        .interpolator(AccelerateInterpolator())
+        .start()
+  }
+
   override fun animateShowQuote(): Observable<AnimationEvent> {
     logger.debug("animateShowQuote")
     return Observable.create { emitter ->
       logger.debug("animateShowQuote.run")
+      randomizeQuote()
+
       quoteText.animate()
           .translationY(0F)
           .setDuration(1000)
@@ -160,13 +205,7 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
           })
           .start()
 
-      quoteTextBackground.layoutParams = quoteTextBackground.layoutParams.apply { this.height = (quoteText.height * 1.33F).toInt() }
-      quoteTextBackground.animate()
-          .alpha(1F)
-          .setStartDelay(250)
-          .duration(1000)
-          .interpolator(AccelerateInterpolator())
-          .start()
+
 
     }
   }

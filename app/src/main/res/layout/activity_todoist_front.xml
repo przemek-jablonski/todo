@@ -55,15 +55,15 @@
       android:layout_height="wrap_content"
       android:gravity="center"
       android:paddingBottom="16dp"
-      android:paddingEnd="16dp"
-      android:paddingStart="16dp"
+      android:paddingEnd="24dp"
+      android:paddingStart="24dp"
       android:paddingTop="32dp"
-      android:text="&quot; Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.  &quot;"
       android:textColor="@color/textQuoteColor"
       android:visibility="invisible"
       app:layout_constraintLeft_toLeftOf="parent"
       app:layout_constraintRight_toRightOf="parent"
       app:layout_constraintTop_toTopOf="parent"
+      tools:text="&quot; Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.  &quot;"
       tools:visibility="visible"
       />
   <android.support.v7.widget.RecyclerView

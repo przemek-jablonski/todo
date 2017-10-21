@@ -2,12 +2,10 @@ package com.android.szparag.todoist.presenters.implementations
 
 import com.android.szparag.todoist.AnimationEvent.AnimationEventType.END
 import com.android.szparag.todoist.models.contracts.CalendarModel
-import com.android.szparag.todoist.models.entities.RenderDay
 import com.android.szparag.todoist.presenters.contracts.FrontPresenter
 import com.android.szparag.todoist.utils.ui
 import com.android.szparag.todoist.views.contracts.FrontView
 import io.reactivex.rxkotlin.subscribeBy
-import org.joda.time.LocalDate
 
 private const val FRONT_LIST_LOADING_THRESHOLD = 4
 
@@ -94,6 +92,10 @@ class TodoistFrontPresenter(calendarModel: CalendarModel) : TodoistBasePresenter
 
   override fun subscribeViewUserEvents() {
     logger.debug("subscribeViewUserEvents")
+
+    view?.subscribeBackgroundClicked()
+        ?.ui()
+        ?.subscribe { view?.randomizeContents() }
   }
 
 
