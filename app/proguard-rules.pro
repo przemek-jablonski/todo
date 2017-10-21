@@ -38,6 +38,9 @@
 # OKIO
 -dontwarn okio.**
 
+# OKHTTP
+-dontwarn com.squareup.okhttp.**
+
 # JODATIME
 -dontwarn org.joda.convert.**
 -dontwarn org.joda.time.**

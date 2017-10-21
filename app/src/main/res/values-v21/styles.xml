@@ -8,6 +8,7 @@
     <item name="android:statusBarColor">#00000000</item>
     <item name="android:windowTranslucentStatus">true</item>
     <item name="android:windowSharedElementsUseOverlay">false</item>
+    <item name="android:colorBackground">@color/appBackgroundColor</item>
   </style>
 
 </resources>

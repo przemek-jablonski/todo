@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <array name="background_placeholders">
+    <item>@drawable/background_placeholder_1</item>
+    <item>@drawable/background_placeholder_2</item>
+    <item>@drawable/background_placeholder_3</item>
+    <item>@drawable/background_placeholder_4</item>
+    <item>@drawable/background_placeholder_5</item>
+    <item>@drawable/background_placeholder_6</item>
+    <item>@drawable/background_placeholder_7</item>
+    <item>@drawable/background_placeholder_8</item>
+    <item>@drawable/background_placeholder_9</item>
+    <item>@drawable/background_placeholder_10</item>
+    <item>@drawable/background_placeholder_11</item>
+  </array>
+</resources>
