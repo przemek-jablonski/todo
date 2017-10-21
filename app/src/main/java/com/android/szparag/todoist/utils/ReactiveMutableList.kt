@@ -5,7 +5,6 @@ import com.android.szparag.todoist.utils.ReactiveList.ReactiveChangeType.INSERTE
 import com.android.szparag.todoist.utils.ReactiveList.ReactiveChangeType.UPDATED
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.Subject
 
 class ReactiveMutableList<E : Any>(private val initialCapacity: Int = 64, private val debuggable: Boolean = false) :
     ArrayList<E>(initialCapacity), MutableList<E>, ReactiveList<E> {
@@ -124,4 +123,7 @@ class ReactiveMutableList<E : Any>(private val initialCapacity: Int = 64, privat
   override fun last() = get(size - 1)
 
   override fun boundary(forward: Boolean) = if (forward) last() else first()
+
+  override fun toString() = asString()
+
 }

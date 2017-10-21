@@ -48,14 +48,9 @@ class TodoistFrontPresenter(calendarModel: CalendarModel) : TodoistBasePresenter
 
     view?.subscribeDayListScrolls()
         ?.ui()
-        ?.doOnEach { scrollEvent -> logger.debug("view?.subscribeDayListScrolls.onEach, event: $scrollEvent") }
         ?.map { checkIfListOutOfRange(it.firstVisibleItemPos, it.lastVisibleItemPos, it.lastItemOnListPos) }
         ?.filter { direction -> direction != 0 }
-        ?.doOnEach { outOfRangeDirection ->
-          logger.debug("view?.subscribeDayListScrolls.onEach (FILTERED), direction: $outOfRangeDirection")
-        }
         ?.doOnSubscribe {
-          logger.debug("view?.subscribeDayListScrolls.onSubscribe")
           model.fillDaysListInitial()
         }
         ?.subscribeBy(onNext = { direction ->
@@ -78,21 +73,6 @@ class TodoistFrontPresenter(calendarModel: CalendarModel) : TodoistBasePresenter
 
   override fun subscribeModelEvents() {
     logger.debug("subscribeModelEvents")
-    model.subscribeForDaysListEvents()
-        .ui()
-        .doOnSubscribe { logger.debug("calendarModel.subscribeForDaysListEvents.onSubscribe") }
-        .subscribeBy(
-            onNext = { event ->
-              logger.debug("calendarModel.subscribeForDaysListEvents.onNext, event: $event")
-            },
-            onError = { exc ->
-              logger.error("calendarModel.subscribeForDaysListEvents.onError, exc: $exc")
-            },
-            onComplete = {
-              logger.debug("calendarModel.subscribeForDaysListEvents.onComplete")
-            }
-        )
-        .toModelDisposable()
 
     model.subscribeForDaysListData()
         .ui()
