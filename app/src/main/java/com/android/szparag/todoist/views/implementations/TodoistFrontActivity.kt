@@ -31,11 +31,12 @@ import com.android.szparag.todoist.utils.getStatusbarHeight
 import com.android.szparag.todoist.utils.interpolator
 import com.android.szparag.todoist.views.contracts.FrontView
 import com.jakewharton.rxbinding2.support.v7.widget.RxRecyclerView
+import com.nvanbenschoten.motion.ParallaxImageView
 import io.reactivex.Observable
 
 class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
 
-  private val backgroundImage: ImageView by bindView(R.id.imageViewFrontBackground)
+  private val backgroundImage: ParallaxImageView by bindView(R.id.imageViewFrontBackground)
   private val quoteText: TextView by bindView(R.id.textViewFrontQuote)
   private val quoteTextBackground: View by bindView(R.id.gradientTopText)
   private val daysRecycler: RecyclerView by bindView(R.id.recyclerViewFront)
@@ -75,13 +76,32 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
     daysRecycler.setScrollingTouchSlop(RecyclerView.TOUCH_SLOP_PAGING)
   }
 
+  override fun onResume() {
+    super.onResume()
+    backgroundImage.setTiltSensitivity(0.60f)
+    backgroundImage.setParallaxIntensity(1.35f)
+    backgroundImage.registerSensorManager()
+  }
+
+  override fun onPause() {
+    super.onPause()
+    backgroundImage.unregisterSensorManager()
+  }
+
   override fun animateShowBackgroundImage(): Observable<AnimationEvent> {
     logger.debug("animateShowBackgroundImage")
     return Observable.create { emitter ->
+
+      //todo here check if internet is in place or whatever
+      val backgroundPlaceholdersArray = resources.obtainTypedArray(R.array.background_placeholders)
+      backgroundImage.setImageResource(backgroundPlaceholdersArray.getResourceId(
+          (Math.random() * backgroundPlaceholdersArray.length()).toInt(), R.drawable.background_placeholder_5))
+      backgroundPlaceholdersArray.recycle()
+
       backgroundImage.animate()
           .alpha(1F)
           .duration(1750)
-          .interpolator(AccelerateDecelerateInterpolator())
+          .interpolator(DecelerateInterpolator())
           .setListener(object : AnimatorListener {
             override fun onAnimationRepeat(animation: Animator?) {
               logger.debug("animateShowBackgroundImage.onAnimationRepeat")
