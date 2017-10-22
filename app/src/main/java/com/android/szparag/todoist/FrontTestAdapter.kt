@@ -9,6 +9,7 @@ import android.widget.TextView
 import com.android.szparag.todoist.FrontTestAdapter.DayViewHolder
 import com.android.szparag.todoist.models.entities.RenderDay
 import com.android.szparag.todoist.utils.Logger
+import com.android.szparag.todoist.utils.asString
 import com.android.szparag.todoist.utils.bindView
 import com.android.szparag.todoist.utils.emptyMutableList
 import com.android.szparag.todoist.utils.setViewDimensions
@@ -41,13 +42,8 @@ class FrontTestAdapter(private val itemWidth: Int? = null, private val itemHeigh
 
   override fun getItemCount() = daysList.size
 
-//  fun addToList(renderDays: List<RenderDay>) {
-//    logger.debug("addToList, renderDays: $renderDays")
-//    daysList.addAll(renderDays)
-//  }
-
   fun updateData(renderDaysList: List<RenderDay>) {
-    logger.debug("updateData, renderDay: $renderDaysList")
+    logger.warn("updateData, renderDaysList: ${renderDaysList.asString()}")
     daysList = renderDaysList
   }
 
