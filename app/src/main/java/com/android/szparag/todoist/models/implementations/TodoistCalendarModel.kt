@@ -50,8 +50,8 @@ class TodoistCalendarModel(private var locale: Locale) : CalendarModel {
   override fun requestRelativeWeekAsDays(weekForward: Boolean, fetchMultiplier: Int) {
     logger.debug("requestRelativeWeekAsDays, weekForward: $weekForward, fetchMultiplier: $fetchMultiplier")
     val boundaryLocalDate = datesList.boundary(weekForward)
-    range(1, fetchMultiplier - 1).forEach { weekIndex ->
-      val appendingLocalDates = boundaryLocalDate.plusWeeks(weekIndex).weekAsDays()
+    range(0, fetchMultiplier - 2).forEach { weekIndex -> //todo range 0 fetch-2 is little ambiguous, make it more readable
+      val appendingLocalDates = boundaryLocalDate.plusWeeks(weekIndex).plusDays(1).weekAsDays()
       datesList.insert(appendingLocalDates)
       logger.debug("requestRelativeWeekAsDays, index: $weekIndex, appending: $appendingLocalDates")
     }.also {
