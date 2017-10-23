@@ -3,9 +3,11 @@ package com.android.szparag.todoist.presenters.implementations
 import com.android.szparag.todoist.AnimationEvent.AnimationEventType.END
 import com.android.szparag.todoist.models.contracts.CalendarModel
 import com.android.szparag.todoist.presenters.contracts.FrontPresenter
+import com.android.szparag.todoist.utils.ReactiveList
 import com.android.szparag.todoist.utils.ui
 import com.android.szparag.todoist.views.contracts.FrontView
 import io.reactivex.rxkotlin.subscribeBy
+import org.joda.time.LocalDate
 
 private const val FRONT_LIST_LOADING_THRESHOLD = 4
 
@@ -56,11 +58,10 @@ class TodoistFrontPresenter(calendarModel: CalendarModel) : TodoistBasePresenter
         ?.subscribeBy(onNext = { direction ->
           logger.debug("view?.subscribeDayListScrolls.onNext, direction: $direction")
           onUserReachedListLoadThreshold(direction)
-        }, onError = { exc ->
-          logger.error("view?.subscribeDayListScrolls.onError, exc: $exc")
         }, onComplete = {
           logger.debug("view?.subscribeDayListScrolls.onComplete")
         })
+        .toViewDisposable()
   }
 
   override fun onUserReachedListLoadThreshold(direction: Int) {
@@ -79,6 +80,9 @@ class TodoistFrontPresenter(calendarModel: CalendarModel) : TodoistBasePresenter
     }
   }
 
+  private fun onNewItemsToCalendarLoaded(reactiveList: ReactiveList<LocalDate>) {
+    view?.updateRenderDays(reactiveList.map { listItem -> model.mapToRenderDay(listItem) })
+  }
 
   override fun subscribeModelEvents() {
     logger.debug("subscribeModelEvents")
@@ -89,7 +93,7 @@ class TodoistFrontPresenter(calendarModel: CalendarModel) : TodoistBasePresenter
         .subscribeBy(
             onNext = { event ->
               logger.debug("calendarModel.subscribeForDaysListData.onNext, list: $event")
-              view?.updateRenderDays(event.map { model.mapToRenderDay(it) })
+              onNewItemsToCalendarLoaded(event)
             },
             onError = { exc ->
               logger.error("calendarModel.subscribeForDaysListData.onError, exc: $exc")
@@ -104,9 +108,11 @@ class TodoistFrontPresenter(calendarModel: CalendarModel) : TodoistBasePresenter
   override fun subscribeViewUserEvents() {
     logger.debug("subscribeViewUserEvents")
 
+    //todo debug only, remove
     view?.subscribeBackgroundClicked()
         ?.ui()
         ?.subscribe { view?.randomizeContents() }
+        .toViewDisposable()
   }
 
 

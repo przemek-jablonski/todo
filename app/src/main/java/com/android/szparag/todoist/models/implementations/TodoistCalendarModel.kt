@@ -50,7 +50,11 @@ class TodoistCalendarModel(private var locale: Locale) : CalendarModel {
 
   override fun requestRelativeWeekAsDays(weekForward: Boolean, fetchMultiplier: Int) {
     logger.debug("requestRelativeWeekAsDays, weekForward: $weekForward, fetchMultiplier: $fetchMultiplier")
-    val boundaryLocalDate = datesList.boundary(weekForward)
+    val boundaryLocalDate = if (datesList.size == 0) {
+      currentDay
+    } else {
+      datesList.boundary(weekForward)
+    }
     val appendingLocalDates = mutableListOf<LocalDate>()
     range(0, fetchMultiplier - 2).forEach { weekIndex ->
       //todo range 0 fetch-2 is little ambiguous, make it more readable
@@ -87,8 +91,8 @@ class TodoistCalendarModel(private var locale: Locale) : CalendarModel {
 
   override fun fillDaysListInitial() {
     logger.debug("fillDaysListInitial")
-    datesList.insert(currentDay.minusWeeks(1).weekAsDays())
-    datesList.insert(currentDay.weekAsDays())
+    requestRelativeWeekAsDays(true, 2)
+    requestRelativeWeekAsDays(false, 2)
   }
 
 }

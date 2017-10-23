@@ -75,7 +75,7 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
     logger.debug("setupViews")
     quoteText.visibility = View.VISIBLE
     quoteText.y -= quoteText.height + getStatusbarHeight()
-    daysRecycler.scrollToPosition(6)
+    daysRecycler.scrollToPosition(6) //todo this should be in presenter AND it sucks
 
   }
 

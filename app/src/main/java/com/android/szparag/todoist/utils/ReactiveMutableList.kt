@@ -122,6 +122,7 @@ class ReactiveMutableList<E : Any>(private val initialCapacity: Int = 64, privat
 
   override fun last() = get(size - 1)
 
+  //todo: this produces ArrayIndexOutOfBoundsException if list is empty
   override fun boundary(forward: Boolean) = if (forward) last() else first()
 
   override fun toString() = asString()
