@@ -55,7 +55,7 @@ class TodoistCalendarModel(private var locale: Locale) : CalendarModel {
       if (weekForward)
         appendingLocalDates.addAll(boundaryLocalDate.plusWeeks(weekIndex).plusDays(1).weekAsDays())
       else
-        appendingLocalDates.addAll(boundaryLocalDate.minusWeeks(weekIndex+1).plusDays(1).weekAsDays())
+        appendingLocalDates.addAll(boundaryLocalDate.minusWeeks(weekIndex+1).weekAsDays())
     }.also {
       if (weekForward) {
         datesList.insert(appendingLocalDates)
@@ -73,6 +73,7 @@ class TodoistCalendarModel(private var locale: Locale) : CalendarModel {
 
   //todo: this should not be here (or its badly used)
    override fun mapToRenderDay(date: LocalDate) = RenderDay(
+      unixTimestamp = date.toDateTimeAtStartOfDay().millis,
       dayName = date.dayOfWeek().getAsText(locale),
       dayNumber = date.dayOfMonth,
       monthNumber = date.monthOfYear,

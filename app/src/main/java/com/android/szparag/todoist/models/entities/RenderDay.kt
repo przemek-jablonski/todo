@@ -1,6 +1,7 @@
 package com.android.szparag.todoist.models.entities
 
 data class RenderDay(
+    val unixTimestamp: Long,
     val dayName: String,
     val dayNumber: Int,
     val monthNumber: Int,

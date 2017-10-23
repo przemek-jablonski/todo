@@ -42,9 +42,26 @@ class FrontTestAdapter(private val itemWidth: Int? = null, private val itemHeigh
 
   override fun getItemCount() = daysList.size
 
-  fun updateData(renderDaysList: List<RenderDay>) {
-    logger.warn("updateData, renderDaysList: ${renderDaysList.asString()}")
-    daysList = renderDaysList
+  override fun getItemId(position: Int) = daysList[position].unixTimestamp
+
+  fun updateData(updatedDaysList: List<RenderDay>) {
+//    logger.warn("updateData, updatedDaysList: ${updatedDaysList.asString()}")
+    val cachedRenderDays = daysList
+    daysList = updatedDaysList
+    if (cachedRenderDays.isEmpty()) {
+      logger.warn("cachedRenderDays EMPTY")
+      notifyDataSetChanged()
+    } else {
+      if (cachedRenderDays[0] == updatedDaysList[0]) {
+        val sizeDiff = updatedDaysList.size - cachedRenderDays.size
+        logger.warn("cachedRenderDays[0] == renderDays[0], sizeDiff: $sizeDiff")
+        notifyItemRangeInserted(cachedRenderDays.size, sizeDiff)
+      } else {
+        val sizeDiff = updatedDaysList.size - cachedRenderDays.size
+        logger.warn("cachedRenderDays[0] != renderDays[0], sizeDiff: $sizeDiff")
+        notifyItemRangeInserted(0, sizeDiff)
+      }
+    }
   }
 
   override fun onBindViewHolder(holder: DayViewHolder?, position: Int) {

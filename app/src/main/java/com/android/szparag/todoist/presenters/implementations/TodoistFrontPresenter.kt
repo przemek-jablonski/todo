@@ -55,12 +55,16 @@ class TodoistFrontPresenter(calendarModel: CalendarModel) : TodoistBasePresenter
         }
         ?.subscribeBy(onNext = { direction ->
           logger.debug("view?.subscribeDayListScrolls.onNext, direction: $direction")
-          model.requestRelativeWeekAsDays(direction > 0, 2)
+          onUserReachedListLoadThreshold(direction)
         }, onError = { exc ->
           logger.error("view?.subscribeDayListScrolls.onError, exc: $exc")
         }, onComplete = {
           logger.debug("view?.subscribeDayListScrolls.onComplete")
         })
+  }
+
+  override fun onUserReachedListLoadThreshold(direction: Int) {
+    model.requestRelativeWeekAsDays(direction > 0, 2)
   }
 
   //todo: why this shit is here

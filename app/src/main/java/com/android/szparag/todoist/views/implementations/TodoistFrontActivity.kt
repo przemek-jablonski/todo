@@ -10,6 +10,7 @@ import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.OvershootInterpolator
+import android.widget.Button
 import android.widget.TextView
 import com.android.szparag.todoist.AnimationEvent
 import com.android.szparag.todoist.AnimationEvent.AnimationEventType.END
@@ -42,6 +43,7 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
   private val quoteTextBackground: View by bindView(R.id.gradientTopText)
   private val daysRecycler: RecyclerView by bindView(R.id.recyclerViewFront)
   private val daysRecyclerBackground: View by bindView(R.id.gradientBottomRecycler)
+  private val debugButton: Button by bindView(R.id.debugButton)
   private lateinit var daysRecyclerAdapter: FrontTestAdapter
   private val daysLayoutManager: LinearLayoutManager by lazy {
     LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -51,6 +53,17 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
     super.onCreate(savedInstanceState)
     logger.debug("onCreate, bundle: $savedInstanceState")
     setContentView(R.layout.activity_todoist_front)
+    val displayDimensions = getDisplayDimensions()
+    daysRecyclerAdapter = FrontTestAdapter(
+        (displayDimensions.first * 0.66f).toInt())
+    daysRecyclerAdapter.setHasStableIds(true)
+    daysRecycler.adapter = daysRecyclerAdapter
+    /*,(displayDimensions.second * 0.50f).toInt()*/
+    daysRecycler.layoutManager = daysLayoutManager
+    LinearSnapHelper().attachToRecyclerView(daysRecycler)
+    daysRecycler.setHasFixedSize(true)
+//    daysRecycler.setScrollingTouchSlop(RecyclerView.TOUCH_SLOP_PAGING)
+    debugButton.setOnClickListener { presenter.onUserReachedListLoadThreshold(-1) }
   }
 
   override fun onStart() {
@@ -65,16 +78,8 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
     logger.debug("setupViews")
     quoteText.visibility = View.VISIBLE
     quoteText.y -= quoteText.height + getStatusbarHeight()
-
-    val displayDimensions = getDisplayDimensions()
-    daysRecyclerAdapter = FrontTestAdapter(
-        (displayDimensions.first * 0.66f).toInt())
-    daysRecycler.adapter = daysRecyclerAdapter
-    /*,(displayDimensions.second * 0.50f).toInt()*/
-    daysRecycler.layoutManager = daysLayoutManager
-    LinearSnapHelper().attachToRecyclerView(daysRecycler)
     daysRecycler.scrollToPosition(6)
-    daysRecycler.setScrollingTouchSlop(RecyclerView.TOUCH_SLOP_PAGING)
+
   }
 
   override fun onResume() {
@@ -140,7 +145,7 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
     Picasso.with(this)
         .load(randomResourceId)
         .priority(Picasso.Priority.HIGH)
-        .fetch(object: Callback {
+        .fetch(object : Callback {
           override fun onSuccess() {
             logger.debug("onSuccess")
             Picasso.with(this@TodoistFrontActivity).load(randomResourceId).into(backgroundImage)
@@ -206,7 +211,6 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
           .start()
 
 
-
     }
   }
 
@@ -249,9 +253,8 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
   }
 
   override fun updateRenderDays(renderDays: List<RenderDay>) {
-    logger.debug("updateRenderDays, renderDays: ${renderDays.asString()}")
+//    logger.debug("updateRenderDays, renderDays: ${renderDays.asString()}")
     daysRecyclerAdapter.updateData(renderDays)
-    daysRecyclerAdapter.notifyDataSetChanged()
   }
 
 
