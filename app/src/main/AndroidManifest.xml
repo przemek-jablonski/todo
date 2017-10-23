@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.android.szparag.todoist">
 
+  <!-- Leak canary needs access to External storage to save heap dumps -->
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
   <application
       android:name=".TodoistApplication"
       android:allowBackup="true"
