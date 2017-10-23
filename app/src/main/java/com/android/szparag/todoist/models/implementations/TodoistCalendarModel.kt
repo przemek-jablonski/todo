@@ -6,6 +6,7 @@ import com.android.szparag.todoist.utils.Logger
 import com.android.szparag.todoist.utils.ReactiveList
 import com.android.szparag.todoist.utils.ReactiveListEvent
 import com.android.szparag.todoist.utils.ReactiveMutableList
+import com.android.szparag.todoist.utils.dayUnixTimestamp
 import com.android.szparag.todoist.utils.range
 import com.android.szparag.todoist.utils.weekAsDays
 import io.reactivex.Completable
@@ -74,7 +75,7 @@ class TodoistCalendarModel(private var locale: Locale) : CalendarModel {
 
   //todo: this should not be here (or its badly used)
   override fun mapToRenderDay(date: LocalDate) = RenderDay(
-      unixTimestamp = date.toDateTimeAtStartOfDay().millis,
+      unixTimestamp = date.dayUnixTimestamp(),
       dayName = date.dayOfWeek().getAsText(locale),
       dayNumber = date.dayOfMonth,
       monthNumber = date.monthOfYear,
