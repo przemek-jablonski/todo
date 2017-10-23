@@ -46,14 +46,16 @@ class TodoistFrontPresenter(calendarModel: CalendarModel) : TodoistBasePresenter
 
     view?.subscribeDayListScrolls()
         ?.ui()
+        ?.doOnEach { scrollEvent -> logger.debug("view?.subscribeDayListScrolls.onNext, scrollEvent: $scrollEvent") }
         ?.map { checkIfListOutOfRange(it.firstVisibleItemPos, it.lastVisibleItemPos, it.lastItemOnListPos) }
+        ?.doOnEach { logger.debug("after filtering, directionInt: $it") }
         ?.filter { direction -> direction != 0 }
         ?.doOnSubscribe {
           model.fillDaysListInitial()
         }
         ?.subscribeBy(onNext = { direction ->
           logger.debug("view?.subscribeDayListScrolls.onNext, direction: $direction")
-          model.requestRelativeWeekAsDays(direction > 0, 2)
+          onUserReachedListLoadThreshold(direction)
         }, onError = { exc ->
           logger.error("view?.subscribeDayListScrolls.onError, exc: $exc")
         }, onComplete = {
@@ -61,11 +63,18 @@ class TodoistFrontPresenter(calendarModel: CalendarModel) : TodoistBasePresenter
         })
   }
 
+  override fun onUserReachedListLoadThreshold(direction: Int) {
+    model.requestRelativeWeekAsDays(direction > 0, 2)
+  }
+
   //todo: why this shit is here
-  private fun checkIfListOutOfRange(firstVisibleItemPos: Int, lastVisibleItemPos: Int, lastItemOnListPos: Int) = when {
-    FRONT_LIST_LOADING_THRESHOLD >= firstVisibleItemPos -> -1
-    lastVisibleItemPos >= lastItemOnListPos - FRONT_LIST_LOADING_THRESHOLD -> 1
-    else -> 0
+  private fun checkIfListOutOfRange(firstVisibleItemPos: Int, lastVisibleItemPos: Int, lastItemOnListPos: Int): Int {
+    return when {
+      FRONT_LIST_LOADING_THRESHOLD >= firstVisibleItemPos -> -1
+      lastVisibleItemPos >= lastItemOnListPos - FRONT_LIST_LOADING_THRESHOLD -> 1
+      else -> 0
+    }.also { logger.info("checkIfListOutOfRange, RESULT: $it (start: 0, firstVisible: $firstVisibleItemPos, lastVisible: " +
+        "$lastVisibleItemPos, last: $lastItemOnListPos)") }
   }
 
 

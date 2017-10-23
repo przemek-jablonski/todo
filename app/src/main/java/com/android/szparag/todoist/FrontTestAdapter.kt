@@ -9,6 +9,7 @@ import android.widget.TextView
 import com.android.szparag.todoist.FrontTestAdapter.DayViewHolder
 import com.android.szparag.todoist.models.entities.RenderDay
 import com.android.szparag.todoist.utils.Logger
+import com.android.szparag.todoist.utils.asString
 import com.android.szparag.todoist.utils.bindView
 import com.android.szparag.todoist.utils.emptyMutableList
 import com.android.szparag.todoist.utils.setViewDimensions
@@ -41,14 +42,26 @@ class FrontTestAdapter(private val itemWidth: Int? = null, private val itemHeigh
 
   override fun getItemCount() = daysList.size
 
-//  fun addToList(renderDays: List<RenderDay>) {
-//    logger.debug("addToList, renderDays: $renderDays")
-//    daysList.addAll(renderDays)
-//  }
+  override fun getItemId(position: Int) = daysList[position].unixTimestamp
 
-  fun updateData(renderDaysList: List<RenderDay>) {
-    logger.debug("updateData, renderDay: $renderDaysList")
-    daysList = renderDaysList
+  fun updateData(updatedDaysList: List<RenderDay>) {
+//    logger.warn("updateData, updatedDaysList: ${updatedDaysList.asString()}")
+    val cachedRenderDays = daysList
+    daysList = updatedDaysList
+    if (cachedRenderDays.isEmpty()) {
+      logger.warn("cachedRenderDays EMPTY")
+      notifyDataSetChanged()
+    } else {
+      if (cachedRenderDays[0] == updatedDaysList[0]) {
+        val sizeDiff = updatedDaysList.size - cachedRenderDays.size
+        logger.warn("cachedRenderDays[0] == renderDays[0], sizeDiff: $sizeDiff")
+        notifyItemRangeInserted(cachedRenderDays.size-1, sizeDiff)
+      } else {
+        val sizeDiff = updatedDaysList.size - cachedRenderDays.size
+        logger.warn("cachedRenderDays[0] != renderDays[0], sizeDiff: $sizeDiff")
+        notifyItemRangeInserted(0, sizeDiff)
+      }
+    }
   }
 
   override fun onBindViewHolder(holder: DayViewHolder?, position: Int) {

@@ -50,12 +50,19 @@ class TodoistCalendarModel(private var locale: Locale) : CalendarModel {
   override fun requestRelativeWeekAsDays(weekForward: Boolean, fetchMultiplier: Int) {
     logger.debug("requestRelativeWeekAsDays, weekForward: $weekForward, fetchMultiplier: $fetchMultiplier")
     val boundaryLocalDate = datesList.boundary(weekForward)
+    val appendingLocalDates = mutableListOf<LocalDate>()
     range(0, fetchMultiplier - 2).forEach { weekIndex -> //todo range 0 fetch-2 is little ambiguous, make it more readable
-      val appendingLocalDates = boundaryLocalDate.plusWeeks(weekIndex).plusDays(1).weekAsDays()
-      datesList.insert(appendingLocalDates)
-      logger.debug("requestRelativeWeekAsDays, index: $weekIndex, appending: $appendingLocalDates")
+      if (weekForward)
+        appendingLocalDates.addAll(boundaryLocalDate.plusWeeks(weekIndex).plusDays(1).weekAsDays())
+      else
+        appendingLocalDates.addAll(boundaryLocalDate.minusWeeks(weekIndex+1).weekAsDays())
     }.also {
-      logger.debug("requestRelativeWeekAsDays, datesList: $datesList")
+      if (weekForward) {
+        datesList.insert(appendingLocalDates)
+    } else {
+        datesList.insert(0, appendingLocalDates)
+    }
+      logger.debug("requestRelativeWeekAsDays, appendingLocalDates: $appendingLocalDates, datesList: $datesList")
     }
   }
 
@@ -66,6 +73,7 @@ class TodoistCalendarModel(private var locale: Locale) : CalendarModel {
 
   //todo: this should not be here (or its badly used)
    override fun mapToRenderDay(date: LocalDate) = RenderDay(
+      unixTimestamp = date.toDateTimeAtStartOfDay().millis,
       dayName = date.dayOfWeek().getAsText(locale),
       dayNumber = date.dayOfMonth,
       monthNumber = date.monthOfYear,
