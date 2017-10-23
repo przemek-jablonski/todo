@@ -9,4 +9,9 @@ data class RenderDay(
     val yearNumber: Int,
     val tasksCompletedCount: Int,
     val tasksRemainingCount: Int
-)
+) {
+
+  override fun equals(other: Any?): Boolean = other.takeIf { it is RenderDay }
+      ?.let { (it as RenderDay).unixTimestamp == this.unixTimestamp }
+      ?: false
+}

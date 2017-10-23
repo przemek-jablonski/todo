@@ -209,8 +209,6 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
 
           })
           .start()
-
-
     }
   }
 

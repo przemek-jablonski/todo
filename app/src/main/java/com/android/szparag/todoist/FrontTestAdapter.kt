@@ -55,7 +55,7 @@ class FrontTestAdapter(private val itemWidth: Int? = null, private val itemHeigh
       if (cachedRenderDays[0] == updatedDaysList[0]) {
         val sizeDiff = updatedDaysList.size - cachedRenderDays.size
         logger.warn("cachedRenderDays[0] == renderDays[0], sizeDiff: $sizeDiff")
-        notifyItemRangeInserted(cachedRenderDays.size, sizeDiff)
+        notifyItemRangeInserted(cachedRenderDays.size-1, sizeDiff)
       } else {
         val sizeDiff = updatedDaysList.size - cachedRenderDays.size
         logger.warn("cachedRenderDays[0] != renderDays[0], sizeDiff: $sizeDiff")
