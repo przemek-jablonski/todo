@@ -2,7 +2,7 @@ package com.android.szparag.todoist.utils
 
 import io.reactivex.Observable
 
-interface ReactiveList<E : Any>: Iterable<E> {
+interface ReactiveList<E : Any> : Iterable<E> {
 
   enum class ReactiveChangeType {
     INSERTED, DELETED, UPDATED, RESET

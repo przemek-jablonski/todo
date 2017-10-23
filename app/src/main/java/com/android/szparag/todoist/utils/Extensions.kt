@@ -17,6 +17,8 @@ import android.view.Window
 import com.android.szparag.todoist.ItemClickSupport
 import com.android.szparag.todoist.R
 import com.android.szparag.todoist.ResizeAnimation
+import com.android.szparag.todoist.models.entities.TodoistTask
+import io.realm.RealmList
 import org.joda.time.DateTime
 import org.joda.time.LocalDate
 import java.util.Random
@@ -156,3 +158,8 @@ inline fun <E> Collection<E>.asString(): String {
     sb.append(',').append("\n")
   }
 }
+
+inline fun LocalDate.dayUnixTimestamp() = this.toDateTimeAtStartOfDay().millis
+
+inline fun RealmList<TodoistTask>.asString() =
+    StringBuilder("[").apply { this@asString.forEach { this.append("{${it.unixCreationTimestamp}, ${it.name}},") } }.toString()

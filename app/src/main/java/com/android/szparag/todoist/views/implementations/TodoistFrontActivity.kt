@@ -22,7 +22,6 @@ import com.android.szparag.todoist.dagger.DaggerGlobalScopeWrapper
 import com.android.szparag.todoist.events.ListScrollEvent
 import com.android.szparag.todoist.models.entities.RenderDay
 import com.android.szparag.todoist.presenters.contracts.FrontPresenter
-import com.android.szparag.todoist.utils.asString
 import com.android.szparag.todoist.utils.bindView
 import com.android.szparag.todoist.utils.duration
 import com.android.szparag.todoist.utils.getDisplayDimensions
@@ -43,7 +42,6 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
   private val quoteTextBackground: View by bindView(R.id.gradientTopText)
   private val daysRecycler: RecyclerView by bindView(R.id.recyclerViewFront)
   private val daysRecyclerBackground: View by bindView(R.id.gradientBottomRecycler)
-  private val debugButton: Button by bindView(R.id.debugButton)
   private lateinit var daysRecyclerAdapter: FrontTestAdapter
   private val daysLayoutManager: LinearLayoutManager by lazy {
     LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -63,7 +61,6 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
     LinearSnapHelper().attachToRecyclerView(daysRecycler)
     daysRecycler.setHasFixedSize(true)
 //    daysRecycler.setScrollingTouchSlop(RecyclerView.TOUCH_SLOP_PAGING)
-    debugButton.setOnClickListener { presenter.onUserReachedListLoadThreshold(-1) }
   }
 
   override fun onStart() {

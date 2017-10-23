@@ -44,7 +44,7 @@ class TodoistTasksModel : TasksModel {
 //  override fun getDay(dayMillis: Long): Observable<TodoistDay> {
 //    return RxJavaInterop.toV2Observable(realmInstance
 //        .where(TodoistDay::class.java)
-//        .equalTo("timestampDayStartUnix", dayMillis)
+//        .equalTo("unixTimestamp", dayMillis)
 //        .findFirst()
 //        .asObservable())
 //  }
