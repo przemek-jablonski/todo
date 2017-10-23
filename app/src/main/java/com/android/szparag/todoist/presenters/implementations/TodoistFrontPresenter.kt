@@ -73,8 +73,10 @@ class TodoistFrontPresenter(calendarModel: CalendarModel) : TodoistBasePresenter
       FRONT_LIST_LOADING_THRESHOLD >= firstVisibleItemPos -> -1
       lastVisibleItemPos >= lastItemOnListPos - FRONT_LIST_LOADING_THRESHOLD -> 1
       else -> 0
-    }.also { logger.info("checkIfListOutOfRange, RESULT: $it (start: 0, firstVisible: $firstVisibleItemPos, lastVisible: " +
-        "$lastVisibleItemPos, last: $lastItemOnListPos)") }
+    }.also {
+      logger.info("checkIfListOutOfRange, RESULT: $it (start: 0, firstVisible: $firstVisibleItemPos, lastVisible: " +
+          "$lastVisibleItemPos, last: $lastItemOnListPos)")
+    }
   }
 
 

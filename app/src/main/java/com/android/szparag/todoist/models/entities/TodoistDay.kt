@@ -6,6 +6,7 @@ import io.realm.annotations.Index
 import io.realm.annotations.RealmClass
 
 @RealmClass open class TodoistDay : RealmObject() {
+
   @Index var timestampDayStartUnix: Long = -1
   lateinit var tasks: RealmList<TodoistTask>
   lateinit var dayName: String
