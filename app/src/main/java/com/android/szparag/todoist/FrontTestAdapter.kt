@@ -10,13 +10,14 @@ import com.android.szparag.todoist.FrontTestAdapter.DayViewHolder
 import com.android.szparag.todoist.models.entities.RenderDay
 import com.android.szparag.todoist.utils.Logger
 import com.android.szparag.todoist.utils.bindView
+import com.android.szparag.todoist.utils.emptyMutableList
 import com.android.szparag.todoist.utils.setViewDimensions
 
 class FrontTestAdapter(private val itemWidth: Int? = null, private val itemHeight: Int? = null) :
     RecyclerView.Adapter<DayViewHolder>() {
 
   private val logger by lazy { Logger.create(this::class.java, hashCode()) }
-  private var daysList = emptyList<RenderDay>()
+  private var daysList = emptyMutableList<RenderDay>()
   private var layoutInflater: LayoutInflater? = null
     private set(value) {
       if (value == null) return else field = value
@@ -43,23 +44,23 @@ class FrontTestAdapter(private val itemWidth: Int? = null, private val itemHeigh
   override fun getItemId(position: Int) = daysList[position].unixTimestamp
 
 
-  fun updateData(updatedDaysList: List<RenderDay>) {
-    val cachedRenderDays = daysList
-    daysList = updatedDaysList
-    if (cachedRenderDays.isEmpty()) {
-      logger.warn("cachedRenderDays EMPTY")
-      notifyDataSetChanged()
-    } else {
-      if (cachedRenderDays[0] == updatedDaysList[0]) {
-        val sizeDiff = updatedDaysList.size - cachedRenderDays.size
-        logger.warn("cachedRenderDays[0] == renderDays[0], sizeDiff: $sizeDiff")
-        notifyItemRangeInserted(cachedRenderDays.size - 1, sizeDiff)
-      } else {
-        val sizeDiff = updatedDaysList.size - cachedRenderDays.size
-        logger.warn("cachedRenderDays[0] != renderDays[0], sizeDiff: $sizeDiff")
-        notifyItemRangeInserted(0, sizeDiff)
-      }
-    }
+  fun updateData(updatedDaysList: List<RenderDay>, fromIndex: Int, changedElementsCount: Int) {
+    logger.debug("updateData: $updatedDaysList, fromIndex: $fromIndex, changedElementsCount: $changedElementsCount")
+    daysList.addAll(fromIndex, updatedDaysList)
+    notifyItemRangeInserted(fromIndex, changedElementsCount)
+//    val cachedRenderDays = daysList
+//    daysList = updatedDaysList
+//    if (cachedRenderDays.isEmpty()) {
+//      notifyDataSetChanged()
+//    } else {
+//      if (cachedRenderDays[0] == updatedDaysList[0]) {
+//        val sizeDiff = updatedDaysList.size - cachedRenderDays.size
+//        notifyItemRangeInserted(cachedRenderDays.size - 1, sizeDiff)
+//      } else {
+//        val sizeDiff = updatedDaysList.size - cachedRenderDays.size
+//        notifyItemRangeInserted(0, sizeDiff)
+//      }
+//    }
   }
 
   override fun onBindViewHolder(holder: DayViewHolder?, position: Int) {

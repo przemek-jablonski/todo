@@ -10,7 +10,6 @@ import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.OvershootInterpolator
-import android.widget.Button
 import android.widget.TextView
 import com.android.szparag.todoist.AnimationEvent
 import com.android.szparag.todoist.AnimationEvent.AnimationEventType.END
@@ -22,6 +21,7 @@ import com.android.szparag.todoist.dagger.DaggerGlobalScopeWrapper
 import com.android.szparag.todoist.events.ListScrollEvent
 import com.android.szparag.todoist.models.entities.RenderDay
 import com.android.szparag.todoist.presenters.contracts.FrontPresenter
+import com.android.szparag.todoist.utils.asString
 import com.android.szparag.todoist.utils.bindView
 import com.android.szparag.todoist.utils.duration
 import com.android.szparag.todoist.utils.getDisplayDimensions
@@ -241,9 +241,9 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
         }
   }
 
-  override fun updateRenderDays(renderDays: List<RenderDay>) {
-//    logger.debug("updateRenderDays, renderDays: ${renderDays.asString()}")
-    daysRecyclerAdapter.updateData(renderDays)
+  override fun appendRenderDays(appendingDays: List<RenderDay>, fromIndex: Int, changedElementsCount: Int) {
+    logger.debug("appendRenderDays, appendingDays: ${appendingDays.asString()}, fromIndex: $fromIndex, changedElementsCount: $changedElementsCount")
+    daysRecyclerAdapter.updateData(appendingDays, fromIndex, changedElementsCount)
   }
 
 

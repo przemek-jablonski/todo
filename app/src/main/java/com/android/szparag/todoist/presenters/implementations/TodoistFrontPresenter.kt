@@ -1,10 +1,10 @@
 package com.android.szparag.todoist.presenters.implementations
 
 import com.android.szparag.todoist.AnimationEvent.AnimationEventType.END
-import com.android.szparag.todoist.models.contracts.CalendarModel
 import com.android.szparag.todoist.models.contracts.FrontModel
 import com.android.szparag.todoist.presenters.contracts.FrontPresenter
-import com.android.szparag.todoist.utils.ReactiveList
+import com.android.szparag.todoist.utils.ReactiveList.ReactiveChangeType.INSERTED
+import com.android.szparag.todoist.utils.ReactiveListEvent
 import com.android.szparag.todoist.utils.ui
 import com.android.szparag.todoist.views.contracts.FrontView
 import io.reactivex.rxkotlin.subscribeBy
@@ -81,23 +81,24 @@ class TodoistFrontPresenter(frontModel: FrontModel) : TodoistBasePresenter<Front
     }
   }
 
-  private fun onNewItemsToCalendarLoaded(reactiveList: ReactiveList<LocalDate>) {
-    view?.updateRenderDays(reactiveList.map { listItem -> model.mapToRenderDay(listItem) })
+  private fun onNewItemsToCalendarLoaded(event: ReactiveListEvent<LocalDate>) {
+    if (event.eventType == INSERTED) {
+      view?.appendRenderDays(
+          event.affectedItems.map { localDateItem -> model.mapToRenderDay(localDateItem) }, event.fromIndexInclusive, event.affectedItems.size)
+    }
+//    view?.appendRenderDays(reactiveList.map { listItem -> model.mapToRenderDay(listItem) })
   }
 
   override fun subscribeModelEvents() {
     logger.debug("subscribeModelEvents")
 
-    model.subscribeForDaysListData()
+    model.subscribeForDaysListEvents()
         .ui()
         .doOnSubscribe { logger.debug("calendarModel.subscribeForDaysListData.onSubscribe") }
         .subscribeBy(
             onNext = { event ->
               logger.debug("calendarModel.subscribeForDaysListData.onNext, list: $event")
               onNewItemsToCalendarLoaded(event)
-            },
-            onError = { exc ->
-              logger.error("calendarModel.subscribeForDaysListData.onError, exc: $exc")
             },
             onComplete = {
               logger.debug("calendarModel.subscribeForDaysListData.onComplete")

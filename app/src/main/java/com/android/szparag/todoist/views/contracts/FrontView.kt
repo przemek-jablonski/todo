@@ -13,7 +13,7 @@ interface FrontView : View {
   //todo: this return type is leaking separation concern (you wouldn't have RecyclerViewScrollEvent in iOS)
   fun subscribeDayListScrolls(): Observable<ListScrollEvent>
 
-  fun updateRenderDays(renderDays: List<RenderDay>)
+  fun appendRenderDays(appendingDays: List<RenderDay>, fromIndex: Int, changedElementsCount: Int)
   fun subscribeBackgroundClicked(): Observable<Any>
   fun randomizeContents()
 

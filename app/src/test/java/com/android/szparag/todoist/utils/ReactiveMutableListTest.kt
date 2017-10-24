@@ -20,7 +20,7 @@ import java.util.UUID
 
 class ReactiveMutableListTest {
 
-  @Mock private lateinit var stringListObserverMock: Observer<ReactiveListEvent>
+  @Mock private lateinit var stringListObserverMock: Observer<ReactiveListEvent<String>>
   private lateinit var stringList: ReactiveList<String>
   private val random: Random by lazy { Random() }
 
@@ -38,8 +38,8 @@ class ReactiveMutableListTest {
   private fun getRandomElementsCount(maxAddedRandomElements: Int = 25) = random.nextIntPositive(maxAddedRandomElements) + 25
 
   private fun setupMockForAcceptingOneEventType(acceptedEventType: ReactiveList.ReactiveChangeType) {
-    `when`(stringListObserverMock.onNext(any(ReactiveListEvent::class.java))).thenAnswer {
-      it.getArgument<ReactiveListEvent>(0).let { event ->
+    `when`(stringListObserverMock.onNext(any(ReactiveListEvent<String>::class.java))).thenAnswer {
+      it.getArgument<ReactiveListEvent<String>>(0).let { event ->
         if (event.eventType != acceptedEventType)
           throw RuntimeException("Unexpected eventType. Expected $acceptedEventType, got actual: ${event.eventType}")
       }
@@ -174,7 +174,6 @@ class ReactiveMutableListTest {
     verify(stringListObserverMock, never()).onComplete()
   }
 
-
   @Test fun `Multiple insert operation should result in multiple onNext Observer notification`() {
     setupMockForAcceptingOneEventType(INSERTED)
 
@@ -198,7 +197,6 @@ class ReactiveMutableListTest {
     verify(stringListObserverMock, never()).onError(any(Throwable::class.java))
     verify(stringListObserverMock, never()).onComplete()
   }
-
 
   @Test fun `Multiple update operation should result in multiple onNext Observer notification`() {
     stringList.insert(getRandomStrings())

@@ -39,7 +39,7 @@ class TodoistFrontModel @Inject constructor(private var locale: Locale, private 
 
   override fun detach(): Completable = Completable.fromAction { logger.debug("detach") }
 
-  override fun subscribeForDaysListEvents(): Observable<ReactiveListEvent> {
+  override fun subscribeForDaysListEvents(): Observable<ReactiveListEvent<LocalDate>> {
     logger.debug("subscribeForDaysListEvents")
     return datesList.subscribeForListEvents()
   }

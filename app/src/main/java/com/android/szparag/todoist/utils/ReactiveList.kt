@@ -18,7 +18,7 @@ interface ReactiveList<E : Any> : Iterable<E> {
   fun delete(element: E)
   fun delete(index: Int)
   fun delete(elements: Collection<E>)
-  fun delete(indexes: Pair<Int, Int>)
+//  fun delete(indexes: Pair<Int, Int>)
 
   fun update(index: Int, element: E)
   fun update(originalElement: E, updatedElement: E)
@@ -27,7 +27,7 @@ interface ReactiveList<E : Any> : Iterable<E> {
 
   fun get(index: Int): E
 
-  fun subscribeForListEvents(): Observable<ReactiveListEvent>
+  fun subscribeForListEvents(): Observable<ReactiveListEvent<E>>
   fun subscribeForListData(): Observable<ReactiveList<E>>
 
   //  fun find(elem)
