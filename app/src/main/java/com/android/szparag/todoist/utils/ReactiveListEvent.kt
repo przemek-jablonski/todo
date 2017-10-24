@@ -2,7 +2,7 @@ package com.android.szparag.todoist.utils
 
 import com.android.szparag.todoist.utils.ReactiveList.ReactiveChangeType
 
-data class ReactiveListEvent<E>(
+data class ReactiveListEvent<E: Any>(
     val eventType: ReactiveChangeType,
     val affectedItems: Collection<E>,
     val fromIndexInclusive: Int
