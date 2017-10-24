@@ -1,6 +1,7 @@
 package com.android.szparag.todoist
 
 import android.content.Context
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -34,7 +35,7 @@ class FrontTestAdapter(private val itemWidth: Int? = null, private val itemHeigh
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = DayViewHolder(
       getLayoutInflater(parent.context)
-          .inflate(R.layout.item_recycler_calendar_day, parent, false)
+          .inflate(R.layout.item_recycler_front_day, parent, false)
           .apply { setViewDimensions(itemWidth, itemHeight) }
   )
 
@@ -48,19 +49,6 @@ class FrontTestAdapter(private val itemWidth: Int? = null, private val itemHeigh
     logger.debug("updateData: $updatedDaysList, fromIndex: $fromIndex, changedElementsCount: $changedElementsCount")
     daysList.addAll(fromIndex, updatedDaysList)
     notifyItemRangeInserted(fromIndex, changedElementsCount)
-//    val cachedRenderDays = daysList
-//    daysList = updatedDaysList
-//    if (cachedRenderDays.isEmpty()) {
-//      notifyDataSetChanged()
-//    } else {
-//      if (cachedRenderDays[0] == updatedDaysList[0]) {
-//        val sizeDiff = updatedDaysList.size - cachedRenderDays.size
-//        notifyItemRangeInserted(cachedRenderDays.size - 1, sizeDiff)
-//      } else {
-//        val sizeDiff = updatedDaysList.size - cachedRenderDays.size
-//        notifyItemRangeInserted(0, sizeDiff)
-//      }
-//    }
   }
 
   override fun onBindViewHolder(holder: DayViewHolder?, position: Int) {
@@ -72,6 +60,7 @@ class FrontTestAdapter(private val itemWidth: Int? = null, private val itemHeigh
       it.dateFullText.text = "${item.dayNumber} ${item.monthName} ${item.yearNumber}"
       it.tasksCompletedText.text = item.tasksCompletedCount.toString()
       it.tasksRemainingText.text = item.tasksRemainingCount.toString()
+      it.tasksOverviewAdapter.updateData(item.tasksList)
     }
   }
 
@@ -81,7 +70,13 @@ class FrontTestAdapter(private val itemWidth: Int? = null, private val itemHeigh
     val dateFullText: TextView by bindView(R.id.dateFullText)
     val tasksCompletedText: TextView by bindView(R.id.tasksCompletedText)
     val tasksRemainingText: TextView by bindView(R.id.tasksRemainingText)
-    val tasksOverviewList: RecyclerView by bindView(R.id.tasksOverviewList)
+    val tasksOverviewRecycler: RecyclerView by bindView(R.id.tasksOverviewList)
+    val tasksOverviewAdapter: FrontTasksAdapter = FrontTasksAdapter()
+
+    init {
+      tasksOverviewRecycler.adapter = tasksOverviewAdapter
+      tasksOverviewRecycler.layoutManager = LinearLayoutManager(itemView.context)
+    }
   }
 
 }
