@@ -44,8 +44,7 @@ class FrontTestAdapter(private val itemWidth: Int? = null, private val itemHeigh
 
   override fun getItemId(position: Int) = daysList[position].unixTimestamp
 
-
-  fun updateData(updatedDaysList: List<RenderDay>, fromIndex: Int, changedElementsCount: Int) {
+  fun updateData(updatedDaysList: Collection<RenderDay>, fromIndex: Int, changedElementsCount: Int) {
     logger.debug("updateData: $updatedDaysList, fromIndex: $fromIndex, changedElementsCount: $changedElementsCount")
     daysList.addAll(fromIndex, updatedDaysList)
     notifyItemRangeInserted(fromIndex, changedElementsCount)

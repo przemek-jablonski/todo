@@ -2,6 +2,7 @@ package com.android.szparag.todoist.presenters.implementations
 
 import com.android.szparag.todoist.AnimationEvent.AnimationEventType.END
 import com.android.szparag.todoist.models.contracts.FrontModel
+import com.android.szparag.todoist.models.entities.RenderDay
 import com.android.szparag.todoist.presenters.contracts.FrontPresenter
 import com.android.szparag.todoist.utils.ReactiveList.ReactiveChangeType.INSERTED
 import com.android.szparag.todoist.utils.ReactiveListEvent
@@ -54,7 +55,8 @@ class TodoistFrontPresenter(frontModel: FrontModel) : TodoistBasePresenter<Front
         ?.doOnEach { logger.debug("after filtering, directionInt: $it") }
         ?.filter { direction -> direction != 0 }
         ?.doOnSubscribe {
-          model.fillDaysListInitial()
+          model.requestRelativeWeekAsDays(true, 2)
+          model.requestRelativeWeekAsDays(false, 2)
         }
         ?.subscribeBy(onNext = { direction ->
           logger.debug("view?.subscribeDayListScrolls.onNext, direction: $direction")
@@ -81,10 +83,10 @@ class TodoistFrontPresenter(frontModel: FrontModel) : TodoistBasePresenter<Front
     }
   }
 
-  private fun onNewItemsToCalendarLoaded(event: ReactiveListEvent<LocalDate>) {
+  private fun onNewItemsToCalendarLoaded(event: ReactiveListEvent<RenderDay>) {
     if (event.eventType == INSERTED) {
       view?.appendRenderDays(
-          event.affectedItems.map { localDateItem -> model.mapToRenderDay(localDateItem) }, event.fromIndexInclusive, event.affectedItems.size)
+          event.affectedItems, event.fromIndexInclusive, event.affectedItems.size)
     }
 //    view?.appendRenderDays(reactiveList.map { listItem -> model.mapToRenderDay(listItem) })
   }
@@ -92,7 +94,8 @@ class TodoistFrontPresenter(frontModel: FrontModel) : TodoistBasePresenter<Front
   override fun subscribeModelEvents() {
     logger.debug("subscribeModelEvents")
 
-    model.subscribeForDaysListEvents()
+    model.subscribeForDaysList()
+//        .flatMap { get }
         .ui()
         .doOnSubscribe { logger.debug("calendarModel.subscribeForDaysListData.onSubscribe") }
         .subscribeBy(

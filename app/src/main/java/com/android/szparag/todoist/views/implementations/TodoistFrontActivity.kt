@@ -241,7 +241,7 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
         }
   }
 
-  override fun appendRenderDays(appendingDays: List<RenderDay>, fromIndex: Int, changedElementsCount: Int) {
+  override fun appendRenderDays(appendingDays: Collection<RenderDay>, fromIndex: Int, changedElementsCount: Int) {
     logger.debug("appendRenderDays, appendingDays: ${appendingDays.asString()}, fromIndex: $fromIndex, changedElementsCount: $changedElementsCount")
     daysRecyclerAdapter.updateData(appendingDays, fromIndex, changedElementsCount)
   }
