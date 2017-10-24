@@ -1,18 +1,22 @@
 package com.android.szparag.todoist.presenters.implementations
 
 import com.android.szparag.todoist.AnimationEvent.AnimationEventType.END
-import com.android.szparag.todoist.models.contracts.CalendarModel
+import com.android.szparag.todoist.models.contracts.FrontModel
+import com.android.szparag.todoist.models.entities.RenderDay
 import com.android.szparag.todoist.presenters.contracts.FrontPresenter
+import com.android.szparag.todoist.utils.ReactiveList.ReactiveChangeType.INSERTED
+import com.android.szparag.todoist.utils.ReactiveListEvent
 import com.android.szparag.todoist.utils.ui
 import com.android.szparag.todoist.views.contracts.FrontView
 import io.reactivex.rxkotlin.subscribeBy
+import org.joda.time.LocalDate
 
 private const val FRONT_LIST_LOADING_THRESHOLD = 4
 
 //todo: change to constructor injection
 //todo: model should be FrontModel (presenter's own Model), not CalendarModel (Model of given feature)
 //todo: refactor to interactor, or some fancy naming shit like that
-class TodoistFrontPresenter(calendarModel: CalendarModel) : TodoistBasePresenter<FrontView, CalendarModel>(calendarModel), FrontPresenter {
+class TodoistFrontPresenter(frontModel: FrontModel) : TodoistBasePresenter<FrontView, FrontModel>(frontModel), FrontPresenter {
 
   override fun attach(view: FrontView) {
     logger.debug("attach, view: $view")
@@ -51,16 +55,16 @@ class TodoistFrontPresenter(calendarModel: CalendarModel) : TodoistBasePresenter
         ?.doOnEach { logger.debug("after filtering, directionInt: $it") }
         ?.filter { direction -> direction != 0 }
         ?.doOnSubscribe {
-          model.fillDaysListInitial()
+          model.requestRelativeWeekAsDays(true, 2)
+          model.requestRelativeWeekAsDays(false, 2)
         }
         ?.subscribeBy(onNext = { direction ->
           logger.debug("view?.subscribeDayListScrolls.onNext, direction: $direction")
           onUserReachedListLoadThreshold(direction)
-        }, onError = { exc ->
-          logger.error("view?.subscribeDayListScrolls.onError, exc: $exc")
         }, onComplete = {
           logger.debug("view?.subscribeDayListScrolls.onComplete")
         })
+        .toViewDisposable()
   }
 
   override fun onUserReachedListLoadThreshold(direction: Int) {
@@ -79,20 +83,25 @@ class TodoistFrontPresenter(calendarModel: CalendarModel) : TodoistBasePresenter
     }
   }
 
+  private fun onNewItemsToCalendarLoaded(event: ReactiveListEvent<RenderDay>) {
+    if (event.eventType == INSERTED) {
+      view?.appendRenderDays(
+          event.affectedItems, event.fromIndexInclusive, event.affectedItems.size)
+    }
+//    view?.appendRenderDays(reactiveList.map { listItem -> model.mapToRenderDay(listItem) })
+  }
 
   override fun subscribeModelEvents() {
     logger.debug("subscribeModelEvents")
 
-    model.subscribeForDaysListData()
+    model.subscribeForDaysList()
+//        .flatMap { get }
         .ui()
         .doOnSubscribe { logger.debug("calendarModel.subscribeForDaysListData.onSubscribe") }
         .subscribeBy(
             onNext = { event ->
               logger.debug("calendarModel.subscribeForDaysListData.onNext, list: $event")
-              view?.updateRenderDays(event.map { model.mapToRenderDay(it) })
-            },
-            onError = { exc ->
-              logger.error("calendarModel.subscribeForDaysListData.onError, exc: $exc")
+              onNewItemsToCalendarLoaded(event)
             },
             onComplete = {
               logger.debug("calendarModel.subscribeForDaysListData.onComplete")
@@ -104,9 +113,11 @@ class TodoistFrontPresenter(calendarModel: CalendarModel) : TodoistBasePresenter
   override fun subscribeViewUserEvents() {
     logger.debug("subscribeViewUserEvents")
 
+    //todo debug only, remove
     view?.subscribeBackgroundClicked()
         ?.ui()
         ?.subscribe { view?.randomizeContents() }
+        .toViewDisposable()
   }
 
 

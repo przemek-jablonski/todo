@@ -2,6 +2,7 @@
 
 package com.android.szparag.todoist.dagger
 
+import com.android.szparag.todoist.models.implementations.TodoistFrontModel
 import com.android.szparag.todoist.views.implementations.TodoistFrontActivity
 import dagger.Component
 import javax.inject.Singleton
