@@ -1,9 +1,13 @@
 version: 2
+general:
+  branches:
+    only:
+      - master
 jobs:
   build:
     working_directory: ~/code
     docker:
-      - image: circleci/android:api-26-alpha
+      - image: c  ircleci/android:api-26-alpha
     environment:
       JVM_OPTS: -Xmx3200m
     steps:
