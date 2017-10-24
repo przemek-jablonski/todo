@@ -163,3 +163,11 @@ inline fun LocalDate.dayUnixTimestamp() = this.toDateTimeAtStartOfDay().millis
 
 inline fun RealmList<TodoistTask>.asString() =
     StringBuilder("[").apply { this@asString.forEach { this.append("{${it.unixCreationTimestamp}, ${it.name}},") } }.toString()
+
+inline fun <T : Comparable<T>> T.max(other: T) = if (this >= other) this else other
+inline fun <T : Comparable<T>> T.min(other: T) = if (this <= other) this else other
+
+inline fun Float.abs() = Math.abs(this)
+inline fun Double.abs() = Math.abs(this)
+inline fun Int.abs() = Math.abs(this)
+inline fun Long.abs() = Math.abs(this)

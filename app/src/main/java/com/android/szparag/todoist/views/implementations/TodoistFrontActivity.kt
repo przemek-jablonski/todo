@@ -28,6 +28,7 @@ import com.android.szparag.todoist.utils.getDisplayDimensions
 import com.android.szparag.todoist.utils.getStatusbarHeight
 import com.android.szparag.todoist.utils.interpolator
 import com.android.szparag.todoist.views.contracts.FrontView
+import com.android.szparag.todoist.widgets.CustomizableRecyclerView
 import com.jakewharton.rxbinding2.support.v7.widget.RxRecyclerView
 import com.jakewharton.rxbinding2.view.RxView
 import com.nvanbenschoten.motion.ParallaxImageView
@@ -35,12 +36,15 @@ import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import io.reactivex.Observable
 
+private const val DAYS_RECYCLER_VELOCITY_MULTIPLIER = 0.45f
+private const val DAYS_RECYCLER_VELOCITY_LIMIT = 7000
+
 class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
 
   private val backgroundImage: ParallaxImageView by bindView(R.id.imageViewFrontBackground)
   private val quoteText: TextView by bindView(R.id.textViewFrontQuote)
   private val quoteTextBackground: View by bindView(R.id.gradientTopText)
-  private val daysRecycler: RecyclerView by bindView(R.id.recyclerViewFront)
+  private val daysRecycler: CustomizableRecyclerView by bindView(R.id.recyclerViewFront)
   private val daysRecyclerBackground: View by bindView(R.id.gradientBottomRecycler)
   private lateinit var daysRecyclerAdapter: FrontTestAdapter
   private val daysLayoutManager: LinearLayoutManager by lazy {
@@ -55,6 +59,8 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
     daysRecyclerAdapter = FrontTestAdapter(
         (displayDimensions.first * 0.66f).toInt())
     daysRecyclerAdapter.setHasStableIds(true)
+    daysRecycler.flingVelocityXMultiplier = DAYS_RECYCLER_VELOCITY_MULTIPLIER
+    daysRecycler.flingVelocityXLimit = DAYS_RECYCLER_VELOCITY_LIMIT
     daysRecycler.adapter = daysRecyclerAdapter
     /*,(displayDimensions.second * 0.50f).toInt()*/
     daysRecycler.layoutManager = daysLayoutManager
