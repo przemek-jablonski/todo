@@ -15,6 +15,7 @@ interface CalendarModel : Model {
 
   fun requestRelativeWeekAsDays(weekForward: Boolean, fetchMultiplier: Int)
 
+  //todo remove those two methods
   fun fillDaysListInitial()
   fun mapToRenderDay(date: LocalDate): RenderDay
 

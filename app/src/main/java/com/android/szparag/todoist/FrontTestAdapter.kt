@@ -42,6 +42,7 @@ class FrontTestAdapter(private val itemWidth: Int? = null, private val itemHeigh
 
   override fun getItemId(position: Int) = daysList[position].unixTimestamp
 
+
   fun updateData(updatedDaysList: List<RenderDay>) {
     val cachedRenderDays = daysList
     daysList = updatedDaysList

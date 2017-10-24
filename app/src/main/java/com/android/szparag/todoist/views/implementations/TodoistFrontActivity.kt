@@ -76,7 +76,6 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
     quoteText.visibility = View.VISIBLE
     quoteText.y -= quoteText.height + getStatusbarHeight()
     daysRecycler.scrollToPosition(6) //todo this should be in presenter AND it sucks
-
   }
 
   override fun onResume() {
@@ -93,10 +92,8 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
   override fun animateShowBackgroundImage(): Observable<AnimationEvent> {
     logger.debug("animateShowBackgroundImage")
     return Observable.create { emitter ->
-
       //todo here check if internet is in place or whatever
       randomizeContents()
-
       backgroundImage.animate()
           .alpha(1F)
           .duration(1750)
@@ -157,7 +154,6 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
 
   //todo feature: in settings - change background effect (PicassoTransformations)
   private fun randomizeQuote() {
-
     val quotePlaceholdersContentsArray = resources.getStringArray(R.array.quote_placeholders_content)
     val quotePlaceholdersAuthorsArray = resources.getStringArray(R.array.quote_placeholders_author)
     val randomResourceIndex = (Math.random() * quotePlaceholdersContentsArray.size).toInt()
@@ -178,7 +174,6 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
     return Observable.create { emitter ->
       logger.debug("animateShowQuote.run")
       randomizeQuote()
-
       quoteText.animate()
           .translationY(0F)
           .setDuration(1000)
@@ -230,7 +225,6 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
 
   override fun subscribeDayListScrolls(): Observable<ListScrollEvent> {
     logger.debug("subscribeDayListScrolls")
-
     return RxRecyclerView.scrollEvents(daysRecycler)
         .concatMap { rvScrollEvent ->
           RxRecyclerView.scrollStateChanges(daysRecycler)

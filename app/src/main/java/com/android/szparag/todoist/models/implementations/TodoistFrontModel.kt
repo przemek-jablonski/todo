@@ -1,8 +1,10 @@
 package com.android.szparag.todoist.models.implementations
 
 import com.android.szparag.todoist.models.contracts.CalendarModel
+import com.android.szparag.todoist.models.contracts.FrontModel
 import com.android.szparag.todoist.models.entities.RenderDay
 import com.android.szparag.todoist.utils.Logger
+import com.android.szparag.todoist.utils.Logger.Companion
 import com.android.szparag.todoist.utils.ReactiveList
 import com.android.szparag.todoist.utils.ReactiveListEvent
 import com.android.szparag.todoist.utils.ReactiveMutableList
@@ -14,18 +16,17 @@ import io.reactivex.Observable
 import org.joda.time.LocalDate
 import java.util.Locale
 import java.util.Random
+import javax.inject.Inject
 
-
-//todo: locale is useless here
-//todo: or is it not?
 
 private const val INITIAL_DAYS_CAPACITY = 7 * 8
 
-class TodoistCalendarModel(private var locale: Locale) : CalendarModel {
-
+//todo: locale is useless here
+//todo: or is it not?
+//todo: make constructor injection
+class TodoistFrontModel @Inject constructor(private var locale: Locale, private val random: Random): FrontModel {
   override val logger by lazy { Logger.create(this::class.java, this.hashCode()) }
   private lateinit var currentDay: LocalDate
-  private val random by lazy { Random() }
   private val datesList: ReactiveList<LocalDate> = ReactiveMutableList(INITIAL_DAYS_CAPACITY, true)
 
   override fun attach(): Completable {
@@ -85,6 +86,7 @@ class TodoistCalendarModel(private var locale: Locale) : CalendarModel {
       monthNumber = date.monthOfYear,
       monthName = date.monthOfYear().getAsText(locale),
       yearNumber = date.year,
+      tasksList = emptyList(),
       tasksCompletedCount = random.nextInt(20),
       tasksRemainingCount = random.nextInt(20)
   )
@@ -94,5 +96,6 @@ class TodoistCalendarModel(private var locale: Locale) : CalendarModel {
     requestRelativeWeekAsDays(true, 2)
     requestRelativeWeekAsDays(false, 2)
   }
+
 
 }

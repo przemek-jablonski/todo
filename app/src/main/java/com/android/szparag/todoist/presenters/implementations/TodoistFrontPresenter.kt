@@ -2,6 +2,7 @@ package com.android.szparag.todoist.presenters.implementations
 
 import com.android.szparag.todoist.AnimationEvent.AnimationEventType.END
 import com.android.szparag.todoist.models.contracts.CalendarModel
+import com.android.szparag.todoist.models.contracts.FrontModel
 import com.android.szparag.todoist.presenters.contracts.FrontPresenter
 import com.android.szparag.todoist.utils.ReactiveList
 import com.android.szparag.todoist.utils.ui
@@ -14,7 +15,7 @@ private const val FRONT_LIST_LOADING_THRESHOLD = 4
 //todo: change to constructor injection
 //todo: model should be FrontModel (presenter's own Model), not CalendarModel (Model of given feature)
 //todo: refactor to interactor, or some fancy naming shit like that
-class TodoistFrontPresenter(calendarModel: CalendarModel) : TodoistBasePresenter<FrontView, CalendarModel>(calendarModel), FrontPresenter {
+class TodoistFrontPresenter(frontModel: FrontModel) : TodoistBasePresenter<FrontView, FrontModel>(frontModel), FrontPresenter {
 
   override fun attach(view: FrontView) {
     logger.debug("attach, view: $view")
