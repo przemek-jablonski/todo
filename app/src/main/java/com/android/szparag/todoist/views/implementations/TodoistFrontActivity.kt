@@ -16,6 +16,7 @@ import com.android.szparag.todoist.AnimationEvent.AnimationEventType.END
 import com.android.szparag.todoist.AnimationEvent.AnimationEventType.REPEAT
 import com.android.szparag.todoist.AnimationEvent.AnimationEventType.START
 import com.android.szparag.todoist.FrontTestAdapter
+import com.android.szparag.todoist.ItemClickSupport
 import com.android.szparag.todoist.R
 import com.android.szparag.todoist.dagger.DaggerGlobalScopeWrapper
 import com.android.szparag.todoist.events.ListScrollEvent
@@ -28,7 +29,8 @@ import com.android.szparag.todoist.utils.getDisplayDimensions
 import com.android.szparag.todoist.utils.getStatusbarHeight
 import com.android.szparag.todoist.utils.interpolator
 import com.android.szparag.todoist.views.contracts.FrontView
-import com.android.szparag.todoist.widgets.CustomizableRecyclerView
+import com.android.szparag.todoist.views.contracts.UnixTimestamp
+import com.android.szparag.todoist.widgets.TodoistRecyclerView
 import com.jakewharton.rxbinding2.support.v7.widget.RxRecyclerView
 import com.jakewharton.rxbinding2.view.RxView
 import com.nvanbenschoten.motion.ParallaxImageView
@@ -44,7 +46,7 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
   private val backgroundImage: ParallaxImageView by bindView(R.id.imageViewFrontBackground)
   private val quoteText: TextView by bindView(R.id.textViewFrontQuote)
   private val quoteTextBackground: View by bindView(R.id.gradientTopText)
-  private val daysRecycler: CustomizableRecyclerView by bindView(R.id.recyclerViewFront)
+  private val daysRecycler: TodoistRecyclerView by bindView(R.id.recyclerViewFront)
   private val daysRecyclerBackground: View by bindView(R.id.gradientBottomRecycler)
   private lateinit var daysRecyclerAdapter: FrontTestAdapter
   private val daysLayoutManager: LinearLayoutManager by lazy {
@@ -66,7 +68,7 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
     daysRecycler.layoutManager = daysLayoutManager
     LinearSnapHelper().attachToRecyclerView(daysRecycler)
     daysRecycler.setHasFixedSize(true)
-//    daysRecycler.setScrollingTouchSlop(RecyclerView.TOUCH_SLOP_PAGING)
+    daysRecycler.setScrollingTouchSlop(RecyclerView.TOUCH_SLOP_PAGING)
   }
 
   override fun onStart() {
@@ -250,6 +252,11 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
   override fun appendRenderDays(appendingDays: Collection<RenderDay>, fromIndex: Int, changedElementsCount: Int) {
     logger.debug("appendRenderDays, appendingDays: ${appendingDays.asString()}, fromIndex: $fromIndex, changedElementsCount: $changedElementsCount")
     daysRecyclerAdapter.updateData(appendingDays, fromIndex, changedElementsCount)
+  }
+
+  override fun subscribeDayClicked(): Observable<UnixTimestamp> {
+    logger.debug("subscribeDayClicked")
+    return daysRecycler.subscribeItemClicks()
   }
 
 

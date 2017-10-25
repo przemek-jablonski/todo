@@ -100,6 +100,8 @@ interface View {
    */
   fun stopRenderUserAlertMessage(userAlertMessage: UserAlertMessage)
 
+  fun resolveStartupData()
+
   fun subscribeUserBackButtonPressed(): Observable<Any>
 
 }

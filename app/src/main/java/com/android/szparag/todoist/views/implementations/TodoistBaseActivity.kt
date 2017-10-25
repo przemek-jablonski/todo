@@ -80,6 +80,9 @@ abstract class TodoistBaseActivity<P : Presenter<*>> : AppCompatActivity(), View
     if (targetScreen == DAY_SCREEN) overridePendingTransition(0, 0)
   }
 
+  override fun resolveStartupData() {
+    logger.debug("resolveStartupData")
+  }
 
   override final fun checkPermissions(vararg permissions: PermissionType) {
     logger.debug("checkPermissions, permissions: $permissions")

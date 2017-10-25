@@ -5,16 +5,20 @@ import com.android.szparag.todoist.events.ListScrollEvent
 import com.android.szparag.todoist.models.entities.RenderDay
 import io.reactivex.Observable
 
+typealias UnixTimestamp = Long
+
 interface FrontView : View {
 
   fun animateShowBackgroundImage(): Observable<AnimationEvent>
   fun animateShowQuote(): Observable<AnimationEvent>
   fun animatePeekCalendar(): Observable<AnimationEvent>
-  //todo: this return type is leaking separation concern (you wouldn't have RecyclerViewScrollEvent in iOS)
+
   fun subscribeDayListScrolls(): Observable<ListScrollEvent>
+  fun subscribeBackgroundClicked(): Observable<Any>
+  fun subscribeDayClicked(): Observable<UnixTimestamp>
 
   fun appendRenderDays(appendingDays: Collection<RenderDay>, fromIndex: Int, changedElementsCount: Int)
-  fun subscribeBackgroundClicked(): Observable<Any>
+
   fun randomizeContents()
 
 }

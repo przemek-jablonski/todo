@@ -9,7 +9,6 @@ import com.android.szparag.todoist.utils.ReactiveListEvent
 import com.android.szparag.todoist.utils.ui
 import com.android.szparag.todoist.views.contracts.FrontView
 import io.reactivex.rxkotlin.subscribeBy
-import org.joda.time.LocalDate
 
 private const val FRONT_LIST_LOADING_THRESHOLD = 4
 
@@ -55,8 +54,8 @@ class TodoistFrontPresenter(frontModel: FrontModel) : TodoistBasePresenter<Front
         ?.doOnEach { logger.debug("after filtering, directionInt: $it") }
         ?.filter { direction -> direction != 0 }
         ?.doOnSubscribe {
-          model.requestRelativeWeekAsDays(true, 2)
-          model.requestRelativeWeekAsDays(false, 2)
+          model.loadDaysFromCalendar(true, 6)
+          model.loadDaysFromCalendar(false, 6)
         }
         ?.subscribeBy(onNext = { direction ->
           logger.debug("view?.subscribeDayListScrolls.onNext, direction: $direction")
@@ -68,7 +67,7 @@ class TodoistFrontPresenter(frontModel: FrontModel) : TodoistBasePresenter<Front
   }
 
   override fun onUserReachedListLoadThreshold(direction: Int) {
-    model.requestRelativeWeekAsDays(direction > 0, 2)
+    model.loadDaysFromCalendar(direction > 0, 2)
   }
 
   //todo: why this shit is here
@@ -84,18 +83,13 @@ class TodoistFrontPresenter(frontModel: FrontModel) : TodoistBasePresenter<Front
   }
 
   private fun onNewItemsToCalendarLoaded(event: ReactiveListEvent<RenderDay>) {
-    if (event.eventType == INSERTED) {
-      view?.appendRenderDays(
-          event.affectedItems, event.fromIndexInclusive, event.affectedItems.size)
-    }
-//    view?.appendRenderDays(reactiveList.map { listItem -> model.mapToRenderDay(listItem) })
+    if (event.eventType == INSERTED) { view?.appendRenderDays(event.affectedItems, event.fromIndexInclusive, event.affectedItems.size) }
   }
 
   override fun subscribeModelEvents() {
     logger.debug("subscribeModelEvents")
 
     model.subscribeForDaysList()
-//        .flatMap { get }
         .ui()
         .doOnSubscribe { logger.debug("calendarModel.subscribeForDaysListData.onSubscribe") }
         .subscribeBy(
@@ -118,6 +112,15 @@ class TodoistFrontPresenter(frontModel: FrontModel) : TodoistBasePresenter<Front
         ?.ui()
         ?.subscribe { view?.randomizeContents() }
         .toViewDisposable()
+
+    view?.subscribeDayClicked()
+        ?.ui()
+        ?.subscribe { dayClicked(it) }
+        .toViewDisposable()
+  }
+
+  private fun dayClicked(dayUnixTimestamp: Long) {
+    logger.debug("dayClicked: $dayUnixTimestamp")
   }
 
 
