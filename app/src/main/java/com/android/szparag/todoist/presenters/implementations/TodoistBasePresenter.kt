@@ -20,13 +20,13 @@ abstract class TodoistBasePresenter<V : View, out M : Model>(val model: M) : Pre
 
   //todo: logger creation is probably heavy, move to another thread
   override fun attach(view: V) {
-    logger.debug("attach.action, view: $view")
+    logger.info("attach.action, view: $view")
     this.view = view
     model.attach().subscribe { onAttached() }
   }
 
   @CallSuper override fun onAttached() {
-    logger.debug("onAttached")
+    logger.info("onAttached")
     viewDisposables = CompositeDisposable()
     modelDisposables = CompositeDisposable()
     subscribeModelEvents()
@@ -37,19 +37,19 @@ abstract class TodoistBasePresenter<V : View, out M : Model>(val model: M) : Pre
 
 
   override final fun detach() {
-    logger.debug("detach")
+    logger.info("detach")
     onBeforeDetached()
     view = null
   }
 
   @CallSuper override fun onBeforeDetached() {
-    logger.debug("onBeforeDetached")
+    logger.info("onBeforeDetached")
     viewDisposables.clear()
     modelDisposables.clear()
   }
 
   override fun onViewReady() {
-    logger.debug("onViewReady")
+    logger.info("onViewReady")
     view?.setupViews()
   }
 

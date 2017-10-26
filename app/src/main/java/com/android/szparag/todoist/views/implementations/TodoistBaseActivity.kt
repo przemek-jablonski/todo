@@ -1,6 +1,5 @@
 package com.android.szparag.todoist.views.implementations
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.CallSuper
 import android.support.design.widget.Snackbar
@@ -11,11 +10,11 @@ import com.android.szparag.todoist.events.PermissionEvent.PermissionResponse.PER
 import com.android.szparag.todoist.presenters.contracts.Presenter
 import com.android.szparag.todoist.utils.Logger
 import com.android.szparag.todoist.utils.emptyString
+import com.android.szparag.todoist.views.contracts.UnixTimestamp
 import com.android.szparag.todoist.views.contracts.View
 import com.android.szparag.todoist.views.contracts.View.PermissionType
 import com.android.szparag.todoist.views.contracts.View.PermissionType.NULL
 import com.android.szparag.todoist.views.contracts.View.Screen
-import com.android.szparag.todoist.views.contracts.View.Screen.DAY_SCREEN
 import com.android.szparag.todoist.views.contracts.View.UserAlertMessage
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
@@ -44,13 +43,16 @@ abstract class TodoistBaseActivity<P : Presenter<*>> : AppCompatActivity(), View
   override fun onStart() {
     super.onStart()
     logger.debug("onStart")
+//    presenter.attach(this@TodoistBaseActivity as Nothing)
   }
 
   @CallSuper
   override fun onStop() {
     super.onStop()
     logger.debug("onStop")
+//    presenter.detach()
   }
+
 
   @CallSuper
   override fun setupViews() {
@@ -72,12 +74,17 @@ abstract class TodoistBaseActivity<P : Presenter<*>> : AppCompatActivity(), View
   //todo: this has to be fixed
   override final fun gotoScreen(targetScreen: Screen) {
     logger.debug("gotoScreen, targetScreen: $targetScreen")
-    startActivity(when (targetScreen) {
-//      View.Screen.DAY_SCREEN -> Intent(applicationContext, TodoistDayActivity::class.java)
-//      View.Screen.WEEK_SCREEN -> Intent(applicationContext, TodoistWeekActivity::class.java)
-      else -> Intent(applicationContext, TodoistFrontActivity::class.java)
-    })
-    if (targetScreen == DAY_SCREEN) overridePendingTransition(0, 0)
+
+//    startActivity(when (targetScreen) {
+////      View.Screen.DAY_SCREEN -> Intent(applicationContext, TodoistDayActivity::class.java)
+////      View.Screen.WEEK_SCREEN -> Intent(applicationContext, TodoistWeekActivity::class.java)
+//      else -> Intent(applicationContext, TodoistFrontActivity::class.java)
+//    })
+//    if (targetScreen == DAY_SCREEN) overridePendingTransition(0, 0)
+  }
+
+  override final fun goToDayScreen(unixTimestamp: UnixTimestamp) {
+    startActivity(TodoistDayActivity.prepareDayActivityRoutingIntent(packageContext = this, dayUnixTimestamp = unixTimestamp))
   }
 
   override fun resolveStartupData() {

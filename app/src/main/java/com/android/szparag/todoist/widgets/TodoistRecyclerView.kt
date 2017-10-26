@@ -4,6 +4,7 @@ import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.View
+import com.android.szparag.todoist.utils.Logger
 import com.android.szparag.todoist.utils.abs
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
@@ -14,6 +15,8 @@ typealias RecyclerItemStableId = Long
 class TodoistRecyclerView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : RecyclerView(context, attrs, defStyleAttr) {
+
+  private val logger = Logger.create(TodoistRecyclerView::class.java, hashCode())
 
   //todo: snapping to element
   //todo: attrs from xml
@@ -29,13 +32,20 @@ class TodoistRecyclerView @JvmOverloads constructor(
   private var itemClicksListenerAttached = false
   private val itemClicksListener by lazy {
     object : RecyclerView.OnChildAttachStateChangeListener {
-      override fun onChildViewDetachedFromWindow(view: View) {}
+      override fun onChildViewDetachedFromWindow(view: View) {
+        logger.debug("onChildViewDetachedFromWindow, view: ${view.hashCode()}")
+        view.setOnClickListener(null)
+        view.setOnLongClickListener(null)
+      }
       override fun onChildViewAttachedToWindow(view: View) {
+        logger.debug("onChildViewAttachedToWindow, view: ${view.hashCode()}")
         view.setOnClickListener { clickedView ->
+          logger.debug("onChildViewAttachedToWindow.setOnClickListener, view: ${view.hashCode()}")
           itemClickSubject.onNext(adapter.getItemId(getChildViewHolder(clickedView).adapterPosition))
         }
         view.setOnLongClickListener { clickedView ->
-          itemClickSubject.onNext(adapter.getItemId(getChildViewHolder(clickedView).adapterPosition))
+          logger.debug("onChildViewAttachedToWindow.setOnLongClickListener, view: ${view.hashCode()}")
+          itemLongClickSubject.onNext(adapter.getItemId(getChildViewHolder(clickedView).adapterPosition))
           return@setOnLongClickListener itemLongClickSubject.hasObservers()
         }
       }
@@ -46,7 +56,9 @@ class TodoistRecyclerView @JvmOverloads constructor(
   fun subscribeItemLongClicks(): Observable<RecyclerItemStableId> = attachItemClicksSubscriptionListener().run { itemLongClickSubject }
 
   private fun attachItemClicksSubscriptionListener() {
+    logger.debug("attachItemClicksSubscriptionListener, itemClicksListenerAttached: $itemClicksListenerAttached")
     if (!itemClicksListenerAttached) {
+      logger.debug("attachItemClicksSubscriptionListener, ATTACHING")
       addOnChildAttachStateChangeListener(itemClicksListener)
       itemClicksListenerAttached = true
     }

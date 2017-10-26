@@ -94,6 +94,7 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
 
   override fun onPause() {
     super.onPause()
+    presenter.detach()
     backgroundImage.unregisterSensorManager()
   }
 

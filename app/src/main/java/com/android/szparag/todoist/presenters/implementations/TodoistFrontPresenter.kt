@@ -8,6 +8,7 @@ import com.android.szparag.todoist.utils.ReactiveList.ReactiveChangeType.INSERTE
 import com.android.szparag.todoist.utils.ReactiveListEvent
 import com.android.szparag.todoist.utils.ui
 import com.android.szparag.todoist.views.contracts.FrontView
+import com.android.szparag.todoist.views.contracts.View.Screen.DAY_SCREEN
 import io.reactivex.rxkotlin.subscribeBy
 
 private const val FRONT_LIST_LOADING_THRESHOLD = 4
@@ -115,12 +116,17 @@ class TodoistFrontPresenter(frontModel: FrontModel) : TodoistBasePresenter<Front
 
     view?.subscribeDayClicked()
         ?.ui()
-        ?.subscribe { dayClicked(it) }
+        ?.doOnDispose { logger.warn("view?.subscribeDayClicked(), DISPOSED")}
+        ?.subscribe {
+          logger.debug("view?.subscribeDayClicked(), ondayClicked")
+          dayClicked(it)
+        }
         .toViewDisposable()
   }
 
   private fun dayClicked(dayUnixTimestamp: Long) {
     logger.debug("dayClicked: $dayUnixTimestamp")
+    view?.goToDayScreen(dayUnixTimestamp)
   }
 
 
