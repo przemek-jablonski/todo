@@ -55,8 +55,8 @@ class TodoistFrontPresenter(frontModel: FrontModel) : TodoistBasePresenter<Front
         ?.doOnEach { logger.debug("after filtering, directionInt: $it") }
         ?.filter { direction -> direction != 0 }
         ?.doOnSubscribe {
-          model.loadDaysFromCalendar(true, 6)
-          model.loadDaysFromCalendar(false, 6)
+          model.loadDaysFromCalendar(true, 2) //todo this should be in subscribeModelsEvents or something
+          model.loadDaysFromCalendar(false, 2) //todo or on attaching model to presenter
         }
         ?.subscribeBy(onNext = { direction ->
           logger.debug("view?.subscribeDayListScrolls.onNext, direction: $direction")

@@ -69,6 +69,7 @@ class TodoistFrontActivity : TodoistBaseActivity<FrontPresenter>(), FrontView {
     LinearSnapHelper().attachToRecyclerView(daysRecycler)
     daysRecycler.setHasFixedSize(true)
     daysRecycler.setScrollingTouchSlop(RecyclerView.TOUCH_SLOP_PAGING)
+    DaggerGlobalScopeWrapper.getComponent(this).inject(this)
   }
 
   override fun onStart() {
