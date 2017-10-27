@@ -10,13 +10,15 @@ import com.android.szparag.todoist.utils.ui
 import com.android.szparag.todoist.views.contracts.FrontView
 import com.android.szparag.todoist.views.contracts.View.Screen.DAY_SCREEN
 import io.reactivex.rxkotlin.subscribeBy
+import javax.inject.Inject
 
 private const val FRONT_LIST_LOADING_THRESHOLD = 4
 
 //todo: change to constructor injection
 //todo: model should be FrontModel (presenter's own Model), not CalendarModel (Model of given feature)
 //todo: refactor to interactor, or some fancy naming shit like that
-class TodoistFrontPresenter(frontModel: FrontModel) : TodoistBasePresenter<FrontView, FrontModel>(frontModel), FrontPresenter {
+class TodoistFrontPresenter @Inject constructor(frontModel: FrontModel) : TodoistBasePresenter<FrontView, FrontModel>(frontModel),
+    FrontPresenter {
 
   override fun attach(view: FrontView) {
     logger.debug("attach, view: $view")
@@ -31,7 +33,6 @@ class TodoistFrontPresenter(frontModel: FrontModel) : TodoistBasePresenter<Front
   override fun onBeforeDetached() {
     logger.debug("onBeforeDetached")
     super.onBeforeDetached()
-    model.detach()
   }
 
   override fun onViewReady() {
@@ -68,7 +69,7 @@ class TodoistFrontPresenter(frontModel: FrontModel) : TodoistBasePresenter<Front
   }
 
   override fun onUserReachedListLoadThreshold(direction: Int) {
-    model.loadDaysFromCalendar(direction > 0, 2)
+    model.loadDaysFromCalendar(weekForward = direction > 0, weeksCount = 2)
   }
 
   //todo: why this shit is here

@@ -26,7 +26,7 @@ abstract class TodoistBaseActivity<P : Presenter<*>> : AppCompatActivity(), View
 
   override val logger by lazy { Logger.create(this::class.java, this.hashCode()) }
   @Inject lateinit open var presenter: P //todo: close and private this somehow
-  override val viewReadySubject: Subject<Boolean> = PublishSubject.create()
+  override val viewReadySubject: Subject<Boolean> = ReplaySubject.create()
   override val permissionsSubject: Subject<PermissionEvent> = ReplaySubject.create()
   private var defaultUserAlert: Snackbar? = null
   private var windowFocusCache = false
@@ -34,9 +34,10 @@ abstract class TodoistBaseActivity<P : Presenter<*>> : AppCompatActivity(), View
   @CallSuper
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    viewReadySubject.doOnSubscribe { viewReadySubject.onNext(hasWindowFocus()) }
+//    viewReadySubject.doOnSubscribe { viewReadySubject.onNext(hasWindowFocus()) }
     logger.debug("logger created, $logger")
     logger.debug("onCreate, bundle: $savedInstanceState")
+    viewReadySubject.onNext(true)
   }
 
   @CallSuper
@@ -75,12 +76,6 @@ abstract class TodoistBaseActivity<P : Presenter<*>> : AppCompatActivity(), View
   override final fun gotoScreen(targetScreen: Screen) {
     logger.debug("gotoScreen, targetScreen: $targetScreen")
 
-//    startActivity(when (targetScreen) {
-////      View.Screen.DAY_SCREEN -> Intent(applicationContext, TodoistDayActivity::class.java)
-////      View.Screen.WEEK_SCREEN -> Intent(applicationContext, TodoistWeekActivity::class.java)
-//      else -> Intent(applicationContext, TodoistFrontActivity::class.java)
-//    })
-//    if (targetScreen == DAY_SCREEN) overridePendingTransition(0, 0)
   }
 
   override final fun goToDayScreen(unixTimestamp: UnixTimestamp) {

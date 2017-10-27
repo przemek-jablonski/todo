@@ -75,6 +75,8 @@
       app:layout_constraintLeft_toLeftOf="parent"
       app:layout_constraintRight_toRightOf="parent"
       app:layout_constraintTop_toTopOf="@+id/guideline8"
+      tools:layout_width="300dp"
+      tools:listitem="@layout/item_recycler_front_day"
       />
   <android.support.constraint.Guideline
       android:id="@+id/guideline8"

@@ -28,10 +28,9 @@ private const val INITIAL_DAYS_CAPACITY = WEEKDAYS_COUNT * 8
 //todo: locale is useless here
 //todo: or is it not?
 //todo: make constructor injection
-class TodoistFrontModel @Inject constructor(private var locale: Locale, private val random: Random): FrontModel {
+class TodoistFrontModel @Inject constructor(private var locale: Locale, private val random: Random, private val realm: Realm) : FrontModel {
 
   override val logger by lazy { Logger.create(this::class.java, this.hashCode()) }
-  private lateinit var realm: Realm
   private lateinit var currentDay: LocalDate
   private val datesList: ReactiveList<LocalDate> = ReactiveMutableList(INITIAL_DAYS_CAPACITY, true)
 
@@ -39,7 +38,6 @@ class TodoistFrontModel @Inject constructor(private var locale: Locale, private 
     logger.debug("attach")
     return Completable.fromAction {
       setupCalendarInstance()
-      realm = Realm.getDefaultInstance()
       logger.debug("attach.action.finished") //todo refactor
     }
   }
@@ -88,7 +86,14 @@ class TodoistFrontModel @Inject constructor(private var locale: Locale, private 
     return subscribeForDaysListEvents()
         .map { it -> ReactiveListEvent(
             it.eventType,
-            it.affectedItems.map { it.toRenderDay(locale, getDay(it.dayUnixTimestamp())?.tasks?.map { it.name } ?: emptyList(), -1, -1) },
+            it.affectedItems.map {
+              it.toRenderDay(
+                  locale = locale,
+                  tasksList = getDay(it.dayUnixTimestamp())?.tasks?.map { it.name } ?: emptyList(),
+                  tasksCompletedCount = -1, //todo
+                  tasksRemainingCount = -1
+              )
+            },
             it.fromIndexInclusive
         ) }
         .toFlowable(ERROR)

@@ -46,6 +46,7 @@ abstract class TodoistBasePresenter<V : View, out M : Model>(val model: M) : Pre
     logger.info("onBeforeDetached")
     viewDisposables.clear()
     modelDisposables.clear()
+    model.detach()
   }
 
   override fun onViewReady() {
