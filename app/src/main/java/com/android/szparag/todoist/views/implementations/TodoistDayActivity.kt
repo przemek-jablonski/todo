@@ -56,18 +56,30 @@ class TodoistDayActivity : TodoistBaseActivity<DayPresenter>(), DayView {
     setContentView(R.layout.activity_todoist_day)
   }
 
-  override fun renderDay(dayNameHeader: CharSequence, dayCalendarSubtitle: CharSequence, tasksCompletedCount: Int,
-      tasksRemainingCount: Int) {
-    logger.debug("renderDay, dayNameHeader: $dayNameHeader, dayCalendarSubtitle: $dayCalendarSubtitle, tasksCompletedCount: " +
-        "$tasksCompletedCount, tasksRemainingCount: $tasksRemainingCount")
+//  override fun renderDay(dayNameHeader: CharSequence, dayCalendarSubtitle: CharSequence, tasksCompletedCount: Int,
+//      tasksRemainingCount: Int) {
+//    logger.debug("renderDay, dayNameHeader: $dayNameHeader, dayCalendarSubtitle: $dayCalendarSubtitle, tasksCompletedCount: " +
+//        "$tasksCompletedCount, tasksRemainingCount: $tasksRemainingCount")
+//    dateHeaderText.text = dayNameHeader
+//    dateFullText.text = dayCalendarSubtitle
+//    tasksCompletedText.text = tasksCompletedCount.toString()
+//    tasksRemainingText.text = tasksRemainingCount.toString()
+//  }
+//
+//  override fun renderTasks(tasksList: List<String>) {
+//    logger.debug("renderTasks, tasksList: $tasksList")
+//  }
+
+  override fun renderDay(dayNameHeader: CharSequence, dayNumber: Int, monthName: CharSequence, yearNumber: Int) {
+    logger.debug("renderDay, dayNameHeader: $dayNameHeader, dayNumber: $dayNumber, monthName: $monthName, yearNumber: $yearNumber")
     dateHeaderText.text = dayNameHeader
-    dateFullText.text = dayCalendarSubtitle
-    tasksCompletedText.text = tasksCompletedCount.toString()
-    tasksRemainingText.text = tasksRemainingCount.toString()
+    dateFullText.text = "$dayNumber $monthName $yearNumber"
   }
 
-  override fun renderTasks(tasksList: List<String>) {
-    logger.debug("renderTasks, tasksList: $tasksList")
+  override fun renderTasks(tasksList: List<CharSequence>, tasksCompletedCount: Int, tasksRemainingCount: Int) {
+    logger.debug("renderTasks, tasksList: $tasksList, tasksCompleted: $tasksCompletedCount, tasksRemaining: $tasksRemainingCount")
 
   }
+
+
 }

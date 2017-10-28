@@ -27,11 +27,40 @@ class TodoistDayPresenter @Inject constructor(dayModel: DayModel) : TodoistBaseP
 
   override fun subscribeModelEvents() {
     logger.debug("subscribeModelEvents")
+//    model.getDayData(unixTimestamp)
+//        .subscribeBy(
+//            onSuccess = { renderDay ->
+//              view?.renderDay(renderDay.dayName, "${renderDay.dayNumber} ${renderDay.monthName} ${renderDay.yearNumber}", -1, -100)
+//            })
+
+
     model.getDayData(unixTimestamp)
+        .doOnSubscribe { logger.debug("model.getDayData.doOnSubscribe") }
         .subscribeBy(
-            onSuccess = { renderDay ->
-              view?.renderDay(renderDay.dayName, "${renderDay.dayNumber} ${renderDay.monthName} ${renderDay.yearNumber}", -1, -100)
-            })
+            onSuccess = { calendarEvent ->
+              logger.debug("model.getDayData.onNext, calendarEvent: $calendarEvent")
+              view?.renderDay(
+                  dayNameHeader = calendarEvent.dayName,
+                  dayNumber = calendarEvent.dayNumber,
+                  monthName = calendarEvent.monthName,
+                  yearNumber = calendarEvent.yearNumber
+              )
+            }
+        )
+
+    model.subscribeForTasksData(unixTimestamp)
+        .doOnSubscribe { logger.debug("model.subscribeForTasksData.doOnSubscribe") }
+        .subscribeBy(
+            onNext = { tasksEvent ->
+              logger.debug("model.subscribeForTasksData.onNext, tasksEvent: $tasksEvent")
+              view?.renderTasks(
+                  tasksEvent.tasksList,
+                  tasksEvent.tasksCompletedCount,
+                  tasksEvent.tasksRemaningCount
+              )
+            }
+        )
+
 
 
 //    model.subscribeForDayData(unixTimestamp)
