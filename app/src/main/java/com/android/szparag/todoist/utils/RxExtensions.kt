@@ -10,6 +10,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 import io.realm.RealmModel
 import io.realm.RealmResults
 
@@ -143,3 +144,13 @@ fun <T> Flowable<T>.single() = this.subscribeOn(Schedulers.single())
 fun <T> Observable<T>.computation() = this.subscribeOn(Schedulers.computation())
 
 fun Completable.computation() = this.subscribeOn(Schedulers.computation())
+
+
+inline fun <E : RealmModel> RealmResults<E>.toObservable(): Observable<E> {
+  val realmResultsSubject = PublishSubject.create<E>()
+  this.addChangeListener { realmResults ->
+    realmResultsSubject.onNext(realmResults.first())
+  }
+  if (this.isNotEmpty()) realmResultsSubject.onNext(this.first())
+  return realmResultsSubject
+}

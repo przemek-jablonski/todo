@@ -1,6 +1,5 @@
 package com.android.szparag.todoist.views.implementations
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.CallSuper
 import android.support.design.widget.Snackbar
@@ -11,11 +10,11 @@ import com.android.szparag.todoist.events.PermissionEvent.PermissionResponse.PER
 import com.android.szparag.todoist.presenters.contracts.Presenter
 import com.android.szparag.todoist.utils.Logger
 import com.android.szparag.todoist.utils.emptyString
+import com.android.szparag.todoist.views.contracts.UnixTimestamp
 import com.android.szparag.todoist.views.contracts.View
 import com.android.szparag.todoist.views.contracts.View.PermissionType
 import com.android.szparag.todoist.views.contracts.View.PermissionType.NULL
 import com.android.szparag.todoist.views.contracts.View.Screen
-import com.android.szparag.todoist.views.contracts.View.Screen.DAY_SCREEN
 import com.android.szparag.todoist.views.contracts.View.UserAlertMessage
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
@@ -27,7 +26,7 @@ abstract class TodoistBaseActivity<P : Presenter<*>> : AppCompatActivity(), View
 
   override val logger by lazy { Logger.create(this::class.java, this.hashCode()) }
   @Inject lateinit open var presenter: P //todo: close and private this somehow
-  override val viewReadySubject: Subject<Boolean> = PublishSubject.create()
+  override val viewReadySubject: Subject<Boolean> = ReplaySubject.create()
   override val permissionsSubject: Subject<PermissionEvent> = ReplaySubject.create()
   private var defaultUserAlert: Snackbar? = null
   private var windowFocusCache = false
@@ -35,22 +34,26 @@ abstract class TodoistBaseActivity<P : Presenter<*>> : AppCompatActivity(), View
   @CallSuper
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    viewReadySubject.doOnSubscribe { viewReadySubject.onNext(hasWindowFocus()) }
+//    viewReadySubject.doOnSubscribe { viewReadySubject.onNext(hasWindowFocus()) }
     logger.debug("logger created, $logger")
     logger.debug("onCreate, bundle: $savedInstanceState")
+    viewReadySubject.onNext(true)
   }
 
   @CallSuper
   override fun onStart() {
     super.onStart()
     logger.debug("onStart")
+//    presenter.attach(this@TodoistBaseActivity as Nothing)
   }
 
   @CallSuper
   override fun onStop() {
     super.onStop()
     logger.debug("onStop")
+//    presenter.detach()
   }
+
 
   @CallSuper
   override fun setupViews() {
@@ -72,14 +75,16 @@ abstract class TodoistBaseActivity<P : Presenter<*>> : AppCompatActivity(), View
   //todo: this has to be fixed
   override final fun gotoScreen(targetScreen: Screen) {
     logger.debug("gotoScreen, targetScreen: $targetScreen")
-    startActivity(when (targetScreen) {
-//      View.Screen.DAY_SCREEN -> Intent(applicationContext, TodoistDayActivity::class.java)
-//      View.Screen.WEEK_SCREEN -> Intent(applicationContext, TodoistWeekActivity::class.java)
-      else -> Intent(applicationContext, TodoistFrontActivity::class.java)
-    })
-    if (targetScreen == DAY_SCREEN) overridePendingTransition(0, 0)
+
   }
 
+  override final fun goToDayScreen(unixTimestamp: UnixTimestamp) {
+    startActivity(TodoistDayActivity.prepareDayActivityRoutingIntent(packageContext = this, dayUnixTimestamp = unixTimestamp))
+  }
+
+  override fun resolveStartupData() {
+    logger.debug("resolveStartupData")
+  }
 
   override final fun checkPermissions(vararg permissions: PermissionType) {
     logger.debug("checkPermissions, permissions: $permissions")

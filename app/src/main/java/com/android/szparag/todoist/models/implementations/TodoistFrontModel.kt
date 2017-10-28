@@ -1,11 +1,9 @@
 package com.android.szparag.todoist.models.implementations
 
-import com.android.szparag.todoist.models.contracts.CalendarModel
 import com.android.szparag.todoist.models.contracts.FrontModel
 import com.android.szparag.todoist.models.entities.RenderDay
 import com.android.szparag.todoist.models.entities.TodoistDay
 import com.android.szparag.todoist.utils.Logger
-import com.android.szparag.todoist.utils.Logger.Companion
 import com.android.szparag.todoist.utils.ReactiveList
 import com.android.szparag.todoist.utils.ReactiveListEvent
 import com.android.szparag.todoist.utils.ReactiveMutableList
@@ -17,8 +15,6 @@ import io.reactivex.BackpressureStrategy.ERROR
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.rxkotlin.toSingle
 import io.realm.Realm
 import org.joda.time.LocalDate
 import java.util.Locale
@@ -32,10 +28,9 @@ private const val INITIAL_DAYS_CAPACITY = WEEKDAYS_COUNT * 8
 //todo: locale is useless here
 //todo: or is it not?
 //todo: make constructor injection
-class TodoistFrontModel @Inject constructor(private var locale: Locale, private val random: Random): FrontModel {
+class TodoistFrontModel @Inject constructor(private var locale: Locale, private val random: Random, private val realm: Realm) : FrontModel {
 
   override val logger by lazy { Logger.create(this::class.java, this.hashCode()) }
-  private lateinit var realm: Realm
   private lateinit var currentDay: LocalDate
   private val datesList: ReactiveList<LocalDate> = ReactiveMutableList(INITIAL_DAYS_CAPACITY, true)
 
@@ -43,7 +38,6 @@ class TodoistFrontModel @Inject constructor(private var locale: Locale, private 
     logger.debug("attach")
     return Completable.fromAction {
       setupCalendarInstance()
-      realm = Realm.getDefaultInstance()
       logger.debug("attach.action.finished") //todo refactor
     }
   }
@@ -58,15 +52,15 @@ class TodoistFrontModel @Inject constructor(private var locale: Locale, private 
     currentDay = LocalDate()
   }
 
-  override fun requestRelativeWeekAsDays(weekForward: Boolean, fetchMultiplier: Int) {
-    logger.debug("requestRelativeWeekAsDays, weekForward: $weekForward, fetchMultiplier: $fetchMultiplier")
+  override fun loadDaysFromCalendar(weekForward: Boolean, weeksCount: Int) {
+    logger.debug("loadDaysFromCalendar, weekForward: $weekForward, weeksCount: $weeksCount")
     val boundaryLocalDate = if (datesList.size == 0) {
       currentDay
     } else {
       datesList.boundary(weekForward)
     }
     val appendingLocalDates = mutableListOf<LocalDate>()
-    range(0, fetchMultiplier - 2).forEach { weekIndex ->
+    range(0, weeksCount - 2).forEach { weekIndex ->
       //todo range 0 fetch-2 is little ambiguous, make it more readable
       if (weekForward)
         appendingLocalDates.addAll(boundaryLocalDate.plusWeeks(weekIndex).plusDays(1).weekAsDays())
@@ -78,7 +72,7 @@ class TodoistFrontModel @Inject constructor(private var locale: Locale, private 
       } else {
         datesList.insert(0, appendingLocalDates)
       }
-      logger.debug("requestRelativeWeekAsDays, appendingLocalDates: $appendingLocalDates, datesList: $datesList")
+      logger.debug("loadDaysFromCalendar, appendingLocalDates: $appendingLocalDates, datesList: $datesList")
     }
   }
 
@@ -92,7 +86,14 @@ class TodoistFrontModel @Inject constructor(private var locale: Locale, private 
     return subscribeForDaysListEvents()
         .map { it -> ReactiveListEvent(
             it.eventType,
-            it.affectedItems.map { it.toRenderDay(locale, getDay(it.dayUnixTimestamp())?.tasks?.map { it.name } ?: emptyList(), -1, -1) },
+            it.affectedItems.map {
+              it.toRenderDay(
+                  locale = locale,
+                  tasksList = getDay(it.dayUnixTimestamp())?.tasks?.map { it.name } ?: emptyList(),
+                  tasksCompletedCount = -1, //todo
+                  tasksRemainingCount = -1
+              )
+            },
             it.fromIndexInclusive
         ) }
         .toFlowable(ERROR)
