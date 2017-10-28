@@ -11,6 +11,9 @@ class Logger {
   private var errorLoggingAvailable = true //todo: check if NOT in debug
 
   companion object {
+
+    fun create(callerObject: Any) = create(callerObject::class.java.simpleName.toString(), callerObject.hashCode())
+
     fun create(callerClass: Class<*>, hashCode: Int) = create(callerClass.simpleName.toString(), hashCode)
 
     fun create(callerString: String, hashCode: Int) = Logger().apply {

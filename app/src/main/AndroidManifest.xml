@@ -20,12 +20,17 @@
         android:theme="@style/AppTheme.NoActionBar">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
+
         <category android:name="android.intent.category.LAUNCHER"/>
+
         <action android:name="com.android.szparag.todoist.intent.FRONT"/>
       </intent-filter>
+
       <meta-data
           android:name="android.app.shortcuts"
           android:resource="@xml/shortcuts"/>
+    </activity>
+    <activity android:name=".views.implementations.TodoistDayActivity">
     </activity>
   </application>
 

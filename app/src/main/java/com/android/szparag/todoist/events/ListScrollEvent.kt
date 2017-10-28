@@ -2,6 +2,7 @@ package com.android.szparag.todoist.events
 
 import android.support.v7.widget.RecyclerView
 
+//todo figure out if every val is needed here
 data class ListScrollEvent(
     val dx: Int,
     val dy: Int,

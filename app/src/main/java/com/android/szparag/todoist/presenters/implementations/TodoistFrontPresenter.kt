@@ -8,15 +8,17 @@ import com.android.szparag.todoist.utils.ReactiveList.ReactiveChangeType.INSERTE
 import com.android.szparag.todoist.utils.ReactiveListEvent
 import com.android.szparag.todoist.utils.ui
 import com.android.szparag.todoist.views.contracts.FrontView
+import com.android.szparag.todoist.views.contracts.View.Screen.DAY_SCREEN
 import io.reactivex.rxkotlin.subscribeBy
-import org.joda.time.LocalDate
+import javax.inject.Inject
 
 private const val FRONT_LIST_LOADING_THRESHOLD = 4
 
 //todo: change to constructor injection
 //todo: model should be FrontModel (presenter's own Model), not CalendarModel (Model of given feature)
 //todo: refactor to interactor, or some fancy naming shit like that
-class TodoistFrontPresenter(frontModel: FrontModel) : TodoistBasePresenter<FrontView, FrontModel>(frontModel), FrontPresenter {
+class TodoistFrontPresenter @Inject constructor(frontModel: FrontModel) : TodoistBasePresenter<FrontView, FrontModel>(frontModel),
+    FrontPresenter {
 
   override fun attach(view: FrontView) {
     logger.debug("attach, view: $view")
@@ -31,7 +33,6 @@ class TodoistFrontPresenter(frontModel: FrontModel) : TodoistBasePresenter<Front
   override fun onBeforeDetached() {
     logger.debug("onBeforeDetached")
     super.onBeforeDetached()
-    model.detach()
   }
 
   override fun onViewReady() {
@@ -55,8 +56,8 @@ class TodoistFrontPresenter(frontModel: FrontModel) : TodoistBasePresenter<Front
         ?.doOnEach { logger.debug("after filtering, directionInt: $it") }
         ?.filter { direction -> direction != 0 }
         ?.doOnSubscribe {
-          model.requestRelativeWeekAsDays(true, 2)
-          model.requestRelativeWeekAsDays(false, 2)
+          model.loadDaysFromCalendar(true, 2) //todo this should be in subscribeModelsEvents or something
+          model.loadDaysFromCalendar(false, 2) //todo or on attaching model to presenter
         }
         ?.subscribeBy(onNext = { direction ->
           logger.debug("view?.subscribeDayListScrolls.onNext, direction: $direction")
@@ -68,7 +69,7 @@ class TodoistFrontPresenter(frontModel: FrontModel) : TodoistBasePresenter<Front
   }
 
   override fun onUserReachedListLoadThreshold(direction: Int) {
-    model.requestRelativeWeekAsDays(direction > 0, 2)
+    model.loadDaysFromCalendar(weekForward = direction > 0, weeksCount = 2)
   }
 
   //todo: why this shit is here
@@ -84,18 +85,13 @@ class TodoistFrontPresenter(frontModel: FrontModel) : TodoistBasePresenter<Front
   }
 
   private fun onNewItemsToCalendarLoaded(event: ReactiveListEvent<RenderDay>) {
-    if (event.eventType == INSERTED) {
-      view?.appendRenderDays(
-          event.affectedItems, event.fromIndexInclusive, event.affectedItems.size)
-    }
-//    view?.appendRenderDays(reactiveList.map { listItem -> model.mapToRenderDay(listItem) })
+    if (event.eventType == INSERTED) { view?.appendRenderDays(event.affectedItems, event.fromIndexInclusive, event.affectedItems.size) }
   }
 
   override fun subscribeModelEvents() {
     logger.debug("subscribeModelEvents")
 
     model.subscribeForDaysList()
-//        .flatMap { get }
         .ui()
         .doOnSubscribe { logger.debug("calendarModel.subscribeForDaysListData.onSubscribe") }
         .subscribeBy(
@@ -118,6 +114,20 @@ class TodoistFrontPresenter(frontModel: FrontModel) : TodoistBasePresenter<Front
         ?.ui()
         ?.subscribe { view?.randomizeContents() }
         .toViewDisposable()
+
+    view?.subscribeDayClicked()
+        ?.ui()
+        ?.doOnDispose { logger.warn("view?.subscribeDayClicked(), DISPOSED")}
+        ?.subscribe {
+          logger.debug("view?.subscribeDayClicked(), ondayClicked")
+          dayClicked(it)
+        }
+        .toViewDisposable()
+  }
+
+  private fun dayClicked(dayUnixTimestamp: Long) {
+    logger.debug("dayClicked: $dayUnixTimestamp")
+    view?.goToDayScreen(dayUnixTimestamp)
   }
 
 

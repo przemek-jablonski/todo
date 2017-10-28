@@ -66,7 +66,7 @@
       tools:text="&quot; Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.  &quot;"
       tools:visibility="visible"
       />
-  <com.android.szparag.todoist.widgets.CustomizableRecyclerView
+  <com.android.szparag.todoist.widgets.TodoistRecyclerView
       android:id="@+id/recyclerViewFront"
       android:layout_width="0dp"
       android:layout_height="0dp"
@@ -75,6 +75,8 @@
       app:layout_constraintLeft_toLeftOf="parent"
       app:layout_constraintRight_toRightOf="parent"
       app:layout_constraintTop_toTopOf="@+id/guideline8"
+      tools:layout_width="300dp"
+      tools:listitem="@layout/item_recycler_front_day"
       />
   <android.support.constraint.Guideline
       android:id="@+id/guideline8"

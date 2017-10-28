@@ -12,9 +12,8 @@ interface View {
   val permissionsSubject: Subject<PermissionEvent>
 
   enum class Screen {
+    FRONT_SCREEN,
     DAY_SCREEN,
-    WEEK_SCREEN,
-    MONTH_SCREEN
   }
 
   /**
@@ -100,7 +99,10 @@ interface View {
    */
   fun stopRenderUserAlertMessage(userAlertMessage: UserAlertMessage)
 
+  fun resolveStartupData()
+
   fun subscribeUserBackButtonPressed(): Observable<Any>
+  fun goToDayScreen(unixTimestamp: UnixTimestamp)
 
 }
 

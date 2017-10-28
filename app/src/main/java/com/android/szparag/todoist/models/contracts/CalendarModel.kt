@@ -8,14 +8,9 @@ import org.joda.time.LocalDate
 
 interface CalendarModel : Model {
 
-//  fun setupCalendarInstance()
-
   fun subscribeForDaysListEvents(): Observable<ReactiveListEvent<LocalDate>>
   fun subscribeForDaysListData(): Observable<ReactiveList<LocalDate>>
 
-  fun requestRelativeWeekAsDays(weekForward: Boolean, fetchMultiplier: Int)
-
-//  fun fillDaysListInitial()
-//  fun mapToRenderDay(date: LocalDate): RenderDay
+  fun loadDaysFromCalendar(weekForward: Boolean, weeksCount: Int)
 
 }

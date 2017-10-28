@@ -18,7 +18,9 @@ import com.android.szparag.todoist.ItemClickSupport
 import com.android.szparag.todoist.R
 import com.android.szparag.todoist.ResizeAnimation
 import com.android.szparag.todoist.models.entities.TodoistTask
+import io.realm.Realm
 import io.realm.RealmList
+import io.realm.RealmModel
 import org.joda.time.DateTime
 import org.joda.time.LocalDate
 import java.util.Random
@@ -167,7 +169,18 @@ inline fun RealmList<TodoistTask>.asString() =
 inline fun <T : Comparable<T>> T.max(other: T) = if (this >= other) this else other
 inline fun <T : Comparable<T>> T.min(other: T) = if (this <= other) this else other
 
-inline fun Float.abs() = Math.abs(this)
-inline fun Double.abs() = Math.abs(this)
 inline fun Int.abs() = Math.abs(this)
 inline fun Long.abs() = Math.abs(this)
+inline fun Float.abs() = Math.abs(this)
+inline fun Double.abs() = Math.abs(this)
+
+inline fun invalidIntValue(): Int = -1
+inline fun invalidLongValue(): Long = -1L
+inline fun invalidFloatValue(): Float = -1.0f
+inline fun invalidDoubleValue(): Double = -1.0
+
+inline fun <E : RealmModel> Realm.debugAllObjects(objectClass: Class<E>, logger: Logger) {
+  where(objectClass).findAll().forEachIndexed { item, index ->
+    logger.debug("Realm.debugAllObjects, [$index]: $item")
+  }
+}
