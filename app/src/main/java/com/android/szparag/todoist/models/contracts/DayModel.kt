@@ -11,6 +11,8 @@ interface DayModel : Model {
 
   fun getDayData(unixTimestamp: UnixTimestamp): Single<DayCalendarEvent>
 
+  fun createNewTaskForDay(unixTimestamp: UnixTimestamp, taskName: CharSequence)
+
   fun subscribeForTasksData(unixTimestamp: UnixTimestamp): Observable<DayTasksEvent>
 
 }

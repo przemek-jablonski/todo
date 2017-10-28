@@ -10,6 +10,7 @@ import javax.inject.Inject
 
 class TodoistDayPresenter @Inject constructor(dayModel: DayModel) : TodoistBasePresenter<DayView, DayModel>(dayModel), DayPresenter {
 
+  //todo: this should be in model!
   private var unixTimestamp = 1L
 
   override fun attach(view: DayView, dayUnixTimestamp: UnixTimestamp) {
@@ -27,13 +28,6 @@ class TodoistDayPresenter @Inject constructor(dayModel: DayModel) : TodoistBaseP
 
   override fun subscribeModelEvents() {
     logger.debug("subscribeModelEvents")
-//    model.getDayData(unixTimestamp)
-//        .subscribeBy(
-//            onSuccess = { renderDay ->
-//              view?.renderDay(renderDay.dayName, "${renderDay.dayNumber} ${renderDay.monthName} ${renderDay.yearNumber}", -1, -100)
-//            })
-
-
     model.getDayData(unixTimestamp)
         .doOnSubscribe { logger.debug("model.getDayData.doOnSubscribe") }
         .subscribeBy(
@@ -45,8 +39,8 @@ class TodoistDayPresenter @Inject constructor(dayModel: DayModel) : TodoistBaseP
                   monthName = calendarEvent.monthName,
                   yearNumber = calendarEvent.yearNumber
               )
-            }
-        )
+            })
+        .toModelDisposable()
 
     model.subscribeForTasksData(unixTimestamp)
         .doOnSubscribe { logger.debug("model.subscribeForTasksData.doOnSubscribe") }
@@ -58,12 +52,19 @@ class TodoistDayPresenter @Inject constructor(dayModel: DayModel) : TodoistBaseP
                   tasksEvent.tasksCompletedCount,
                   tasksEvent.tasksRemaningCount
               )
-            }
-        )
+            })
+        .toModelDisposable()
   }
 
   override fun subscribeViewUserEvents() {
     logger.debug("subscribeViewUserEvents")
+
+    view?.subscribeNewTaskTextAccepted()
+        ?.subscribeBy(
+            onNext = { taskName ->
+              model.createNewTaskForDay(unixTimestamp, taskName)
+            })
+        .toViewDisposable()
   }
 
 }

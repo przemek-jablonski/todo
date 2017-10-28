@@ -12,8 +12,10 @@ import com.android.szparag.todoist.presenters.contracts.DayPresenter
 import com.android.szparag.todoist.utils.bindView
 import com.android.szparag.todoist.utils.invalidLongValue
 import com.android.szparag.todoist.views.contracts.DayView
+import com.android.szparag.todoist.widgets.WidgetTaskInput
 import com.android.szparag.todoist.widgets.adapters.DayTasksAdapter
 import io.reactivex.Observable
+import io.reactivex.rxkotlin.subscribeBy
 
 private const val INTENT_EXTRAS_KEY_UNIXTIMESTAMP = "todoist.activity.day.timestamp"
 
@@ -30,6 +32,7 @@ class TodoistDayActivity : TodoistBaseActivity<DayPresenter>(), DayView {
   private val tasksCompletedText: TextView by bindView(R.id.tasksCompletedText)
   private val tasksRemainingText: TextView by bindView(R.id.tasksRemainingText)
   private val tasksOverviewRecycler: RecyclerView by bindView(R.id.tasksOverviewList)
+  private val taskInputWidget: WidgetTaskInput by bindView(R.id.taskInputWidget)
   private val tasksOverviewRecyclerAdapter: DayTasksAdapter by lazy {
     DayTasksAdapter().also { tasksOverviewRecycler.adapter = it }
   }
@@ -43,10 +46,11 @@ class TodoistDayActivity : TodoistBaseActivity<DayPresenter>(), DayView {
     logger.debug("onStart")
     DaggerGlobalScopeWrapper.getComponent(this).inject(this)
     presenter.attach(view = this, dayUnixTimestamp = intent.getLongExtra(INTENT_EXTRAS_KEY_UNIXTIMESTAMP, invalidLongValue()))
-//    tasksOverviewRecyclerAdapter = DayTasksAdapter()
-//    tasksOverviewRecycler.adapter = tasksOverviewRecyclerAdapter
     tasksOverviewRecycler.layoutManager = LinearLayoutManager(this)
+
   }
+
+  override fun subscribeNewTaskTextAccepted() = taskInputWidget.subscribeTextAccepted()
 
   override fun onPause() {
     super.onPause()

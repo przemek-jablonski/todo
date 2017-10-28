@@ -5,6 +5,7 @@ import com.android.szparag.todoist.events.DayTasksEvent
 import com.android.szparag.todoist.models.contracts.DayModel
 import com.android.szparag.todoist.models.contracts.UnixTimestamp
 import com.android.szparag.todoist.models.entities.TodoistDay
+import com.android.szparag.todoist.models.entities.TodoistTask
 import com.android.szparag.todoist.utils.Logger
 import com.android.szparag.todoist.utils.debugAllObjects
 import com.android.szparag.todoist.utils.safeFirst
@@ -33,7 +34,6 @@ class TodoistDayModel(private val locale: Locale, private val realm: Realm) : Da
   override fun subscribeForTasksData(unixTimestamp: UnixTimestamp): Observable<DayTasksEvent> {
     logger.debug("subscribeForTasksData, unixTimestamp: $unixTimestamp")
     check(unixTimestamp >= 0)
-    realm.debugAllObjects(TodoistDay::class.java, logger)
     return realm.where(TodoistDay::class.java)
         .equalTo("unixTimestamp", unixTimestamp)
         .findAll()
@@ -41,6 +41,21 @@ class TodoistDayModel(private val locale: Locale, private val realm: Realm) : Da
         .map { results -> results.safeFirst()?.toDayTasksEvent() ?: DayTasksEvent.empty(unixTimestamp) }
   }
 
+
+  override fun createNewTaskForDay(unixTimestamp: UnixTimestamp, taskName: CharSequence) {
+    logger.debug("createNewTaskForDay, unixTimestamp: $unixTimestamp")
+    realm.executeTransaction {
+      val day = realm.where(TodoistDay::class.java)
+          .equalTo("unixTimestamp", unixTimestamp)
+          .findFirst()
+      if (day == null) {
+        realm.insert(TodoistDay(unixTimestamp).apply { this.tasks.add(TodoistTask(unixTimestamp, taskName as String)) })
+      } else {
+        day.tasks.add(TodoistTask(unixTimestamp, taskName as String))
+      }
+//          .tasks.add(TodoistTask(unixTimestamp, taskName as String))
+    }
+  }
 
   override fun attach(): Completable {
     logger.debug("attach")
