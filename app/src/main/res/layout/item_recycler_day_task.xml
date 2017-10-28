@@ -6,7 +6,7 @@
     >
 
   <ImageView
-      android:id="@+id/imageView"
+      android:id="@+id/taskSeverityImage"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginBottom="4dp"
@@ -20,7 +20,7 @@
       app:srcCompat="@android:drawable/presence_online"
       />
   <TextView
-      android:id="@+id/textView"
+      android:id="@+id/taskNameText"
       android:layout_width="0dp"
       android:layout_height="0dp"
       android:layout_marginBottom="8dp"
@@ -33,9 +33,10 @@
       app:layout_constraintTop_toTopOf="parent"
       />
   <CheckBox
-      android:id="@+id/checkBox3"
+      android:id="@+id/taskDoneCheckbox"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+
       android:layout_marginBottom="8dp"
       android:layout_marginEnd="8dp"
       android:layout_marginStart="8dp"

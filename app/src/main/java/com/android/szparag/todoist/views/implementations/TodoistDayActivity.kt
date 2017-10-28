@@ -3,6 +3,7 @@ package com.android.szparag.todoist.views.implementations
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.widget.TextView
 import com.android.szparag.todoist.R
@@ -11,6 +12,7 @@ import com.android.szparag.todoist.presenters.contracts.DayPresenter
 import com.android.szparag.todoist.utils.bindView
 import com.android.szparag.todoist.utils.invalidLongValue
 import com.android.szparag.todoist.views.contracts.DayView
+import com.android.szparag.todoist.widgets.adapters.DayTasksAdapter
 import io.reactivex.Observable
 
 private const val INTENT_EXTRAS_KEY_UNIXTIMESTAMP = "todoist.activity.day.timestamp"
@@ -28,6 +30,9 @@ class TodoistDayActivity : TodoistBaseActivity<DayPresenter>(), DayView {
   private val tasksCompletedText: TextView by bindView(R.id.tasksCompletedText)
   private val tasksRemainingText: TextView by bindView(R.id.tasksRemainingText)
   private val tasksOverviewRecycler: RecyclerView by bindView(R.id.tasksOverviewList)
+  private val tasksOverviewRecyclerAdapter: DayTasksAdapter by lazy {
+    DayTasksAdapter().also { tasksOverviewRecycler.adapter = it }
+  }
 
   override fun resolveStartupData() {
     logger.debug("resolveStartupData")
@@ -38,6 +43,9 @@ class TodoistDayActivity : TodoistBaseActivity<DayPresenter>(), DayView {
     logger.debug("onStart")
     DaggerGlobalScopeWrapper.getComponent(this).inject(this)
     presenter.attach(view = this, dayUnixTimestamp = intent.getLongExtra(INTENT_EXTRAS_KEY_UNIXTIMESTAMP, invalidLongValue()))
+//    tasksOverviewRecyclerAdapter = DayTasksAdapter()
+//    tasksOverviewRecycler.adapter = tasksOverviewRecyclerAdapter
+    tasksOverviewRecycler.layoutManager = LinearLayoutManager(this)
   }
 
   override fun onPause() {
@@ -56,20 +64,6 @@ class TodoistDayActivity : TodoistBaseActivity<DayPresenter>(), DayView {
     setContentView(R.layout.activity_todoist_day)
   }
 
-//  override fun renderDay(dayNameHeader: CharSequence, dayCalendarSubtitle: CharSequence, tasksCompletedCount: Int,
-//      tasksRemainingCount: Int) {
-//    logger.debug("renderDay, dayNameHeader: $dayNameHeader, dayCalendarSubtitle: $dayCalendarSubtitle, tasksCompletedCount: " +
-//        "$tasksCompletedCount, tasksRemainingCount: $tasksRemainingCount")
-//    dateHeaderText.text = dayNameHeader
-//    dateFullText.text = dayCalendarSubtitle
-//    tasksCompletedText.text = tasksCompletedCount.toString()
-//    tasksRemainingText.text = tasksRemainingCount.toString()
-//  }
-//
-//  override fun renderTasks(tasksList: List<String>) {
-//    logger.debug("renderTasks, tasksList: $tasksList")
-//  }
-
   override fun renderDay(dayNameHeader: CharSequence, dayNumber: Int, monthName: CharSequence, yearNumber: Int) {
     logger.debug("renderDay, dayNameHeader: $dayNameHeader, dayNumber: $dayNumber, monthName: $monthName, yearNumber: $yearNumber")
     dateHeaderText.text = dayNameHeader
@@ -78,8 +72,8 @@ class TodoistDayActivity : TodoistBaseActivity<DayPresenter>(), DayView {
 
   override fun renderTasks(tasksList: List<CharSequence>, tasksCompletedCount: Int, tasksRemainingCount: Int) {
     logger.debug("renderTasks, tasksList: $tasksList, tasksCompleted: $tasksCompletedCount, tasksRemaining: $tasksRemainingCount")
-
+    tasksOverviewRecyclerAdapter.updateData(tasksList.toMutableList())
+    tasksCompletedText.text = tasksCompletedCount.toString()
+    tasksRemainingText.text = tasksRemainingCount.toString()
   }
-
-
 }

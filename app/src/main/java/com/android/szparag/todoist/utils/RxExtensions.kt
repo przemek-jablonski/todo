@@ -145,12 +145,7 @@ fun <T> Observable<T>.computation() = this.subscribeOn(Schedulers.computation())
 
 fun Completable.computation() = this.subscribeOn(Schedulers.computation())
 
+//yo dawg, i herd u like observabelz
+inline fun <E : RealmModel> RealmResults<E>.toObservable() = this.asObservable().toObservable()
 
-inline fun <E : RealmModel> RealmResults<E>.toObservable(): Observable<E> {
-  val realmResultsSubject = PublishSubject.create<E>()
-  this.addChangeListener { realmResults ->
-    realmResultsSubject.onNext(realmResults.first())
-  }
-  if (this.isNotEmpty()) realmResultsSubject.onNext(this.first())
-  return realmResultsSubject
-}
+inline fun <E> rx.Observable<E>.toObservable() = RxJavaInterop.toV2Observable(this)

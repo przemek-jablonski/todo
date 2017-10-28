@@ -1,6 +1,6 @@
 package com.android.szparag.todoist.presenters.implementations
 
-import com.android.szparag.todoist.AnimationEvent.AnimationEventType.END
+import com.android.szparag.todoist.events.AnimationEvent.AnimationEventType.END
 import com.android.szparag.todoist.models.contracts.FrontModel
 import com.android.szparag.todoist.models.entities.RenderDay
 import com.android.szparag.todoist.presenters.contracts.FrontPresenter
@@ -8,7 +8,6 @@ import com.android.szparag.todoist.utils.ReactiveList.ReactiveChangeType.INSERTE
 import com.android.szparag.todoist.utils.ReactiveListEvent
 import com.android.szparag.todoist.utils.ui
 import com.android.szparag.todoist.views.contracts.FrontView
-import com.android.szparag.todoist.views.contracts.View.Screen.DAY_SCREEN
 import io.reactivex.rxkotlin.subscribeBy
 import javax.inject.Inject
 

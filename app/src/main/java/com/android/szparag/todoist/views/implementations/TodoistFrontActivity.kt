@@ -11,12 +11,11 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.OvershootInterpolator
 import android.widget.TextView
-import com.android.szparag.todoist.AnimationEvent
-import com.android.szparag.todoist.AnimationEvent.AnimationEventType.END
-import com.android.szparag.todoist.AnimationEvent.AnimationEventType.REPEAT
-import com.android.szparag.todoist.AnimationEvent.AnimationEventType.START
-import com.android.szparag.todoist.FrontTestAdapter
-import com.android.szparag.todoist.ItemClickSupport
+import com.android.szparag.todoist.events.AnimationEvent
+import com.android.szparag.todoist.events.AnimationEvent.AnimationEventType.END
+import com.android.szparag.todoist.events.AnimationEvent.AnimationEventType.REPEAT
+import com.android.szparag.todoist.events.AnimationEvent.AnimationEventType.START
+import com.android.szparag.todoist.widgets.adapters.FrontTestAdapter
 import com.android.szparag.todoist.R
 import com.android.szparag.todoist.dagger.DaggerGlobalScopeWrapper
 import com.android.szparag.todoist.events.ListScrollEvent

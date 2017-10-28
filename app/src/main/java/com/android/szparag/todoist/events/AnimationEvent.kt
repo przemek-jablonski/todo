@@ -1,4 +1,4 @@
-package com.android.szparag.todoist
+package com.android.szparag.todoist.events
 
 /**
  * Created by Przemyslaw Jablonski (github.com/sharaquss, pszemek.me) on 17/09/2017.

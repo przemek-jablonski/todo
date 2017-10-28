@@ -1,6 +1,6 @@
 package com.android.szparag.todoist.views.contracts
 
-import com.android.szparag.todoist.AnimationEvent
+import com.android.szparag.todoist.events.AnimationEvent
 import com.android.szparag.todoist.events.ListScrollEvent
 import com.android.szparag.todoist.models.entities.RenderDay
 import io.reactivex.Observable
