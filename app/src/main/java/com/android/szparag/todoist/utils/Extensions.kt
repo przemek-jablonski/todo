@@ -21,6 +21,7 @@ import com.android.szparag.todoist.models.entities.TodoistTask
 import io.realm.Realm
 import io.realm.RealmList
 import io.realm.RealmModel
+import io.realm.RealmResults
 import org.joda.time.DateTime
 import org.joda.time.LocalDate
 import java.util.Random
@@ -180,7 +181,9 @@ inline fun invalidFloatValue(): Float = -1.0f
 inline fun invalidDoubleValue(): Double = -1.0
 
 inline fun <E : RealmModel> Realm.debugAllObjects(objectClass: Class<E>, logger: Logger) {
-  where(objectClass).findAll().forEachIndexed { item, index ->
+  where(objectClass).findAll().forEachIndexed { index, item ->
     logger.debug("Realm.debugAllObjects, [$index]: $item")
   }
 }
+
+inline fun <E : RealmModel> RealmResults<E>.safeFirst() = if (this.isNotEmpty()) first() else null

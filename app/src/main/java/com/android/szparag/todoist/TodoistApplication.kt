@@ -47,7 +47,7 @@ class TodoistApplication : MultiDexApplication() {
 
   private fun randomizeDb(realm: Realm, random: Random, currentDay: LocalDate) {
     (-28..28).forEachIndexed { index, _ ->
-      if (random.nextFloat() > 0.65f) {
+      if (random.nextFloat() > 0.30f) {
         val day = currentDay.plusDays(index)
 
         val tasks = RealmList<TodoistTask>()
