@@ -38,7 +38,7 @@ class TodoistDayModel(private val locale: Locale, private val realm: Realm) : Da
         .equalTo("unixTimestamp", unixTimestamp)
         .findAll()
         .toObservable()
-        .map { results -> results.safeFirst()?.toDayTasksEvent() ?: DayTasksEvent(unixTimestamp) }
+        .map { results -> results.safeFirst()?.toDayTasksEvent() ?: DayTasksEvent.empty(unixTimestamp) }
   }
 
 

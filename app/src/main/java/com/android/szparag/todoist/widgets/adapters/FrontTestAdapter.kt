@@ -1,4 +1,4 @@
-package com.android.szparag.todoist
+package com.android.szparag.todoist.widgets.adapters
 
 import android.content.Context
 import android.support.v7.widget.LinearLayoutManager
@@ -7,12 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.android.szparag.todoist.FrontTestAdapter.DayViewHolder
+import com.android.szparag.todoist.R.id
+import com.android.szparag.todoist.R.layout
 import com.android.szparag.todoist.models.entities.RenderDay
 import com.android.szparag.todoist.utils.Logger
 import com.android.szparag.todoist.utils.bindView
 import com.android.szparag.todoist.utils.emptyMutableList
 import com.android.szparag.todoist.utils.setViewDimensions
+import com.android.szparag.todoist.widgets.adapters.FrontTestAdapter.DayViewHolder
 
 class FrontTestAdapter(private val itemWidth: Int? = null, private val itemHeight: Int? = null) :
     RecyclerView.Adapter<DayViewHolder>() {
@@ -35,7 +37,7 @@ class FrontTestAdapter(private val itemWidth: Int? = null, private val itemHeigh
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = DayViewHolder(
       getLayoutInflater(parent.context)
-          .inflate(R.layout.item_recycler_front_day, parent, false)
+          .inflate(layout.item_recycler_front_day, parent, false)
           .apply { setViewDimensions(itemWidth, itemHeight) }
   )
 
@@ -65,11 +67,11 @@ class FrontTestAdapter(private val itemWidth: Int? = null, private val itemHeigh
 
 
   class DayViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    val dateHeaderText: TextView by bindView(R.id.dateHeaderText)
-    val dateFullText: TextView by bindView(R.id.dateFullText)
-    val tasksCompletedText: TextView by bindView(R.id.tasksCompletedText)
-    val tasksRemainingText: TextView by bindView(R.id.tasksRemainingText)
-    val tasksOverviewRecycler: RecyclerView by bindView(R.id.tasksOverviewList)
+    val dateHeaderText: TextView by bindView(id.dateHeaderText)
+    val dateFullText: TextView by bindView(id.dateFullText)
+    val tasksCompletedText: TextView by bindView(id.tasksCompletedText)
+    val tasksRemainingText: TextView by bindView(id.tasksRemainingText)
+    val tasksOverviewRecycler: RecyclerView by bindView(id.tasksOverviewList)
     val tasksOverviewAdapter: FrontTasksAdapter = FrontTasksAdapter()
 
     init {

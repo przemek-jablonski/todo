@@ -14,15 +14,11 @@ import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewPropertyAnimator
 import android.view.Window
-import com.android.szparag.todoist.ItemClickSupport
-import com.android.szparag.todoist.R
-import com.android.szparag.todoist.ResizeAnimation
 import com.android.szparag.todoist.models.entities.TodoistTask
 import io.realm.Realm
 import io.realm.RealmList
 import io.realm.RealmModel
 import io.realm.RealmResults
-import org.joda.time.DateTime
 import org.joda.time.LocalDate
 import java.util.Random
 
@@ -84,18 +80,6 @@ inline fun ViewPropertyAnimator.duration(durationMillis: Long) = this.apply { du
 inline fun ViewPropertyAnimator.interpolator(
     timeInterpolator: TimeInterpolator) = this.apply { interpolator = timeInterpolator }
 
-inline fun DateTime.unixTime(): Long = (this.millis / 1000F).toLong()
-
-
-inline fun RecyclerView.setupGranularClickListener()
-    = this.getTag(
-    R.id.item_click_support) as ItemClickSupport? ?: ItemClickSupport().apply {
-  this.attach(this@setupGranularClickListener)
-}
-
-inline fun RecyclerView.clearGranularClickListener() = (this.getTag(
-    R.id.item_click_support) as ItemClickSupport?)?.apply { this.detach() }
-
 inline fun Activity.getDisplayMetrics(): DisplayMetrics {
   val displayMetrics = DisplayMetrics()
   windowManager.defaultDisplay.getMetrics(displayMetrics)
@@ -126,12 +110,12 @@ inline fun LinearSmoothScroller.configureDurationFactor(context: Context, durati
   }
 }
 
-inline fun View.resize(targetWidth: Int = this.width, targetHeight: Int = this.height)
-    = ResizeAnimation(this, targetWidth, targetHeight)
-
-
-inline fun View.scale(targetWidth: Int = this.width, targetHeight: Int = this.height)
-    = this.resize(targetWidth, targetHeight)
+//inline fun View.resize(targetWidth: Int = this.width, targetHeight: Int = this.height)
+//    = ResizeAnimation(this, targetWidth, targetHeight)
+//
+//
+//inline fun View.scale(targetWidth: Int = this.width, targetHeight: Int = this.height)
+//    = this.resize(targetWidth, targetHeight)
 
 inline fun emptyString() = ""
 inline fun <E> emptyMutableList() = mutableListOf<E>()
