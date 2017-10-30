@@ -8,9 +8,9 @@ import org.joda.time.LocalDate
 
 interface CalendarModel : Model {
 
-  fun subscribeForDaysListEvents(): Observable<ReactiveListEvent<LocalDate>>
-  fun subscribeForDaysListData(): Observable<ReactiveList<LocalDate>>
-
+  fun fetchInitialCalendarData(weekFetchMultiplier: Int)
   fun loadDaysFromCalendar(weekForward: Boolean, weeksCount: Int)
 
+  fun subscribeForDaysListEvents(): Observable<ReactiveListEvent<LocalDate>>
+  fun subscribeForDaysListData(): Observable<ReactiveList<LocalDate>>
 }
