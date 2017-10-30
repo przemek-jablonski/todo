@@ -55,8 +55,9 @@ class TodoistFrontPresenter @Inject constructor(frontModel: FrontModel) : Todois
         ?.doOnEach { logger.debug("after filtering, directionInt: $it") }
         ?.filter { direction -> direction != 0 }
         ?.doOnSubscribe {
-          model.loadDaysFromCalendar(true, 2) //todo this should be in subscribeModelsEvents or something
-          model.loadDaysFromCalendar(false, 2) //todo or on attaching model to presenter
+          //          model.loadDaysFromCalendar(true, 2) //todo this should be in subscribeModelsEvents or something
+//          model.loadDaysFromCalendar(false, 2) //todo or on attaching model to presenter
+          model.fetchInitialCalendarData(2)
         }
         ?.subscribeBy(onNext = { direction ->
           logger.debug("view?.subscribeDayListScrolls.onNext, direction: $direction")

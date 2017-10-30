@@ -48,9 +48,9 @@ class TodoistDayPresenter @Inject constructor(dayModel: DayModel) : TodoistBaseP
             onNext = { tasksEvent ->
               logger.debug("model.subscribeForTasksData.onNext, tasksEvent: $tasksEvent")
               view?.renderTasks(
-                  tasksEvent.tasksList,
-                  tasksEvent.tasksCompletedCount,
-                  tasksEvent.tasksRemaningCount
+                  tasksList = tasksEvent.tasksList,
+                  tasksCompletedCount = tasksEvent.tasksCompletedCount,
+                  tasksRemainingCount = tasksEvent.tasksRemaningCount
               )
             })
         .toModelDisposable()

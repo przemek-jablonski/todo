@@ -52,6 +52,14 @@ class TodoistFrontModel @Inject constructor(private var locale: Locale, private 
     currentDay = LocalDate()
   }
 
+  override fun fetchInitialCalendarData(weekFetchMultiplier: Int) {
+    logger.debug("fetchInitialCalendarData")
+    if (datesList.size == 0) {
+      loadDaysFromCalendar(true, 2 * weekFetchMultiplier)
+      loadDaysFromCalendar(false, 2)
+    }
+  }
+
   override fun loadDaysFromCalendar(weekForward: Boolean, weeksCount: Int) {
     logger.debug("loadDaysFromCalendar, weekForward: $weekForward, weeksCount: $weeksCount")
     val boundaryLocalDate = if (datesList.size == 0) {
